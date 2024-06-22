@@ -15,7 +15,7 @@ int computorv2_init(t_computorv2 *p2)
 {
 	if (p2)
 	{
-		p2->obj = (t_object *)0;
+		
 	}
 	return (COMPUTORV2_SUCCESS);
 }
@@ -39,9 +39,29 @@ int computorv2_assignment(t_statment *st)
 	return (0);
 }
 
-int computorv2_operation(t_object *left, t_object *right)
+int computorv2_operation(t_object **result, t_object *left, t_object *right, int operation_code)
 {
-	return (0);
+	if (operation_code == COMPUTORV2_OPERATION_MULT)
+	{
+		if ((left->type == COMPUTORV2_TYPE_RATIONAL) && (right->type == COMPUTORV2_TYPE_RATIONAL))
+		{
+			*result = malloc(sizeof(t_rational));
+			((t_rational*)(*result))->type  = COMPUTORV2_TYPE_RATIONAL;
+			((t_rational*)(*result))->value = (((t_rational*)left)->value) * (((t_rational*)right)->value);
+			return (COMPUTORV2_SUCCESS);
+		}
+	}
+	if (operation_code == COMPUTORV2_OPERATION_MULT)
+	{
+		if ((left->type == COMPUTORV2_TYPE_RATIONAL) && (right->type == COMPUTORV2_TYPE_RATIONAL))
+		{
+			*result = malloc(sizeof(t_rational));
+			((t_rational*)(*result))->type  = COMPUTORV2_TYPE_RATIONAL;
+			((t_rational*)(*result))->value = (((t_rational*)left)->value) + (((t_rational*)right)->value);
+			return (COMPUTORV2_SUCCESS);
+		}
+	}
+	return (COMPUTORV2_ERROR);
 }
 
 int computorv2_parse_rational(t_computorv2 *p2, t_statment *st)
@@ -75,8 +95,9 @@ int computorv2_parse_rational(t_computorv2 *p2, t_statment *st)
 			c = computorv2_next(st);
 		}
 	}
-	p2->obj = malloc(sizeof(t_rational));
-	((t_rational*)(p2->obj))->value = integer_part + fractional_part;
+	st->obj = malloc(sizeof(t_rational));
+	st->obj->type = COMPUTORV2_TYPE_RATIONAL;
+	((t_rational*)(st->obj))->value = integer_part + fractional_part;
 	return (COMPUTORV2_SUCCESS);
 }
 
@@ -97,7 +118,8 @@ int computorv2_parse_multiplicatives(t_computorv2 *p2, t_statment *st)
 	while (1)
 	{
 		computorv2_skip_spaces(st);
-		t_object *left = p2->obj;
+		t_object *left   = st->obj;
+		t_object *result = (t_object*)0;
 		if ((computorv2_next_at(st, 0) == '*') && (computorv2_next_at(st, 1) == '*'))
 		{
 			computorv2_move(st);
@@ -108,7 +130,8 @@ int computorv2_parse_multiplicatives(t_computorv2 *p2, t_statment *st)
 		{
 			computorv2_move(st);
 			computorv2_parse_object(p2, st);
-			computorv2_operation(left, p2->obj);
+			computorv2_operation(&result, left, st->obj, COMPUTORV2_OPERATION_MULT);
+			st->obj = result;
 		}
 		else if (computorv2_next_at(st, 0) == '/')
 		{
@@ -125,9 +148,38 @@ int computorv2_parse_multiplicatives(t_computorv2 *p2, t_statment *st)
 	return (0);
 }
 
-int computorv2_parse_expression(t_computorv2 *p2, t_statment *st)
+int computorv2_parse_additional(t_computorv2 *p2, t_statment *st)
 {
 	computorv2_parse_multiplicatives(p2, st);
+	while (1)
+	{
+		computorv2_skip_spaces(st);
+		exit(0);
+		t_object *left   = st->obj;
+		t_object *result = (t_object*)0;
+		if (computorv2_next_at(st, 0) == '+')
+		{
+			computorv2_move(st);
+			computorv2_parse_multiplicatives(p2, st);
+			computorv2_operation(&result, left, st->obj, COMPUTORV2_OPERATION_ADD);
+			st->obj = result;
+		}
+		else
+		{
+			break ;			
+		}
+	}
+	return (0);
+}
+
+int computorv2_parse_expression(t_computorv2 *p2, t_statment *st)
+{
+	computorv2_parse_additional(p2, st);
+
+	t_number res = ((t_rational*)(st->obj))->value;
+
+	printf("%.10f\n", res);
+
 	exit(0);
 	return (0);
 }
@@ -164,3 +216,36 @@ int main(int argc, char const *argv[])
 	computorv2_parse_statment(&st);
 	return 0;
 }
+
+
+
+/*
+
+https://github.com/<name>
+https://gitlab.com/<name>
+https://www.linkedin.com/in/<name>
+https://<name>.com
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

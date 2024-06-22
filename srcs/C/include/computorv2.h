@@ -16,25 +16,32 @@
 	 = ?
 */
 
+# define COMPUTORV2_OPERATION_MULT   1
+# define COMPUTORV2_OPERATION_ADD    2
+
 # define COMPUTORV2_SUCCESS          0
 # define COMPUTORV2_ERROR            1
 # define COMPUTORV2_MAX_VARLEN       1024
 # define COMPUTORV2_OBJECT_INTERFACE struct s_object *next; char *name; int type
+
+# define COMPUTORV2_TYPE_RATIONAL   1
+
 
 typedef double t_number;
 typedef struct s_object t_object;
 
 typedef struct s_computorv2
 {
-	t_object *obj;
+	
 }	t_computorv2;
 
 typedef struct s_statment
 {
-	int  pos;
-	char *str;
-	int  len;
-	char *var;
+	int      pos;
+	char     *str;
+	int      len;
+	char     *var;
+	t_object *obj;
 }	t_statment;
 
 typedef struct s_object
