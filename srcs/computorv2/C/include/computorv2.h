@@ -26,6 +26,9 @@
 
 # define COMPUTORV2_TYPE_RATIONAL   1
 
+# define RATIONAL2NUMBER(o) (((t_rational*)o)->value)
+
+# define ISRATIONAL(o) ((o) && (o->type & COMPUTORV2_TYPE_RATIONAL))
 
 typedef double t_number;
 typedef struct s_object t_object;
@@ -86,5 +89,6 @@ typedef struct s_function
 
 int computorv2_assignment(t_statment *st);
 int computorv2_define_function(t_statment *st, const char *function_name, const char *variable_name);
+int computorv2_parse_expression(t_computorv2 *p2, t_statment *st);
 
 #endif//COMPUTORV2_H

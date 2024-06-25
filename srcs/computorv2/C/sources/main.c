@@ -39,25 +39,32 @@ int computorv2_assignment(t_statment *st)
 	return (0);
 }
 
+t_rational* computorv2_new_rational(t_number value)
+{
+	t_rational* r =  malloc(sizeof(t_rational));
+	if (r)
+	{
+		r->type  = COMPUTORV2_TYPE_RATIONAL;
+		r->value = value;
+	}
+	return (r);
+}
+
 int computorv2_operation(t_object **result, t_object *left, t_object *right, int operation_code)
 {
 	if (operation_code == COMPUTORV2_OPERATION_MULT)
 	{
-		if ((left->type == COMPUTORV2_TYPE_RATIONAL) && (right->type == COMPUTORV2_TYPE_RATIONAL))
+		if (ISRATIONAL(left) && ISRATIONAL(right))
 		{
-			*result = malloc(sizeof(t_rational));
-			((t_rational*)(*result))->type  = COMPUTORV2_TYPE_RATIONAL;
-			((t_rational*)(*result))->value = (((t_rational*)left)->value) * (((t_rational*)right)->value);
+			*result = (t_object*) computorv2_new_rational(RATIONAL2NUMBER(left) * RATIONAL2NUMBER(right));
 			return (COMPUTORV2_SUCCESS);
 		}
 	}
-	if (operation_code == COMPUTORV2_OPERATION_MULT)
+	if (operation_code == COMPUTORV2_OPERATION_ADD)
 	{
-		if ((left->type == COMPUTORV2_TYPE_RATIONAL) && (right->type == COMPUTORV2_TYPE_RATIONAL))
+		if (ISRATIONAL(left) && ISRATIONAL(right))
 		{
-			*result = malloc(sizeof(t_rational));
-			((t_rational*)(*result))->type  = COMPUTORV2_TYPE_RATIONAL;
-			((t_rational*)(*result))->value = (((t_rational*)left)->value) + (((t_rational*)right)->value);
+			*result = (t_object*) computorv2_new_rational(RATIONAL2NUMBER(left) + RATIONAL2NUMBER(right));
 			return (COMPUTORV2_SUCCESS);
 		}
 	}
@@ -101,10 +108,40 @@ int computorv2_parse_rational(t_computorv2 *p2, t_statment *st)
 	return (COMPUTORV2_SUCCESS);
 }
 
+int computorv2_parse_matrix(t_computorv2 *p2, t_statment *st)
+{
+	computorv2_skip_spaces(st);
+	if (computorv2_next(st) != '[')
+	{
+		return (0);
+	}
+	computorv2_move(st);
+	exit(0);
+	return (0);
+}
+
 int computorv2_parse_object(t_computorv2 *p2, t_statment *st)
 {
 	computorv2_skip_spaces(st);
 	const char c = computorv2_next(st);
+	if (c == '[')
+	{
+		return (computorv2_parse_matrix(p2, st));
+	}
+	if (c == '(')
+	{
+		computorv2_move(st);
+		computorv2_skip_spaces(st);
+		computorv2_parse_expression(p2, st);
+		computorv2_skip_spaces(st);
+		if (computorv2_next(st) != ')')
+		{
+			return (COMPUTORV2_ERROR);
+		}
+		computorv2_move(st);
+		computorv2_skip_spaces(st);
+		return (0);
+	}
 	if (isdigit(c))
 	{
 		return (computorv2_parse_rational(p2, st));
@@ -154,7 +191,6 @@ int computorv2_parse_additional(t_computorv2 *p2, t_statment *st)
 	while (1)
 	{
 		computorv2_skip_spaces(st);
-		exit(0);
 		t_object *left   = st->obj;
 		t_object *result = (t_object*)0;
 		if (computorv2_next_at(st, 0) == '+')
@@ -162,7 +198,7 @@ int computorv2_parse_additional(t_computorv2 *p2, t_statment *st)
 			computorv2_move(st);
 			computorv2_parse_multiplicatives(p2, st);
 			computorv2_operation(&result, left, st->obj, COMPUTORV2_OPERATION_ADD);
-			st->obj = result;
+			st->obj = result;			
 		}
 		else
 		{
@@ -175,12 +211,6 @@ int computorv2_parse_additional(t_computorv2 *p2, t_statment *st)
 int computorv2_parse_expression(t_computorv2 *p2, t_statment *st)
 {
 	computorv2_parse_additional(p2, st);
-
-	t_number res = ((t_rational*)(st->obj))->value;
-
-	printf("%.10f\n", res);
-
-	exit(0);
 	return (0);
 }
 
@@ -194,11 +224,16 @@ int main(int argc, char const *argv[])
 	t_statment st;
 
 	st.pos = 0;
-	st.str = "2 * 4 + 1";
+	st.str = " [[2,3];[4,3]]";
 	st.len = strlen(st.str);
 
-
 	computorv2_parse_expression(&p2, &st);
+
+	t_number res = ((t_rational*)(st.obj))->value;
+
+	printf("[%.10f]\n", res);
+
+	exit(0);
 
 
 	st.pos = 0;
@@ -216,36 +251,3 @@ int main(int argc, char const *argv[])
 	computorv2_parse_statment(&st);
 	return 0;
 }
-
-
-
-/*
-
-https://github.com/<name>
-https://gitlab.com/<name>
-https://www.linkedin.com/in/<name>
-https://<name>.com
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
