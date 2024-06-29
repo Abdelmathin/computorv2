@@ -71,8 +71,12 @@ int computorv2_operation(t_object **result, t_object *left, t_object *right, int
 	return (COMPUTORV2_ERROR);
 }
 
-int computorv2_parse_rational(t_computorv2 *p2, t_statment *st)
+int computorv2_parse_rational(t_rational *r, t_statment *st)
 {
+	if (!st)
+	{
+		return (COMPUTORV2_ERROR);
+	}
 	computorv2_skip_spaces(st);
 	if (!isdigit(computorv2_next(st)))
 	{
@@ -102,9 +106,38 @@ int computorv2_parse_rational(t_computorv2 *p2, t_statment *st)
 			c = computorv2_next(st);
 		}
 	}
-	st->obj = malloc(sizeof(t_rational));
-	st->obj->type = COMPUTORV2_TYPE_RATIONAL;
-	((t_rational*)(st->obj))->value = integer_part + fractional_part;
+	if (r)
+	{
+		r->type  = COMPUTORV2_TYPE_RATIONAL;
+		r->value = integer_part + fractional_part;
+	}
+	return (COMPUTORV2_SUCCESS);
+}
+
+int computorv2_parse_vector(t_computorv2 *p2, t_statment *st)
+{
+	t_rational r;
+
+	computorv2_skip_spaces(st);
+	if (computorv2_next(st) != '[')
+	{
+		return (COMPUTORV2_ERROR);
+	}
+	while (1)
+	{
+		computorv2_move(st);
+		computorv2_parse_rational(&r, st);
+		computorv2_skip_spaces(st);
+		if (computorv2_next(st) == ']')
+		{
+			break;
+		}
+		else if (computorv2_next(st) != ',')
+		{
+			return (COMPUTORV2_ERROR);
+		}
+	}
+	computorv2_move(st);
 	return (COMPUTORV2_SUCCESS);
 }
 
@@ -115,8 +148,20 @@ int computorv2_parse_matrix(t_computorv2 *p2, t_statment *st)
 	{
 		return (0);
 	}
+	while (1)
+	{
+		computorv2_move(st);
+		computorv2_parse_vector((t_computorv2 *)0, st);
+		if (computorv2_next(st) == ']')
+		{
+			break;
+		}
+		else if (computorv2_next(st) != ';')
+		{
+			return (COMPUTORV2_ERROR);
+		}
+	}
 	computorv2_move(st);
-	exit(0);
 	return (0);
 }
 
@@ -144,14 +189,40 @@ int computorv2_parse_object(t_computorv2 *p2, t_statment *st)
 	}
 	if (isdigit(c))
 	{
-		return (computorv2_parse_rational(p2, st));
+		return (computorv2_parse_rational(0, st));
+	}
+	return (0);
+}
+
+int computorv2_parse_exponentiation(t_computorv2 *p2, t_statment *st)
+{
+	computorv2_parse_object(p2, st);
+	while (1)
+	{
+		t_object *left   = (t_object *) st->obj;
+		t_object *result = (t_object*)0;
+		computorv2_skip_spaces(st);
+		if (computorv2_next(st) == '^')
+		{
+			computorv2_move(st);
+			computorv2_parse_object(p2, st);
+			t_object *right = (t_object *) st->obj;
+			computorv2_operation(&result, left, right, COMPUTORV2_OPERATION_EXPONENTIATION);
+
+			printf("[%c]", computorv2_next(st));
+			exit(0);
+		}
+		else
+		{
+			break ;
+		}
 	}
 	return (0);
 }
 
 int computorv2_parse_multiplicatives(t_computorv2 *p2, t_statment *st)
 {
-	computorv2_parse_object(p2, st);
+	computorv2_parse_exponentiation(p2, st);
 	while (1)
 	{
 		computorv2_skip_spaces(st);
@@ -161,24 +232,24 @@ int computorv2_parse_multiplicatives(t_computorv2 *p2, t_statment *st)
 		{
 			computorv2_move(st);
 			computorv2_move(st);
-			computorv2_parse_object(p2, st);
+			computorv2_parse_exponentiation(p2, st);
 		}
 		else if (computorv2_next_at(st, 0) == '*')
 		{
 			computorv2_move(st);
-			computorv2_parse_object(p2, st);
+			computorv2_parse_exponentiation(p2, st);
 			computorv2_operation(&result, left, st->obj, COMPUTORV2_OPERATION_MULT);
 			st->obj = result;
 		}
 		else if (computorv2_next_at(st, 0) == '/')
 		{
 			computorv2_move(st);
-			computorv2_parse_object(p2, st);
+			computorv2_parse_exponentiation(p2, st);
 		}
 		else if (computorv2_next_at(st, 0) == '%')
 		{
 			computorv2_move(st);
-			computorv2_parse_object(p2, st);
+			computorv2_parse_exponentiation(p2, st);
 		}
 		break ;
 	}
@@ -193,7 +264,7 @@ int computorv2_parse_additional(t_computorv2 *p2, t_statment *st)
 		computorv2_skip_spaces(st);
 		t_object *left   = st->obj;
 		t_object *result = (t_object*)0;
-		if (computorv2_next_at(st, 0) == '+')
+		if (computorv2_next(st) == '+')
 		{
 			computorv2_move(st);
 			computorv2_parse_multiplicatives(p2, st);
@@ -224,20 +295,23 @@ int main(int argc, char const *argv[])
 	t_statment st;
 
 	st.pos = 0;
-	st.str = " [[2,3];[4,3]]";
+	st.str = " ( 1 + 2 ) * ( 5 - 2 ) ";
+	st.str = " 1 + 2 ";
+	st.str = " 1 - 2 ";
+	st.str = " 2 ^ 2 ";
 	st.len = strlen(st.str);
 
 	computorv2_parse_expression(&p2, &st);
 
-	t_number res = ((t_rational*)(st.obj))->value;
+	// t_number res = ((t_rational*)(st.obj))->value;
 
-	printf("[%.10f]\n", res);
+	// printf("[%.10f]\n", res);
 
 	exit(0);
 
 
 	st.pos = 0;
-	st.str = "funB(x)  + 1= 2 * 4 + x";
+	st.str = "funB(x)  + 1 = 2 * 4 + x";
 	st.str = "   funA( x )    = 2 * 4 + x";
 	st.len = strlen(st.str);
 

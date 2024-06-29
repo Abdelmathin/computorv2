@@ -16,8 +16,9 @@
 	 = ?
 */
 
-# define COMPUTORV2_OPERATION_MULT   1
-# define COMPUTORV2_OPERATION_ADD    2
+# define COMPUTORV2_OPERATION_MULT           1
+# define COMPUTORV2_OPERATION_ADD            2
+# define COMPUTORV2_OPERATION_EXPONENTIATION 3
 
 # define COMPUTORV2_SUCCESS          0
 # define COMPUTORV2_ERROR            1
