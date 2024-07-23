@@ -29,6 +29,11 @@ typedef struct s_computorv2
 
 typedef int t_error;
 
+// static t_irrational PI;
+// static t_irrational E;
+// static t_irrational PHI;
+// static t_complex    i;
+
 typedef struct s_object t_object;
 
 typedef struct s_object
@@ -308,6 +313,27 @@ int computorv2_operation_code(t_statment *st)
     return (0);
 }
 
+# define ISDIGIT(c)  (('0' <= c) && (c <= '9'))
+# define VARSTART(c) ((('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')) || (c == '_'))
+# define VARCHAR(c)  (VARSTART(c) || ISDIGIT(c))
+
+t_error computorv2_parse_variable(t_statment *st)
+{
+    char c = computorv2_getc(st);
+    char variable_name[COMPUTORV2_MAX_VARLEN];
+    unsigned int i = 0;
+    while ((i < COMPUTORV2_MAX_VARLEN) && (VARCHAR(c)))
+    {
+        variable_name[i] = c;
+        c = computorv2_next(st);
+        i++;
+    }
+    variable_name[i] = 0;
+    printf("variable_name = %s\n", variable_name);
+    exit(0);
+    return (st->err);
+}
+
 /* [START] statment [START] */
 
 t_error computorv2_parse_object(t_statment *st)
@@ -315,7 +341,11 @@ t_error computorv2_parse_object(t_statment *st)
     st->operation = 0;
     computorv2_skip_spaces(st);
     const char c = computorv2_getc(st);
-    if (('0' <= c) && (c <= '9'))
+    if (VARSTART(c))
+    {
+        st->err = computorv2_parse_variable(st);
+    }
+    else if (ISDIGIT(c))
     {
         st->err = computorv2_parse_number(st);
     }
@@ -326,8 +356,16 @@ t_error computorv2_parse_object(t_statment *st)
     }
     if (!st->err)
     {
-        st->operation = computorv2_operation_code(st);        
-        printf("st->operation = %i\n", st->operation);
+        computorv2_skip_spaces(st);        
+        if (VARSTART(computorv2_getc(st)))
+        {
+            /* caseOf(2i) */
+            st->operation = COMPUTORV2_OPERATION_MULT;
+        }
+        else
+        {
+            st->operation = computorv2_operation_code(st);
+        }
     }
     return (st->err);
 }
@@ -387,8 +425,14 @@ int main(int argc, char **argv)
 	}
     computorv2_init_statment(&st);
 
+    /*
+        PI
+        E
+        i
+    */
+
     st.pos = 0;
-    st.str = "  4 * 5 + 2 ";
+    st.str = " 2i ";
     st.len = -1;
     st.vm  = &vm;
 
