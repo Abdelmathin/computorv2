@@ -10,10 +10,12 @@
 # define ERROR_NOT_ENOUGH_MEMORY 1
 # define ERROR_NAN               2
 
-# define COMPUTORV2_OPERATION_MULT           (1 << 0)
-# define COMPUTORV2_OPERATION_ADD            (1 << 1)
-# define COMPUTORV2_OPERATION_SUB            (1 << 2)
-# define COMPUTORV2_OPERATION_EXPONENTIATION (1 << 3)
+
+# define COMPUTORV2_OPERATION_ADD  (1 << 0)
+# define COMPUTORV2_OPERATION_SUB  (1 << 1)
+# define COMPUTORV2_OPERATION_MULT (1 << 2)
+# define COMPUTORV2_OPERATION_DIV  (1 << 3)
+# define COMPUTORV2_OPERATION_EXP  (1 << 4)
 
 # define COMPUTORV2_TYPE_INTEGER    1
 # define COMPUTORV2_TYPE_RATIONAL   2
@@ -301,6 +303,10 @@ int computorv2_operation_code(t_statment *st)
     computorv2_skip_spaces(st);
     const char c = computorv2_getc(st);
     const char z = computorv2_next(st);
+    if (!c)
+    {
+        return (0);
+    }
     switch (c)
     {
         case '+':
@@ -309,7 +315,12 @@ int computorv2_operation_code(t_statment *st)
             return (COMPUTORV2_OPERATION_SUB);
         case '*':
             return (COMPUTORV2_OPERATION_MULT);
+        case '/':
+            return (COMPUTORV2_OPERATION_DIV);
+        case '^':
+            return (COMPUTORV2_OPERATION_EXP);
     }
+    printf("operation_code ======> %c\n", c);
     return (0);
 }
 
@@ -432,7 +443,7 @@ int main(int argc, char **argv)
     */
 
     st.pos = 0;
-    st.str = " 2i ";
+    st.str = " 5 ^ 2 ";
     st.len = -1;
     st.vm  = &vm;
 
