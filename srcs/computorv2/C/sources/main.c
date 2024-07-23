@@ -20,10 +20,7 @@ int computorv2_init(t_computorv2 *p2)
 	return (COMPUTORV2_SUCCESS);
 }
 
-int computorv2_fini(t_computorv2 *p2)
-{
-	return (COMPUTORV2_SUCCESS);
-}
+
 
 int computorv2_define_function(t_statment *st, const char *function_name, const char *variable_name)
 {
@@ -194,96 +191,9 @@ int computorv2_parse_object(t_computorv2 *p2, t_statment *st)
 	return (0);
 }
 
-int computorv2_parse_exponentiation(t_computorv2 *p2, t_statment *st)
-{
-	computorv2_parse_object(p2, st);
-	while (1)
-	{
-		t_object *left   = (t_object *) st->obj;
-		t_object *result = (t_object*)0;
-		computorv2_skip_spaces(st);
-		if (computorv2_next(st) == '^')
-		{
-			computorv2_move(st);
-			computorv2_parse_object(p2, st);
-			t_object *right = (t_object *) st->obj;
-			computorv2_operation(&result, left, right, COMPUTORV2_OPERATION_EXPONENTIATION);
 
-			printf("[%c]", computorv2_next(st));
-			exit(0);
-		}
-		else
-		{
-			break ;
-		}
-	}
-	return (0);
-}
 
-int computorv2_parse_multiplicatives(t_computorv2 *p2, t_statment *st)
-{
-	computorv2_parse_exponentiation(p2, st);
-	while (1)
-	{
-		computorv2_skip_spaces(st);
-		t_object *left   = st->obj;
-		t_object *result = (t_object*)0;
-		if ((computorv2_next_at(st, 0) == '*') && (computorv2_next_at(st, 1) == '*'))
-		{
-			computorv2_move(st);
-			computorv2_move(st);
-			computorv2_parse_exponentiation(p2, st);
-		}
-		else if (computorv2_next_at(st, 0) == '*')
-		{
-			computorv2_move(st);
-			computorv2_parse_exponentiation(p2, st);
-			computorv2_operation(&result, left, st->obj, COMPUTORV2_OPERATION_MULT);
-			st->obj = result;
-		}
-		else if (computorv2_next_at(st, 0) == '/')
-		{
-			computorv2_move(st);
-			computorv2_parse_exponentiation(p2, st);
-		}
-		else if (computorv2_next_at(st, 0) == '%')
-		{
-			computorv2_move(st);
-			computorv2_parse_exponentiation(p2, st);
-		}
-		break ;
-	}
-	return (0);
-}
 
-int computorv2_parse_additional(t_computorv2 *p2, t_statment *st)
-{
-	computorv2_parse_multiplicatives(p2, st);
-	while (1)
-	{
-		computorv2_skip_spaces(st);
-		t_object *left   = st->obj;
-		t_object *result = (t_object*)0;
-		if (computorv2_next(st) == '+')
-		{
-			computorv2_move(st);
-			computorv2_parse_multiplicatives(p2, st);
-			computorv2_operation(&result, left, st->obj, COMPUTORV2_OPERATION_ADD);
-			st->obj = result;			
-		}
-		else
-		{
-			break ;			
-		}
-	}
-	return (0);
-}
-
-int computorv2_parse_expression(t_computorv2 *p2, t_statment *st)
-{
-	computorv2_parse_additional(p2, st);
-	return (0);
-}
 
 int main(int argc, char const *argv[])
 {
