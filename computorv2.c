@@ -1,6 +1,7 @@
 # include <ctype.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <math.h>
 
 # define COMPUTORV2_SUCCESS          0
 # define COMPUTORV2_ERROR            1
@@ -220,6 +221,14 @@ int computorv2_operation(t_object **result, const t_object *left, const t_object
         if (ISRATIONAL(left) && ISRATIONAL(right))
         {
             *result = (t_object *) computorv2_new_rational(RATIONAL2NUMBER(left) * RATIONAL2NUMBER(right));
+            return (0);
+        }
+    }
+    else if (operation_code == COMPUTORV2_OPERATION_EXP)
+    {
+        if (ISRATIONAL(left) && ISRATIONAL(right))
+        {
+            *result = (t_object *) computorv2_new_rational(exp(RATIONAL2NUMBER(right) * log(RATIONAL2NUMBER(left))));
             return (0);
         }
     }
