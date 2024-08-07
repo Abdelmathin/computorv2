@@ -2,6 +2,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
+# include <unistd.h>
 
 # define COMPUTORV2_SUCCESS          0
 # define COMPUTORV2_ERROR            1
@@ -11,6 +12,9 @@
 # define ERROR_NOT_ENOUGH_MEMORY 1
 # define ERROR_NAN               2
 
+# define STATMENT_TYPE_GET       1
+# define STATMENT_TYPE_SET       2
+# define STATMENT_TYPE_SOLVE     4
 
 # define COMPUTORV2_OPERATION_ADD  (1 << 0)
 # define COMPUTORV2_OPERATION_SUB  (1 << 1)
@@ -24,11 +28,6 @@
 # define COMPUTORV2_OBJECT_INTERFACE struct s_object *next; char *name; int type
 # define RATIONAL2NUMBER(o) (((t_rational*)o)->value)
 # define ISRATIONAL(o) ((o) && (o->type & COMPUTORV2_TYPE_RATIONAL))
-
-typedef struct s_computorv2
-{
-
-} t_computorv2;
 
 typedef int t_error;
 
@@ -78,12 +77,18 @@ typedef struct s_function
     char *variable;
 }   t_function;
 
+typedef struct s_computorv2
+{
+    t_object     *variables;
+} t_computorv2;
+
 typedef struct s_statment
 {
     unsigned int pos;
     char         *str;
     unsigned int len;
     int          err;
+    int          type;
     int          operation;
     char         *var;
     t_object     *result;
@@ -433,7 +438,44 @@ t_error computorv2_parse_statment(t_statment *st)
     return (st->err);
 }
 
+t_error computorv2_assignment(t_statment *st)
+{
+    return (st->err);
+}
+
+t_error computorv2_solve_equation(t_statment *st)
+{
+    return (st->err);
+}
+
+t_error computorv2_parse_line(t_statment *st)
+{
+
+
+    exit(0);
+
+
+    computorv2_parse_statment(st);
+    return (st->err);
+}
+
 /* [STOP] statment [STOP] */
+// ⁰¹²³⁴⁵⁶⁷⁸⁹
+/*
+
+    PGCD
+
+    - define a variable:
+        varA = 2
+    - define a function:
+        funA(x) = 2*x^5 + 4x^2 - 5*x + 4
+    - get value:
+        a + 2 = ?
+        funC(3) = ?
+    - solve equation:
+        funA(x) = 0 ?
+
+*/
 
 int main(int argc, char **argv)
 {
@@ -451,12 +493,13 @@ int main(int argc, char **argv)
         i
     */
 
+
     st.pos = 0;
-    st.str = " 5 ^ 2 ";
+    st.str = "varA = 2";
     st.len = -1;
     st.vm  = &vm;
 
-    computorv2_parse_statment(&st);
+    computorv2_parse_line(&st);
 
     computorv2_print(st.result);
 	return (0);
