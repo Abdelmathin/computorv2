@@ -65,4 +65,6 @@ python:
 push:
 	git add . && git commit -m "update" && git push
 
+p: push
+
 re: fclean all

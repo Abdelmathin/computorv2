@@ -434,28 +434,70 @@ t_error computorv2_parse_additional(t_statment *st)
 
 t_error computorv2_parse_statment(t_statment *st)
 {
+    printf("st->type = %i\n", st->type);
+    printf("[");
+    while ((st->pos < st->len) && (st->str[st->pos]))
+    {
+        printf("%c", st->str[st->pos]);
+        st->pos++;
+    }
+    printf("]\n");
+    exit(0);
     computorv2_parse_additional(st);
-    return (st->err);
-}
-
-t_error computorv2_assignment(t_statment *st)
-{
-    return (st->err);
-}
-
-t_error computorv2_solve_equation(t_statment *st)
-{
     return (st->err);
 }
 
 t_error computorv2_parse_line(t_statment *st)
 {
-
-
-    exit(0);
-
-
+    const unsigned int oldlen = st->len;
+    int equals = 0;
+    unsigned int pos = st->pos;
+    while ((pos < st->len) && (st->str[pos] != '\0'))
+    {
+        if (st->str[pos] == '=')
+        {
+            equals++;
+        }
+        pos++;
+    }
+    if (equals < 1)
+    {
+        st->type = STATMENT_TYPE_GET;
+        return (computorv2_parse_statment(st));
+    }
+    while ((pos > st->pos) && ((pos == st->len) || isspace(st->str[pos]) || (st->str[pos] == '\0')))
+    {
+        pos--;
+    }
+    if (st->str[pos] == '=')
+    {
+        st->len = pos;
+        st->type = STATMENT_TYPE_GET;
+        computorv2_parse_statment(st);
+        st->len = oldlen;
+        return (st->err);
+    }
+    st->type = STATMENT_TYPE_SET;
+    if (st->str[pos] == '?')
+    {
+        pos--;
+        while ((pos > st->pos) && (isspace(st->str[pos])))
+        {
+            pos--;
+        }
+        if (st->str[pos] == '=')
+        {
+            st->len  = pos;
+            st->type = STATMENT_TYPE_GET;
+        }
+        else
+        {
+            st->len  = pos + 1;
+            st->type = STATMENT_TYPE_SOLVE;
+        }
+    }
     computorv2_parse_statment(st);
+    st->len = oldlen;
     return (st->err);
 }
 
@@ -465,11 +507,12 @@ t_error computorv2_parse_line(t_statment *st)
 
     PGCD
 
-    - define a variable:
-        varA = 2
-    - define a function:
-        funA(x) = 2*x^5 + 4x^2 - 5*x + 4
-    - get value:
+    - set: variable / function:
+        - varA = 2
+        - funA(x) = 2*x^5 + 4x^2 - 5*x + 4
+    - get: variable / function:
+        a + 2
+        a + 2 =
         a + 2 = ?
         funC(3) = ?
     - solve equation:
@@ -495,7 +538,7 @@ int main(int argc, char **argv)
 
 
     st.pos = 0;
-    st.str = "varA = 2";
+    st.str = "  a + 2 =  0";
     st.len = -1;
     st.vm  = &vm;
 
