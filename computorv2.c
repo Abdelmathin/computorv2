@@ -4,30 +4,31 @@
 # include <math.h>
 # include <unistd.h>
 
-# define COMPUTORV2_SUCCESS          0
-# define COMPUTORV2_ERROR            1
-
 # define COMPUTORV2_MAX_VARLEN       1024
+# define COMPUTORV2_BUFFER_SIZE      1024
 
-# define ERROR_NOT_ENOUGH_MEMORY 1
-# define ERROR_NAN               2
+# define COMPUTORV2_SUCCESS          (0 << 0)
+# define COMPUTORV2_ERROR            (1 << 0)
 
-# define STATMENT_TYPE_GET       1
-# define STATMENT_TYPE_SET       2
-# define STATMENT_TYPE_SOLVE     4
+# define ERROR_NOT_ENOUGH_MEMORY     (1 << 0)
+# define ERROR_NAN                   (1 << 1)
 
-# define COMPUTORV2_OPERATION_ADD  (1 << 0)
-# define COMPUTORV2_OPERATION_SUB  (1 << 1)
-# define COMPUTORV2_OPERATION_MULT (1 << 2)
-# define COMPUTORV2_OPERATION_DIV  (1 << 3)
-# define COMPUTORV2_OPERATION_EXP  (1 << 4)
+# define STATMENT_TYPE_GET           (1 << 0)
+# define STATMENT_TYPE_SET           (1 << 1)
+# define STATMENT_TYPE_SOLVE         (1 << 2)
 
-# define COMPUTORV2_TYPE_INTEGER    1
-# define COMPUTORV2_TYPE_RATIONAL   2
+# define COMPUTORV2_OPERATION_ADD    (1 << 0)
+# define COMPUTORV2_OPERATION_SUB    (1 << 1)
+# define COMPUTORV2_OPERATION_MULT   (1 << 2)
+# define COMPUTORV2_OPERATION_DIV    (1 << 3)
+# define COMPUTORV2_OPERATION_EXP    (1 << 4)
+
+# define COMPUTORV2_TYPE_INTEGER     (1 << 0)
+# define COMPUTORV2_TYPE_RATIONAL    (1 << 1)
 
 # define COMPUTORV2_OBJECT_INTERFACE struct s_object *next; char *name; int type
-# define RATIONAL2NUMBER(o) (((t_rational*)o)->value)
-# define ISRATIONAL(o) ((o) && (o->type & COMPUTORV2_TYPE_RATIONAL))
+# define RATIONAL2NUMBER(o)          (((t_rational*)o)->value)
+# define ISRATIONAL(o)               ((o) && (o->type & COMPUTORV2_TYPE_RATIONAL))
 
 typedef int t_error;
 
@@ -37,6 +38,13 @@ typedef int t_error;
 // static t_complex    i;
 
 typedef struct s_object t_object;
+
+typedef struct s_buffer
+{
+    struct s_buffer *next;
+    char            *str;
+    unsigned int    len;
+}   t_buffer;
 
 typedef struct s_object
 {
@@ -90,7 +98,8 @@ typedef struct s_statment
     int          err;
     int          type;
     int          operation;
-    char         *var;
+    char         *function_name;
+    char         *variable_name;
     t_object     *result;
     t_computorv2 *vm;
 }	t_statment;
@@ -130,14 +139,15 @@ int computorv2_init_statment(t_statment *st)
 {
     if (st)
     {
-        st->pos       = 0;
-        st->str       = (void *)0;
-        st->len       = 0;
-        st->err       = 0;
-        st->operation = 0;
-        st->var       = (void *)0;
-        st->result    = (void *)0;
-        st->vm        = (void *)0;
+        st->pos           = 0;
+        st->str           = (void *)0;
+        st->len           = 0;
+        st->err           = 0;
+        st->operation     = 0;
+        st->result        = (void *)0;
+        st->function_name = (char *)0;
+        st->variable_name = (char *)0;
+        st->vm            = (void *)0;
         return (0);
     }
     return (1);
@@ -538,7 +548,7 @@ int main(int argc, char **argv)
 
 
     st.pos = 0;
-    st.str = "  a + 2 =  0";
+    st.str = "  aaaaaaaaaaaaaaaaaaaa0123456789 = 1 + 2 + 3 + 4 + 5 + 6 ";
     st.len = -1;
     st.vm  = &vm;
 
