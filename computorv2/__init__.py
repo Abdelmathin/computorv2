@@ -36,6 +36,11 @@ def ISCOMPLEX(obj):
 		return (False)
 	return (obj.type() == COMPUTORV2_TYPE_COMPLEX)
 
+def ISVECTOR(obj):
+	if not obj:
+		return (False)
+	return (obj.type() == COMPUTORV2_TYPE_VECTOR)
+
 def is_digit(c):
 	try:
 		return (ord('0') <= ord(c) <= ord('9'))
@@ -153,6 +158,13 @@ class Computorv2Vector:
 		self.elements = elements
 		if not self.elements:
 			self.elements = []
+
+	def multiply(self, scalar):
+		i = 0
+		while (i < self.size()):
+			self.elements[i] *= scalar
+			i += 1
+		return (self)
 
 	def add(self, element):
 		self.elements.append(element)
@@ -320,6 +332,9 @@ class Computorv2:
 			if (ISINTEGER(left) and ISCOMPLEX(right)):
 				st.result = Computorv2Complex(left.toInteger())
 				return (0)
+			if (ISINTEGER(left) and ISVECTOR(right)):
+				st.result = right.multiply(left.toInteger())
+				return (0)
 		raise
 
 	def precedence(self, st, perv):
@@ -333,6 +348,7 @@ class Computorv2:
 			perv(st)
 			right     = st.result
 			st.result = None
+			print (left, right)
 			st.err    = self.operation(st, left, right, operation)
 		return (st.err);
 
@@ -360,7 +376,7 @@ st = Statment()
 cm = Computorv2()
 
 st.set_pos(0)
-st.set_str("  5 * i   ")
+st.set_str("   2 * [1, 2, 3]   ")
 st.set_len(len(st.get_str()))
 
 cm.parse_statment(st)
