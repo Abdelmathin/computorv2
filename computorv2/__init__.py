@@ -21,15 +21,15 @@ COMPUTORV2_TYPE_VECTOR      = (1 << 2)
 COMPUTORV2_TYPE_MATRIX      = (1 << 3)
 COMPUTORV2_TYPE_COMPLEX     = (1 << 4)
 
-def is_vector(obj):
-	if not obj:
-		return (False)
-	return (obj.type() == COMPUTORV2_TYPE_VECTOR)
-
 def ISINTEGER(obj):
 	if not obj:
 		return (False)
 	return (obj.type() == COMPUTORV2_TYPE_INTEGER)
+
+def ISRATIONAL(obj):
+	if not obj:
+		return (False)
+	return (obj.type() == COMPUTORV2_TYPE_RATIONAL)
 
 def ISCOMPLEX(obj):
 	if not obj:
@@ -41,79 +41,35 @@ def ISVECTOR(obj):
 		return (False)
 	return (obj.type() == COMPUTORV2_TYPE_VECTOR)
 
-def is_digit(c):
+def ISDIGIT(c):
 	try:
 		return (ord('0') <= ord(c) <= ord('9'))
 	except:
 		pass
 	return (False)
 
-def is_var_start(c):
+def CHARCODE(c):
+	return (ord(c))
+
+def ISVARSTART(c):
 	return (c.lower() in "_abcdefghijklmnopqrstuvwxyz")
 
-def is_var_char(c):
-	return (is_digit(c) or is_var_start(c))
+def IS_VAR_CHAR(c):
+	return (ISDIGIT(c) or ISVARSTART(c))
 
 class Computorv2Object:
-
-	def __init__(self):
-		pass
+	pass
 
 class Statment:
-	def __init__(self):
-		self.pos           = 0
-		self.str           = None
-		self.len           = 0
-		self.err           = 0
-		self.operation     = 0
-		self.result        = None
-		self.function_name = None
-		self.variable_name = None
-		self.vm            = None
-
-	def get_str(self):
-		return (self.str)
-
-	def set_pos(self, p):
-		self.pos = p
-	def set_str(self, s):
-		self.str = s
-	def set_len(self, l):
-		self.len = l
-
-	def skip_spaces(self):
-		while ((st.pos < st.len) and st.str[st.pos].isspace()):
-			st.pos += 1
-		return (COMPUTORV2_SUCCESS)
-
-	def getc(self):
-		if (st.pos < st.len):
-			return (st.str[st.pos])
-		return (None)
-
-	def next(self):
-		if (self.pos < self.len):
-			self.pos += 1
-		if (self.str) and (self.pos < self.len):
-			return (self.str[self.pos])
-		return (0)
-
-	def get_operation_code(self):
-		self.skip_spaces()
-		c = self.getc()
-		z = self.next()
-		if (c == "+"):
-			return (COMPUTORV2_OPERATION_ADD)
-		if (c == "-"):
-			return (COMPUTORV2_OPERATION_SUB)
-		if (c == "*"):
-			return (COMPUTORV2_OPERATION_MULT)
-		if (c == "/"):
-			return (COMPUTORV2_OPERATION_DIV)
-		if (c == "^"):
-			return (COMPUTORV2_OPERATION_EXP)
-		print ("operation_code ======> " + c + "\n", c)
-		return (0);
+	pos           = 0
+	str           = None
+	len           = 0
+	err           = 0
+	operation     = 0
+	result        = None
+	function_name = None
+	variable_name = None
+	vm            = None
 
 class Computorv2Integer:
 
@@ -134,13 +90,22 @@ class Computorv2Rational:
 	def __init__(self, value):
 		self.value = float(value)
 
+	def toFloat(self):
+		return (self.value)
+
 	def type(self):
 		return (COMPUTORV2_TYPE_RATIONAL)
+
+	def toString(self):
+		return (str(self.value))
 
 class Computorv2Complex:
 
 	def __init__(self, value = 1):
 		self.value = value
+
+	def toNumber(self):
+		return (self.value)
 
 	def type(self):
 		return (COMPUTORV2_TYPE_COMPLEX)
@@ -207,92 +172,146 @@ class Computorv2Matrix:
 			s += v.toString() + "\n"
 		return (s.strip())
 
+def computorv2_operation(st, left, right, operation_code):
+	st.result = None
+	if (operation_code == COMPUTORV2_OPERATION_MULT):
+		if (ISINTEGER(left) and ISINTEGER(right)):
+			st.result = Computorv2Integer(left.toInteger() * right.toInteger())
+			return (0)
+		if (ISINTEGER(left) and ISRATIONAL(right)):
+			st.result = Computorv2Rational(left.toInteger() * right.toFloat())
+			return (0)
+		if (ISINTEGER(left) and ISCOMPLEX(right)):
+			st.result = Computorv2Complex(left.toInteger() * right.toNumber())
+			return (0)
+		if (ISINTEGER(left) and ISVECTOR(right)):
+			st.result = right.multiply(left.toInteger())
+			return (0)
+	raise
+
+def computorv2_statment_get_str(st):
+	return (st.str)
+
+def computorv2_statment_set_pos(st, p):
+	st.pos = p
+
+def computorv2_statment_set_str(st, s):
+	st.str = s
+
+def computorv2_statment_set_len(st, l):
+	st.len = l
+
+def computorv2_statment_getc(st):
+	if (st.pos < st.len):
+		return (st.str[st.pos])
+	return (0)
+
+def computorv2_statment_next(st):
+	if (st.pos < st.len):
+		st.pos += 1
+	if (st.str) and (st.pos < st.len):
+		return (st.str[st.pos])
+	return (0)
+
+def computorv2_skip_spaces(st):
+	while ((st.pos < st.len) and st.str[st.pos].isspace()):
+		st.pos += 1
+	return (COMPUTORV2_SUCCESS)
+
+def get_operation_code(st):
+	computorv2_skip_spaces(st)
+	c = computorv2_statment_getc(st)
+	z = computorv2_statment_next(st)
+	if (c == "+"):
+		return (COMPUTORV2_OPERATION_ADD)
+	if (c == "-"):
+		return (COMPUTORV2_OPERATION_SUB)
+	if (c == "*"):
+		return (COMPUTORV2_OPERATION_MULT)
+	if (c == "/"):
+		return (COMPUTORV2_OPERATION_DIV)
+	if (c == "^"):
+		return (COMPUTORV2_OPERATION_EXP)
+	print ("operation_code ======> '" + c + "' <======\n", c)
+	return (0);
+
+def computorv2_parse_number(st):
+	st.result = None
+	c = computorv2_statment_getc(st)
+	if not (ISDIGIT(c)):
+		return (1)
+	r = 0
+	while (ISDIGIT(c)):
+		r = 10 * r + (CHARCODE(c) - CHARCODE('0'))
+		c = computorv2_statment_next(st)
+	if (c != '.'):
+		st.result = Computorv2Integer(r)
+		return (0)
+	c = computorv2_statment_next(st)
+	f = 0.1
+	while (ISDIGIT(c)):
+		r = r + f * (CHARCODE(c) - CHARCODE('0'))
+		c = computorv2_statment_next(st)
+		f = f / 10.0
+	st.result = Computorv2Rational(r)
+	return (0)
+
 class Computorv2:
 	def __init__(self):
 		pass
 
-	def parse_number(self, st):
-		c = st.getc()
-		if not (is_digit(c)):
-			st.result = None
-			return (1)
-		r = ""
-		while (is_digit(c)):
-			r = r + c
-			c = st.next()
-		name = ""
-		while (is_var_char(st.getc())):
-			name += st.getc()
-			st.next()
-		if (name == "i"):
-			st.result = Computorv2Complex(int(r, 10))
-			return (0)
-		if (c != "."):
-			st.result = Computorv2Integer(int(r, 10))
-			return (0)
-		r += "."
-		c = st.next()
-		while (is_digit(c)):
-			r = r + c
-			c = st.next()
-		name = ""
-		while (is_var_char(st.getc())):
-			name += st.getc()
-			st.next()
-		if (name == "i"):
-			st.result = Computorv2Complex(float(r))
-			return (0)
-		st.result = Computorv2Rational(float(r))
-		return (0)
-
 	def parse_matrix(self, st):
-		c = st.getc()
+		c = computorv2_statment_getc(st)
 		if (c != '['):
 			st.result = None
 			return (1)
-		c = st.next()
-		st.skip_spaces()
+		c = computorv2_statment_next(st)
+		computorv2_skip_spaces(st)
 		if (c != '['):
 			v = Computorv2Vector()
 			while (1):
-				st.skip_spaces()
+				print ("before", computorv2_statment_getc(st))
+				computorv2_skip_spaces(st)
 				self.parse_object(st)
-				st.skip_spaces()
+				computorv2_skip_spaces(st)
+				print ("after", computorv2_statment_getc(st))
+				if not st.result:
+					return (1)
 				v.add(st.result)
-				if (st.getc() != ','):
+				if (computorv2_statment_getc(st) != ','):
 					break
-				c = st.next()
-
-			if (st.getc() != ']'):
+				c = computorv2_statment_next(st)
+			if (computorv2_statment_getc(st) != ']'):
 				st.result = None
 				return (1)
-			st.next()
+			exit()
+			computorv2_statment_next(st)
 			st.result = v
 			return (0)
 		m = Computorv2Matrix()
 		while (1):
-			st.skip_spaces()
+			computorv2_skip_spaces(st)
 			self.parse_object(st)
-			st.skip_spaces()
-			if not is_vector(st.result):
+			computorv2_skip_spaces(st)
+			if not ISVECTOR(st.result):
 				st.result = None
 				return (1)
 			m.add(st.result)
-			if (st.getc() != ';'):
+			if (computorv2_statment_getc(st) != ';'):
 				break
-			c = st.next()
-		if (st.getc() != ']'):
+			c = computorv2_statment_next(st)
+		if (computorv2_statment_getc(st) != ']'):
 			st.result = None
 			return (1)
-		st.next()
+		computorv2_statment_next(st)
 		st.result = m
 		return (0)
 
 	def parse_variable(self, st):
 		name = ""
-		while (is_var_char(st.getc())):
-			name += st.getc()
-			st.next()
+		while (IS_VAR_CHAR(computorv2_statment_getc(st))):
+			name += computorv2_statment_getc(st)
+			computorv2_statment_next(st)
 		if (name == "i"):
 			st.result = Computorv2Complex()
 			return (0)
@@ -301,41 +320,41 @@ class Computorv2:
 	def parse_object(self, st):
 		st.operation = 0
 		st.result    = None
-		st.skip_spaces()
-		c = st.getc()
-		if (is_var_start(c)):
+		computorv2_skip_spaces(st)
+		c = computorv2_statment_getc(st)
+		if (ISVARSTART(c)):
 			st.err = self.parse_variable(st)
-		elif (is_digit(c)):
-			st.err = self.parse_number(st)
+		elif (ISDIGIT(c)):
+			st.err = computorv2_parse_number(st)
+		elif (c == '('):
+			computorv2_statment_next(st)
+			computorv2_skip_spaces(st)
+			self.parse_additional(st)
+			computorv2_skip_spaces(st)
+			if (computorv2_statment_getc(st) != ')'):
+				# delete...
+				st.result = None
+				return (1)
+			computorv2_statment_next(st) # skip ')'
+			return (0)
+
 		elif (c == '['):
 			st.err = self.parse_matrix(st)
 		else:
 			print("\n\n\n\n>>>>>> invalid object! >>>>> c = '" + str(c) + "'\n")
 			exit(0)
 		if (st.err == 0):
-			st.skip_spaces()
-			c = st.getc()
+			computorv2_skip_spaces(st)
+			c = computorv2_statment_getc(st)
 			if not c:
 				return (0)
-			if (is_var_start(st.getc())):
+			if (ISVARSTART(computorv2_statment_getc(st))):
 				# caseOf(2i):
+				print ('# caseOf(2i):')
 				st.operation = COMPUTORV2_OPERATION_MULT
 			else:
-				st.operation = st.get_operation_code()
-
-	def operation(self, st, left, right, operation_code):
-		st.result = None
-		if (operation_code == COMPUTORV2_OPERATION_MULT):
-			if (ISINTEGER(left) and ISINTEGER(right)):
-				st.result = Computorv2Integer(left.toInteger() * right.toInteger())
-				return (0)
-			if (ISINTEGER(left) and ISCOMPLEX(right)):
-				st.result = Computorv2Complex(left.toInteger())
-				return (0)
-			if (ISINTEGER(left) and ISVECTOR(right)):
-				st.result = right.multiply(left.toInteger())
-				return (0)
-		raise
+				st.operation = get_operation_code(st)
+		return (st.err)
 
 	def precedence(self, st, perv):
 		perv(st)
@@ -348,8 +367,8 @@ class Computorv2:
 			perv(st)
 			right     = st.result
 			st.result = None
-			print (left, right)
-			st.err    = self.operation(st, left, right, operation)
+			print (left, right, operation)
+			st.err    = computorv2_operation(st, left, right, operation)
 		return (st.err);
 
 	def parse_exponentiation(self, st):
@@ -366,7 +385,6 @@ class Computorv2:
 
 	def parse_statment(self, st):
 		err = self.parse_additional(st)
-		print (st.result.toString())
 		return (err)
 
 	def parse_line(self, line):
@@ -375,8 +393,9 @@ class Computorv2:
 st = Statment()
 cm = Computorv2()
 
-st.set_pos(0)
-st.set_str("   2 * [1, 2, 3]   ")
-st.set_len(len(st.get_str()))
+computorv2_statment_set_pos(st, 0)
+computorv2_statment_set_str(st, " 2 * (5) ")
+computorv2_statment_set_len(st, len(computorv2_statment_get_str(st)))
 
 cm.parse_statment(st)
+print (st.result.toString())
