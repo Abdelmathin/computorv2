@@ -15,6 +15,7 @@ COMPUTORV2_OPERATION_MULT        = (1 << 2)
 COMPUTORV2_OPERATION_DIV         = (1 << 3)
 COMPUTORV2_OPERATION_EXP         = (1 << 4)
 
+COMPUTORV2_OPERATION_NONE        = (0 << 0)
 COMPUTORV2_TYPE_INTEGER          = (1 << 0)
 COMPUTORV2_TYPE_RATIONAL         = (1 << 1)
 COMPUTORV2_TYPE_VECTOR           = (1 << 2)
@@ -200,6 +201,9 @@ def computorv2_operation(st, left, right, operation_code):
 		if (ISCOMPLEX(left) and ISINTEGER(right)):
 			st.result = computorv2_new_complex(left._real + right._value, left._imag)
 			return (0)
+		if (ISCOMPLEX(right) and ISINTEGER(left)):
+			st.result = computorv2_new_complex(right._real + left._value, right._imag)
+			return (0)
 	if (operation_code == COMPUTORV2_OPERATION_MULT):
 		if (ISINTEGER(left) and ISINTEGER(right)):
 			st.result = computorv2_new_integer(left._value * right._value)
@@ -219,6 +223,11 @@ def computorv2_operation(st, left, right, operation_code):
 		if (ISINTEGER(right) and ISMATRIX(left)):
 			st.result = computorv2_multiply_integer_matrix(right, left)
 			return (0)
+	if (operation_code == COMPUTORV2_OPERATION_MOD):
+		if (ISINTEGER(left) and ISINTEGER(right)):
+			st.result = computorv2_new_integer(left._value % right._value)
+			return (0)
+	print (left, right, operation_code)
 	raise
 
 def computorv2_statment_get_str(st):
@@ -273,7 +282,7 @@ def get_operation_code(st):
 	if (c == "^"):
 		computorv2_statment_next(st)
 		return (COMPUTORV2_OPERATION_EXP)
-	return (0);
+	return (0)
 
 def computorv2_parse_number(st):
 	c = computorv2_statment_getc(st)
@@ -393,39 +402,35 @@ class Computorv2:
 			st.operation = get_operation_code(st)
 			if (ISVARSTART(computorv2_statment_getc(st))):
 				# caseOf(2i):
-				print ('# caseOf(2i):')
 				st.operation = COMPUTORV2_OPERATION_MULT
 		return (st.err)
 
-	def precedence(self, st, perv):
+	def precedence(self, st, perv, operations):
 		perv(st)
-		while (not st.err):
+		while ((st.err == 0) and ((operations & st.operation) != 0)):
 			operation = st.operation;
-			if (not operation):
-				return (st.err)
 			left      = st.result
 			st.result = None
 			perv(st)
 			right     = st.result
 			st.result = None
-			print (left, right, operation)
 			st.err    = computorv2_operation(st, left, right, operation)
 		return (st.err)
 
 	def parse_exponentiation(self, st):
-		err = self.precedence(st, self.parse_object)
+		err = self.precedence(st, self.parse_object, COMPUTORV2_OPERATION_NONE)
 		return (err)
 
 	def parse_multiplicatives(self, st):
-		err = self.precedence(st, self.parse_exponentiation)
+		err = self.precedence(st, self.parse_exponentiation, COMPUTORV2_OPERATION_EXP)
 		return (err)
 
 	def parse_additional(self, st):
-		err = self.precedence(st, self.parse_multiplicatives)
+		err = self.precedence(st, self.parse_multiplicatives, COMPUTORV2_OPERATION_MULT | COMPUTORV2_OPERATION_DIV | COMPUTORV2_OPERATION_MOD | COMPUTORV2_OPERATION_MATRIX_MULT)
 		return (err)
 
 	def parse_statment(self, st):
-		err = self.parse_additional(st)
+		err = self.precedence(st, self.parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB)
 		return (err)
 
 	def parse_line(self, line):
@@ -435,7 +440,7 @@ st = Statment()
 cm = Computorv2()
 
 computorv2_statment_set_pos(st, 0)
-computorv2_statment_set_str(st, "  5 + 5 * 5i ")
+computorv2_statment_set_str(st, "  15 % 6 ")
 computorv2_statment_set_len(st, len(computorv2_statment_get_str(st)))
 
 cm.parse_statment(st)
