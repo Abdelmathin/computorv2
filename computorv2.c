@@ -527,7 +527,8 @@ t_error computorv2_parse_line(t_statment *st)
         funC(3) = ?
     - solve equation:
         funA(x) = 0 ?
-
+        funA(x) = 3 + i ?
+    ./computor "1 / 3" --precision=15
 */
 
 int main(int argc, char **argv)

@@ -1,28 +1,29 @@
 
-COMPUTORV2_SUCCESS               = (0 << 0)
-COMPUTORV2_ERROR                 = (1 << 0)
+COMPUTORV2_SUCCESS                = (0 << 0)
+COMPUTORV2_ERROR                  = (1 << 0)
 
-ERROR_NOT_ENOUGH_MEMORY          = (1 << 0)
-ERROR_NAN                        = (1 << 1)
+ERROR_NOT_ENOUGH_MEMORY           = (1 << 0)
+ERROR_NAN                         = (1 << 1)
 
-STATMENT_TYPE_GET                = (1 << 0)
-STATMENT_TYPE_SET                = (1 << 1)
-STATMENT_TYPE_SOLVE              = (1 << 2)
+STATMENT_TYPE_VARIABLE_DEFINITION = (1 << 0)
+STATMENT_TYPE_FUNCTION_DEFINITION = (1 << 1)
+STATMENT_TYPE_SET                 = (1 << 2)
+STATMENT_TYPE_SOLVE               = (1 << 3)
 
-COMPUTORV2_OPERATION_ADD         = (1 << 0)
-COMPUTORV2_OPERATION_SUB         = (1 << 1)
-COMPUTORV2_OPERATION_MULT        = (1 << 2)
-COMPUTORV2_OPERATION_DIV         = (1 << 3)
-COMPUTORV2_OPERATION_EXP         = (1 << 4)
+COMPUTORV2_OPERATION_ADD          = (1 << 0)
+COMPUTORV2_OPERATION_SUB          = (1 << 1)
+COMPUTORV2_OPERATION_MULT         = (1 << 2)
+COMPUTORV2_OPERATION_DIV          = (1 << 3)
+COMPUTORV2_OPERATION_EXP          = (1 << 4)
 
-COMPUTORV2_OPERATION_NONE        = (0 << 0)
-COMPUTORV2_TYPE_INTEGER          = (1 << 0)
-COMPUTORV2_TYPE_RATIONAL         = (1 << 1)
-COMPUTORV2_TYPE_VECTOR           = (1 << 2)
-COMPUTORV2_TYPE_MATRIX           = (1 << 3)
-COMPUTORV2_TYPE_COMPLEX          = (1 << 4)
-COMPUTORV2_OPERATION_MATRIX_MULT = (1 << 5)
-COMPUTORV2_OPERATION_MOD         = (1 << 6)
+COMPUTORV2_OPERATION_NONE         = (0 << 0)
+COMPUTORV2_TYPE_INTEGER           = (1 << 0)
+COMPUTORV2_TYPE_RATIONAL          = (1 << 1)
+COMPUTORV2_TYPE_VECTOR            = (1 << 2)
+COMPUTORV2_TYPE_MATRIX            = (1 << 3)
+COMPUTORV2_TYPE_COMPLEX           = (1 << 4)
+COMPUTORV2_OPERATION_MATRIX_MULT  = (1 << 5)
+COMPUTORV2_OPERATION_MOD          = (1 << 6)
 
 def GETTYPEOF(obj):
 	if obj:
@@ -63,7 +64,7 @@ def IS_VAR_CHAR(c):
 class Computorv2Object:
 	pass
 
-class Statment:
+class t_statment:
 	pos           = 0
 	str           = None
 	len           = 0
@@ -73,6 +74,13 @@ class Statment:
 	function_name = None
 	variable_name = None
 	vm            = None
+	_type         = 0
+
+class Computorv2:
+	_variables = None
+
+class t_variable:
+	_name = ""
 
 class Computorv2Integer:
 	_value = 0
@@ -356,92 +364,111 @@ def computorv2_parse_matrix(self, st):
 	st.result = m
 	return (0)
 
-class Computorv2:
-	def __init__(self):
-		pass
+def computorv2_parse_variable(st):
+	name = ""
+	while (IS_VAR_CHAR(computorv2_statment_getc(st))):
+		name += computorv2_statment_getc(st)
+		computorv2_statment_next(st)
+	if (name == "i"):
+		st.result = computorv2_new_complex(0, 1)
+		return (0)
+	raise
 
-	def parse_variable(self, st):
-		name = ""
-		while (IS_VAR_CHAR(computorv2_statment_getc(st))):
-			name += computorv2_statment_getc(st)
-			computorv2_statment_next(st)
-		if (name == "i"):
-			st.result = computorv2_new_complex(0, 1)
-			return (0)
-		raise
-
-	def parse_object(self, st):
-		st.operation = 0
-		st.result    = None
+def computorv2_parse_object(computor, st):
+	st.operation = 0
+	st.result    = None
+	computorv2_skip_spaces(st)
+	c = computorv2_statment_getc(st)
+	if (ISVARSTART(c)):
+		st.err = computorv2_parse_variable(st)
+	elif (ISDIGIT(c)):
+		st.err = computorv2_parse_number(st)
+	elif (c == '('):
+		computorv2_statment_next(st)
 		computorv2_skip_spaces(st)
-		c = computorv2_statment_getc(st)
-		if (ISVARSTART(c)):
-			st.err = self.parse_variable(st)
-		elif (ISDIGIT(c)):
-			st.err = computorv2_parse_number(st)
-		elif (c == '('):
-			computorv2_statment_next(st)
-			computorv2_skip_spaces(st)
-			self.parse_additional(st)
-			computorv2_skip_spaces(st)
-			if (computorv2_statment_getc(st) != ')'):
-				# delete...
-				st.result = None
-				return (1)
-			computorv2_statment_next(st) # skip ')'
+		computor.parse_additional(st)
+		computorv2_skip_spaces(st)
+		if (computorv2_statment_getc(st) != ')'):
+			# delete...
+			st.result = None
+			return (1)
+		computorv2_statment_next(st) # skip ')'
+		return (0)
+	elif (c == '['):
+		st.err = computorv2_parse_matrix(computor, st)
+	else:
+		print("\n\n\n\n>>>>>> invalid object! >>>>> c = '" + str(c) + "'\n")
+		exit(0)
+	if (st.err == 0):
+		computorv2_skip_spaces(st)
+		if computorv2_statment_getc(st) == 0:
 			return (0)
-		elif (c == '['):
-			st.err = computorv2_parse_matrix(self, st)
-		else:
-			print("\n\n\n\n>>>>>> invalid object! >>>>> c = '" + str(c) + "'\n")
-			exit(0)
-		if (st.err == 0):
-			computorv2_skip_spaces(st)
-			if computorv2_statment_getc(st) == 0:
-				return (0)
-			st.operation = get_operation_code(st)
-			if (ISVARSTART(computorv2_statment_getc(st))):
-				# caseOf(2i):
-				st.operation = COMPUTORV2_OPERATION_MULT
-		return (st.err)
+		st.operation = get_operation_code(st)
+		if (ISVARSTART(computorv2_statment_getc(st))):
+			# caseOf(2i):
+			st.operation = COMPUTORV2_OPERATION_MULT
+	return (st.err)
 
-	def precedence(self, st, perv, operations):
-		perv(st)
-		while ((st.err == 0) and ((operations & st.operation) != 0)):
-			operation = st.operation;
-			left      = st.result
-			st.result = None
-			perv(st)
-			right     = st.result
-			st.result = None
-			st.err    = computorv2_operation(st, left, right, operation)
-		return (st.err)
+def computorv2_precedence(computor, st, perv, operations):
+	perv(computor, st)
+	while ((st.err == 0) and ((operations & st.operation) != 0)):
+		operation = st.operation;
+		left      = st.result
+		st.result = None
+		perv(computor, st)
+		right     = st.result
+		st.result = None
+		st.err    = computorv2_operation(st, left, right, operation)
+	return (st.err)
 
-	def parse_exponentiation(self, st):
-		err = self.precedence(st, self.parse_object, COMPUTORV2_OPERATION_NONE)
-		return (err)
+def computorv2_parse_exponentiation(computor, st):
+	err = computorv2_precedence(computor, st, computorv2_parse_object, COMPUTORV2_OPERATION_NONE)
+	return (err)
 
-	def parse_multiplicatives(self, st):
-		err = self.precedence(st, self.parse_exponentiation, COMPUTORV2_OPERATION_EXP)
-		return (err)
+def computorv2_parse_multiplicatives(computor, st):
+	err = computorv2_precedence(computor, st, computorv2_parse_exponentiation, COMPUTORV2_OPERATION_EXP)
+	return (err)
 
-	def parse_additional(self, st):
-		err = self.precedence(st, self.parse_multiplicatives, COMPUTORV2_OPERATION_MULT | COMPUTORV2_OPERATION_DIV | COMPUTORV2_OPERATION_MOD | COMPUTORV2_OPERATION_MATRIX_MULT)
-		return (err)
+def computorv2_parse_additional(computor, st):
+	err = computorv2_precedence(computor, st, computorv2_parse_multiplicatives, COMPUTORV2_OPERATION_MULT | COMPUTORV2_OPERATION_DIV | COMPUTORV2_OPERATION_MOD | COMPUTORV2_OPERATION_MATRIX_MULT)
+	return (err)
 
-	def parse_statment(self, st):
-		err = self.precedence(st, self.parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB)
-		return (err)
+def computorv2_parse_statment(computor, st):
+	err = computorv2_precedence(computor, st, computorv2_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB)
+	return (err)
 
-	def parse_line(self, line):
-		pass
+def computorv2_parse_line(computor, line):
+	pass
 
-st = Statment()
-cm = Computorv2()
+def computorv2_init(computor):
+	computor._variables = None
 
-computorv2_statment_set_pos(st, 0)
-computorv2_statment_set_str(st, "  15 % 6 ")
-computorv2_statment_set_len(st, len(computorv2_statment_get_str(st)))
+st = t_statment()
+computor = Computorv2()
 
-cm.parse_statment(st)
-print (computorv2_object2string(st.result))
+computorv2_init(computor)
+
+computorv2_parse_line(computor, "varA = 2")
+
+ 
+
+
+# computorv2_statment_set_pos(st, 0)
+# computorv2_statment_set_str(st, "  15 % 6 ")
+# computorv2_statment_set_len(st, len(computorv2_statment_get_str(st)))
+
+# computorv2_parse_statment(cm, st)
+# print (computorv2_object2string(st.result))
+
+
+
+
+
+
+
+
+
+
+
+
+
