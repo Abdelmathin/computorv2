@@ -157,6 +157,26 @@ bool computorv2::statment_eos(const computorv2::statment *st)
 	return (true);
 }
 
+std::string computorv2::statment_parsename(computorv2::statment *st)
+{
+	if (st)
+	{
+		computorv2::statment_skip_spaces(st);
+		char c = computorv2::statment_getc(st);
+		if (ISVARSTART(c))
+		{
+			std::string name = "";
+			while (IS_VAR_CHAR(c))
+			{
+				name += c;
+				c = computorv2::statment_next(st);
+			}
+			return (name);
+		}
+	}
+	return ("");
+}
+
 t_error computorv2::statment_parse_number(computorv2::statment *st)
 {
 	char c = computorv2::statment_getc(st);
@@ -340,26 +360,6 @@ t_error computorv2::statment_parse_additional(computorv2::statment *st)
     return (err);
 }
 
-std::string statment_parsename(computorv2::statment *st)
-{
-	if (st)
-	{
-		computorv2::statment_skip_spaces(st);
-		char c = computorv2::statment_getc(st);
-		if (ISVARSTART(c))
-		{
-			std::string name = "";
-			while (IS_VAR_CHAR(c))
-			{
-				name += c;
-				c = computorv2::statment_next(st);
-			}
-			return (name);
-		}
-	}
-	return ("");
-}
-
 t_error computorv2::statment_type(computorv2::statment *st)
 {
 	if (!st)
@@ -418,7 +418,7 @@ t_error computorv2::statment_type(computorv2::statment *st)
 	else if ((eq == 1) && (ex == 0))
 	{
 		st->_pos = old_pos;
-		st->_funcname = statment_parsename(st);
+		st->_funcname = computorv2::statment_parsename(st);
 		computorv2::statment_skip_spaces(st);
 		c = statment_getc(st);
 		if (c == '=')
@@ -432,7 +432,7 @@ t_error computorv2::statment_type(computorv2::statment *st)
 		else if (c == '(')
 		{
 			computorv2::statment_next(st);
-			st->_varname = statment_parsename(st);
+			st->_varname = computorv2::statment_parsename(st);
 			computorv2::statment_skip_spaces(st);
 			c = statment_getc(st);
 			if ((st->_varname != "") && (c == ')'))
