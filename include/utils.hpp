@@ -40,6 +40,11 @@
 
 typedef int t_error;
 
+#define COMPUTORV2_EPSILON                   0.0000001
+#define ABS(x)                               ( (x) >= 0 ? (x) : -(x) )
+#define ISNULL(x)                            ( ABS(x) < COMPUTORV2_EPSILON )
+
+#define COMPUTORV2_CASE_INSENSITIVE          1
 #define COMPUTORV2_SUCCESS                   (0 << 0)
 #define COMPUTORV2_ERROR                     (1 << 0)
 
@@ -73,7 +78,7 @@ typedef int t_error;
 #define CHARCODE(c)     ((int)(c))
 #define ISDIGIT(c)      (('0' <= c) && (c <= '9'))
 #define ISSPACE(c)      ((c == ' ') || (c == '\t'))
-#define ISVARSTART(c)   (c == '_') || (('a' <= c) && (c <= 'z'))
+#define ISVARSTART(c)   ((c == '_') || (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')))
 #define IS_VAR_CHAR(c)  (ISDIGIT(c) || ISVARSTART(c))
 
 #define GETTYPEOF(obj)  (obj ? ((obj)->getType()) : 0)
@@ -97,6 +102,8 @@ namespace computorv2
 		computorv2::VirtualMachine* _vm        ;
 	} statment;
 
+	std::string tolower(const std::string s);
+	std::string ltrim(const std::string s);
 	char        statment_getc(const computorv2::statment *st);
 	char        statment_next(computorv2::statment *st);
 	bool        statment_eos(const computorv2::statment *st);
@@ -115,6 +122,8 @@ namespace computorv2
 	t_error     statment_parse_multiplicatives(computorv2::statment *st);
 	t_error     statment_parse_additional(computorv2::statment *st);
 	t_error     statment_type(computorv2::statment *st);
+	t_error     statment_assign_variable(computorv2::statment *st);
+	t_error     statment_assign_function(computorv2::statment *st);
 	t_error     statment_assign(computorv2::statment *st);
 	t_error     statment_parse(computorv2::statment *st);
 }

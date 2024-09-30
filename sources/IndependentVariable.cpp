@@ -50,3 +50,8 @@ void computorv2::IndependentVariable::clear(void)
 {
 	this->_name = "";
 }
+
+computorv2::Object* computorv2::IndependentVariable::copy(void) const
+{
+    return ( new computorv2::IndependentVariable(*this) );
+}

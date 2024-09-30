@@ -4,6 +4,26 @@
 #include "../include/IndependentVariable.hpp"
 #include <iostream>
 
+std::string computorv2::tolower(const std::string s)
+{
+	std::string u = "";
+	for (size_t i = 0; i < s.length(); i++)
+	{
+		u += std::tolower(s[i]);
+	}
+	return (u);
+}
+
+std::string computorv2::ltrim(const std::string s)
+{
+	std::string::size_type first = s.find_first_not_of("\v\f\t ");
+	if (first == std::string::npos)
+	{
+		return ("");
+	}
+	return (s.substr(first, (s.length() - first)));
+}
+
 t_error computorv2::statment_init(computorv2::statment *st)
 {
 	if (st)
@@ -171,6 +191,9 @@ std::string computorv2::statment_parsename(computorv2::statment *st)
 				name += c;
 				c = computorv2::statment_next(st);
 			}
+			#if COMPUTORV2_CASE_INSENSITIVE
+				return (computorv2::tolower(name));
+			#endif//COMPUTORV2_CASE_INSENSITIVE
 			return (name);
 		}
 	}
@@ -210,20 +233,32 @@ t_error computorv2::statment_parse_number(computorv2::statment *st)
 
 t_error computorv2::statment_parse_variable(computorv2::statment *st)
 {
-	st->_result = NULL;
-	std::string name = "";
-	while (IS_VAR_CHAR(computorv2::statment_getc(st)))
+	if (st)
 	{
-		name += computorv2::statment_getc(st);
-		computorv2::statment_next(st);
-	}
-	if (st->_vm)
-	{
-		st->_result = st->_vm->getVariableByName(name);
-		if (st->_result)
+		st->_result      = NULL;
+		std::string name = computorv2::statment_parsename(st);
+		if (st->_vm)
 		{
-			return (COMPUTORV2_SUCCESS);
+			st->_result = st->_vm->getConstantByName(name);
+			if (!st->_result)
+			{
+				st->_result = st->_vm->getVariableByName(name);				
+			}
+			if (st->_result)
+			{
+				st->_result = st->_result->copy();
+			}
+			else
+			{
+				st->_err = COMPUTORV2_ERROR;
+			}
 		}
+		else
+		{
+			st->_result = new computorv2::IndependentVariable();
+			st->_result->setName(name);
+		}
+		return (st->_err);		
 	}
 	return (COMPUTORV2_ERROR);
 }
@@ -268,7 +303,7 @@ t_error computorv2::statment_operation(computorv2::statment *st, const computorv
 	st->_result = NULL;
 	if (operation_code == COMPUTORV2_OPERATION_ADD)
 	{
-		if (ISRATIONAL(left) and ISRATIONAL(right))
+		if (ISRATIONAL(left) && ISRATIONAL(right))
 		{
 			const computorv2::Rational* rleft  = static_cast<const computorv2::Rational*>(left);
 			const computorv2::Rational* rright = static_cast<const computorv2::Rational*>(right);
@@ -278,7 +313,7 @@ t_error computorv2::statment_operation(computorv2::statment *st, const computorv
 	}
 	else if (operation_code == COMPUTORV2_OPERATION_SUB)
 	{
-		if (ISRATIONAL(left) and ISRATIONAL(right))
+		if (ISRATIONAL(left) && ISRATIONAL(right))
 		{
 			const computorv2::Rational* rleft  = static_cast<const computorv2::Rational*>(left);
 			const computorv2::Rational* rright = static_cast<const computorv2::Rational*>(right);
@@ -288,7 +323,7 @@ t_error computorv2::statment_operation(computorv2::statment *st, const computorv
 	}
 	else if (operation_code == COMPUTORV2_OPERATION_MULT)
 	{
-		if (ISRATIONAL(left) and ISRATIONAL(right))
+		if (ISRATIONAL(left) && ISRATIONAL(right))
 		{
 			const computorv2::Rational* rleft  = static_cast<const computorv2::Rational*>(left);
 			const computorv2::Rational* rright = static_cast<const computorv2::Rational*>(right);
@@ -298,7 +333,7 @@ t_error computorv2::statment_operation(computorv2::statment *st, const computorv
 	}
 	else if (operation_code == COMPUTORV2_OPERATION_DIV)
 	{
-		if (ISRATIONAL(left) and ISRATIONAL(right))
+		if (ISRATIONAL(left) && ISRATIONAL(right))
 		{
 			const computorv2::Rational* rleft  = static_cast<const computorv2::Rational*>(left);
 			const computorv2::Rational* rright = static_cast<const computorv2::Rational*>(right);
@@ -463,173 +498,94 @@ t_error computorv2::statment_type(computorv2::statment *st)
 	return (COMPUTORV2_ERROR);
 }
 
-t_error computorv2::statment_assign(computorv2::statment *st)
+t_error computorv2::statment_assign_variable(computorv2::statment *st)
 {
-	return (COMPUTORV2_SUCCESS);
+	if (st)
+	{
+		const std::string varname = st->_varname;
+		t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
+		if (st->_vm)
+		{
+			computorv2::Object* old = st->_vm->getVariableByName(varname);
+			if (old)
+			{
+				delete (old);
+			}
+			st->_vm->setVariableByName(varname, st->_result);
+		}
+		if (st->_result)
+		{
+			std::cout << st->_result->toString() << std::endl;
+		}
+		return (err);
+	}
+	return (COMPUTORV2_ERROR);
+}
+
+t_error computorv2::statment_assign_function(computorv2::statment *st)
+{
+	if (st)
+	{
+		const std::string function_name         = st->_funcname;
+		const std::string variable_variable     = st->_varname;
+		computorv2::Object independent_variable = computorv2::IndependentVariable();
+		independent_variable.setName(variable_variable);
+		if (st->_vm)
+		{
+			st->_vm->setIndependentVariable(&independent_variable);
+		}
+		t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
+		if ((st->_result) && (st->_vm))
+		{
+			computorv2::Function* f = new computorv2::Function();
+			f->setName(function_name);
+			f->setBody(st->_result->toString());
+			f->setIndependentVariable(variable_variable);			
+			st->_vm->setVariableByName(function_name, f);
+			delete (st->_result);
+			st->_result = f;
+		}
+		if (st->_vm)
+		{
+			st->_vm->setIndependentVariable(NULL);
+		}
+		return (err);
+	}
+	return (COMPUTORV2_ERROR);
 }
 
 t_error computorv2::statment_parse(computorv2::statment *st)
 {
-	computorv2::statment_type(st);
-	std::cout << "type: " << st->_type << std::endl;
-	exit(0);
-
-
-
-	/*
-		varA = 2        (0)
-		varA = ?        (0)
-		varA + varB = 2 (1)
-	*/
-	if (!st)
-	{
-		return (COMPUTORV2_ERROR);
-	}
 	while (1)
 	{
-		st->_type = 0;
 		computorv2::statment_skip(st, "\r\n\t\v\f ");
-		const std::string::size_type old_pos = st->_pos;
-		std::string varname = "";
-		char c = computorv2::statment_getc(st);
-		if (ISVARSTART(c))
+		computorv2::statment_type(st);
+		if (st->_type == STATMENT_TYPE_GET)
 		{
-			while (IS_VAR_CHAR(c))
-			{
-				varname += c;
-				c = computorv2::statment_next(st);
-			}
-			computorv2::statment_skip_spaces(st);
-			c = computorv2::statment_getc(st);
-			if (c == '(')
-			{
-				/* function(x) */
-				computorv2::statment_next(st);
-				computorv2::statment_skip_spaces(st);
-				c = computorv2::statment_getc(st);
-				if (ISVARSTART(c))
-				{
-					std::string independent_variable = "";
-					while (IS_VAR_CHAR(c))
-					{
-						independent_variable += c;
-						c = computorv2::statment_next(st);
-					}
-					computorv2::statment_skip_spaces(st);
-					c = computorv2::statment_getc(st);
-					if (c == ')')
-					{
-						computorv2::statment_next(st);
-						computorv2::statment_skip_spaces(st);
-						c = computorv2::statment_getc(st);
-						if (c == '=')
-						{
-							computorv2::statment_next(st);
-							computorv2::statment_skip_spaces(st);
-							c = computorv2::statment_getc(st);
-							if (c == '?')
-							{
-								std::cout << "evaluate f(x) " << varname << std::endl;
-								exit(0);
-							}
-							else
-							{
-								if (st->_vm)
-								{
-									computorv2::Object* v = new computorv2::IndependentVariable();
-									v->setName(independent_variable);
-									st->_vm->setIndependentVariable(v);
-								}
-								t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
-								if (st->_result)
-								{
-									computorv2::Function* f = new computorv2::Function();
-									f->setName(varname);
-									f->setBody(st->_result->toString());
-									f->setIndependentVariable(independent_variable);
-									if (st->_vm)
-									{
-										st->_vm->setVariableByName(varname, f);
-									}
-									delete (st->_result);
-									st->_result = f;
-								}
-								else
-								{
-									throw "// error";
-								}
-								if (st->_vm)
-								{
-									computorv2::Object* v = st->_vm->getIndependentVariable();
-									st->_vm->setIndependentVariable(NULL);
-									delete (v);
-								}
-								c = computorv2::statment_getc(st);
-								if (c == '\n')
-								{
-									continue ;
-								}
-								return (COMPUTORV2_ERROR);
-							}
-						}
-					}
-					st->_pos  = old_pos;
-					st->_type = STATMENT_TYPE_GET;
-					return (COMPUTORV2_SUCCESS);
-				}
-				std::cout << ">>>> " << computorv2::statment_getc(st) << std::endl;
-				exit(0);
-			}
-			else if (c == '=')
-			{
-				computorv2::statment_next(st);
-				computorv2::statment_skip_spaces(st);
-				c = computorv2::statment_getc(st);
-				if (c == '?')
-				{
-					std::cout << "get value of: " << varname << std::endl;
-					exit(0);
-				}
-				else
-				{
-					t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
-					if (err != COMPUTORV2_SUCCESS)
-					{
-						return (err);
-					}
-					if (st->_vm)
-					{
-						st->_vm->setVariableByName(varname, st->_result);
-					}
-					c = computorv2::statment_getc(st);
-					if (c == '\n')
-					{
-						continue ;
-					}
-					return (COMPUTORV2_ERROR);
-				}
-			}
+			st->_varname = "";
+			computorv2::statment_assign_variable(st);
 		}
-		st->_pos  = old_pos;
-		st->_type = STATMENT_TYPE_GET;
-		return (COMPUTORV2_SUCCESS);
+		else if (st->_type == STATMENT_TYPE_SET_VARIABLE)
+		{
+			computorv2::statment_assign_variable(st);
+		}
+		else if (st->_type == STATMENT_TYPE_SET_FUNCTION)
+		{
+			computorv2::statment_assign_function(st);
+		}
+		else
+		{
+			std::cout << "unknown type: " << st->_type << std::endl;
+			exit(0);			
+		}
+		if (computorv2::statment_getc(st) == '\r')
+		{
+			computorv2::statment_next(st);
+		}
+		if (computorv2::statment_getc(st) != '\n')
+		{
+			return (st->_err);
+		}
 	}
-
-
-
-	// while (1)
-	// {
-	// 	computorv2::statment_type(st);
-	// 	t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
-	// 	if (err != COMPUTORV2_SUCCESS)
-	// 	{
-	// 		return (err);
-	// 	}
-	// 	if (computorv2::statment_getc(st) != '\n')
-	// 	{
-	// 		return (err);
-	// 	}
-	// 	computorv2::statment_next(st);
-	// }
-	return (COMPUTORV2_SUCCESS);
+	return (COMPUTORV2_ERROR);
 }

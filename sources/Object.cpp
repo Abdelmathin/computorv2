@@ -50,6 +50,11 @@ void computorv2::Object::clear(void)
 	this->_name = "";
 }
 
+computorv2::Object* computorv2::Object::copy(void) const
+{
+	return ( new computorv2::Object(*this) );
+}
+
 std::ostream& operator<<(std::ostream& os, const computorv2::Object& obj)
 {
 	os << obj.toString();

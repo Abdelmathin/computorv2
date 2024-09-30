@@ -14,12 +14,13 @@ namespace computorv2
 			Object(const Object& other);
 			Object& operator=(const Object& other);
 
-			virtual int         getType(void) const;
-			virtual std::string getName(void) const;
+			virtual int                 getType(void) const;
+			virtual std::string         getName(void) const;
 
-			void                setName(std::string name);
+			void                        setName(std::string name);
 
-			virtual std::string toString(void) const;
-			void                clear(void);
+			virtual std::string         toString(void) const;
+			void                        clear(void);
+			virtual computorv2::Object* copy(void) const;
 	};
 }

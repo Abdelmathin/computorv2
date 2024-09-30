@@ -74,3 +74,8 @@ void computorv2::Function::clear(void)
     this->_body = "";
     this->_ivar = "";
 }
+
+computorv2::Object* computorv2::Function::copy(void) const
+{
+    return ( new computorv2::Function(*this) );
+}

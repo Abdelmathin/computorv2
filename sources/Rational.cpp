@@ -69,3 +69,8 @@ void computorv2::Rational::clear(void)
 	this->_name  = "";
 	this->_value = 0.0;
 }
+
+computorv2::Object* computorv2::Rational::copy(void) const
+{
+    return ( new computorv2::Rational(*this) );
+}

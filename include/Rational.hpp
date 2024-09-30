@@ -27,5 +27,6 @@ namespace computorv2
 
 			std::string  toString(void) const;
 			void         clear(void);
+			computorv2::Object* copy(void) const;
 	};
 }
