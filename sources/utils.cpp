@@ -239,25 +239,31 @@ t_error computorv2::statment_parse_variable(computorv2::statment *st)
 		std::string name = computorv2::statment_parsename(st);
 		if (st->_vm)
 		{
-			st->_result = st->_vm->getConstantByName(name);
+			st->_result = st->_vm->getIndependentByName(name);
 			if (!st->_result)
 			{
-				st->_result = st->_vm->getVariableByName(name);				
+				st->_result = st->_vm->getConstantByName(name);				
 			}
-			if (st->_result)
+			if (!st->_result)
 			{
-				st->_result = st->_result->copy();
+				st->_result = st->_vm->getVariableByName(name);
 			}
-			else
+			if (!st->_result)
 			{
 				st->_err = COMPUTORV2_ERROR;
+				return (st->_err);
 			}
+			st->_result = st->_result->copy();
 		}
 		else
 		{
 			st->_result = new computorv2::IndependentVariable();
 			st->_result->setName(name);
 		}
+		std::cout << "name: " << name << std::endl;
+		std::cout << "st->_result->getType(): " << st->_result->getType() << std::endl;
+		std::cout << "st->_result: " << st->_result->toString() << std::endl;
+		exit(0);
 		return (st->_err);		
 	}
 	return (COMPUTORV2_ERROR);
@@ -532,7 +538,7 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 		independent_variable.setName(variable_variable);
 		if (st->_vm)
 		{
-			st->_vm->setIndependentVariable(&independent_variable);
+			st->_vm->setIndependentByName(variable_variable, &independent_variable);
 		}
 		t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
 		if ((st->_result) && (st->_vm))
@@ -547,7 +553,7 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 		}
 		if (st->_vm)
 		{
-			st->_vm->setIndependentVariable(NULL);
+			st->_vm->delIndependentByName(variable_variable);
 		}
 		return (err);
 	}
@@ -576,7 +582,7 @@ t_error computorv2::statment_parse(computorv2::statment *st)
 		else
 		{
 			std::cout << "unknown type: " << st->_type << std::endl;
-			exit(0);			
+			exit(0);
 		}
 		if (computorv2::statment_getc(st) == '\r')
 		{

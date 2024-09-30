@@ -34,7 +34,6 @@ namespace computorv2
     };
 }
 
-
 computorv2::Complex operator+(const computorv2::Complex& left, const computorv2::Complex& right);
 computorv2::Complex operator-(const computorv2::Complex& left, const computorv2::Complex& right);
 computorv2::Complex operator-(const computorv2::Complex& left);
@@ -44,3 +43,4 @@ computorv2::Complex operator*(double left, const computorv2::Complex& right);
 computorv2::Complex operator/(const computorv2::Complex& left, const computorv2::Complex& right);
 computorv2::Complex operator/(const computorv2::Complex& left, double right);
 computorv2::Complex operator/(double left, const computorv2::Complex& right);
+bool                operator==(const computorv2::Complex& left, const computorv2::Complex& right);

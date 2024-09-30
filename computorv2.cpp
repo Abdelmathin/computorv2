@@ -12,11 +12,25 @@
 
 int main(void)
 {
-	computorv2::Client client = computorv2::Client();
+	computorv2::IndependentVariable u; u.setName("x");
+	computorv2::IndependentVariable v; v.setName("x");
 
-	client.addBuffer("a = 5\n");
-	client.addBuffer("b = i\n");
-	client.addBuffer("c = b\n");
+	std::cout << "u = " << u << std::endl;
+	std::cout << "v = " << v << std::endl;
+
+	std::cout << "(u + v) = " << (u + u) << std::endl;
+
+	std::cout << "u = " << u << std::endl;
+	std::cout << "v = " << v << std::endl;
+	// std::cout << "v = " << computorv2::topower(v, 2) << std::endl;
+
+	/*
+		a * x^2 + d + b + (c * x^2)
+	*/
+
+	// computorv2::Client client = computorv2::Client();
+
+	// client.addBuffer("f(x) = x + x + 1\n");
 
 	return (0);
 }

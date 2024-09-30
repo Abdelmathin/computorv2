@@ -30,3 +30,5 @@ namespace computorv2
 			computorv2::Object* copy(void) const;
 	};
 }
+
+bool operator==(const computorv2::Rational& left, const computorv2::Rational& right);

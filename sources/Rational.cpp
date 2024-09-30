@@ -74,3 +74,8 @@ computorv2::Object* computorv2::Rational::copy(void) const
 {
     return ( new computorv2::Rational(*this) );
 }
+
+bool operator==(const computorv2::Rational& left, const computorv2::Rational& right)
+{
+	return (ISNULL(left.getValue() - right.getValue()));
+}

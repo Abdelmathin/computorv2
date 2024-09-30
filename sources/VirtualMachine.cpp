@@ -22,16 +22,11 @@ computorv2::VirtualMachine& computorv2::VirtualMachine::operator=(const computor
 {
 	if (this != &other)
 	{
-		this->_independent = other._independent;
-		this->_variables   = other._variables;
-		this->_constants   = other._constants;
+		this->_variables    = other._variables   ;
+		this->_constants    = other._constants   ;
+		this->_independents = other._independents;
 	}
 	return (*this);
-}
-
-computorv2::Object* computorv2::VirtualMachine::getIndependentVariable(void) const
-{
-	return (this->_independent);
 }
 
 computorv2::Object* computorv2::VirtualMachine::getVariableByName(const std::string name) const
@@ -54,9 +49,14 @@ computorv2::Object* computorv2::VirtualMachine::getConstantByName(const std::str
 	return (it->second);
 }
 
-void computorv2::VirtualMachine::setIndependentVariable(computorv2::Object* independent)
+computorv2::Object* computorv2::VirtualMachine::getIndependentByName(const std::string name) const
 {
-	this->_independent = independent;
+	std::map< std::string, computorv2::Object* >::const_iterator it = this->_independents.find(name);
+	if (it == this->_independents.end())
+	{
+		return (NULL);
+	}
+	return (it->second);
 }
 
 void computorv2::VirtualMachine::setVariableByName(const std::string name, computorv2::Object* var)
@@ -69,9 +69,32 @@ void computorv2::VirtualMachine::setConstantByName(const std::string name, compu
 	this->_constants[name] = var;
 }
 
+void computorv2::VirtualMachine::setIndependentByName(const std::string name, computorv2::Object* var)
+{
+	this->_independents[name] = var;
+}
+
+void computorv2::VirtualMachine::delVariableByName(const std::string name)
+{
+	this->_variables[name] = NULL;
+	this->_variables.erase(name);
+}
+
+void computorv2::VirtualMachine::delConstantByName(const std::string name)
+{
+	this->_constants[name] = NULL;
+	this->_constants.erase(name);
+}
+
+void computorv2::VirtualMachine::delIndependentByName(const std::string name)
+{
+	this->_independents[name] = NULL;
+	this->_independents.erase(name);
+}
+
 void computorv2::VirtualMachine::clear(void)
 {
-	this->_independent = NULL;
 	this->_variables.clear();
 	this->_constants.clear();
+	this->_independents.clear();
 }

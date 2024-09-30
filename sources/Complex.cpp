@@ -195,3 +195,15 @@ computorv2::Complex operator/(double left, const computorv2::Complex& right)
 {
 	return (computorv2::Complex(left, 0.0) / right);
 }
+
+bool operator==(const computorv2::Complex& left, const computorv2::Complex& right)
+{
+	if (ISNULL(left.getReal() - right.getReal()))
+	{
+		if (ISNULL(left.getImage() - right.getImage()))
+		{
+			return (true);
+		}
+	}
+	return (false);
+}
