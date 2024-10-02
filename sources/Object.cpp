@@ -55,6 +55,16 @@ computorv2::Object* computorv2::Object::copy(void) const
 	return ( new computorv2::Object(*this) );
 }
 
+bool computorv2::Object::isnull(void) const
+{
+	return (false);
+}
+
+bool computorv2::Object::isunity(void) const
+{
+	return (false);
+}
+
 std::ostream& operator<<(std::ostream& os, const computorv2::Object& obj)
 {
 	os << obj.toString();

@@ -1,35 +1,40 @@
 #include <iostream>
 #include "include/utils.hpp"
 #include "include/Object.hpp"
-#include "sources/Function.cpp"
 #include "sources/Rational.cpp"
 #include "sources/VirtualMachine.cpp"
 #include "sources/Object.cpp"
-#include "sources/IndependentVariable.cpp"
+#include "sources/Polynomial.cpp"
 #include "sources/utils.cpp"
 #include "sources/Client.cpp"
 #include "sources/Complex.cpp"
+#include "include/computorv2.hpp"
+#include "sources/computorv2.cpp"
+#include <unistd.h>
+
+void leaks(void)
+{
+	char buffer[1024];
+	buffer[sprintf(buffer, "leaks %d\n", getpid())] = 0;
+	system(buffer);
+}
+
+/*
+	Polynomial
+	.setIndependentVariableName("x");
+	derivative
+*/
 
 int main(void)
 {
-	computorv2::IndependentVariable u; u.setName("x");
-	computorv2::IndependentVariable v; v.setName("x");
+	computorv2::Polynomial x; x.setName("x");
 
-	std::cout << "u = " << u << std::endl;
-	std::cout << "v = " << v << std::endl;
+	std::cout << computorv2::derivative(computorv2::Rational(15)).toString() << std::endl;
+	std::cout << computorv2::derivative(computorv2::Complex(1.0, 1.0)).toString() << std::endl;
+	std::cout << computorv2::derivative(x).toString() << std::endl;
 
-	std::cout << "(u + v) = " << (u + u) << std::endl;
-
-	std::cout << "u = " << u << std::endl;
-	std::cout << "v = " << v << std::endl;
-	// std::cout << "v = " << computorv2::topower(v, 2) << std::endl;
-
-	/*
-		a * x^2 + d + b + (c * x^2)
-	*/
 
 	// computorv2::Client client = computorv2::Client();
-
 	// client.addBuffer("f(x) = x + x + 1\n");
 
 	return (0);

@@ -122,6 +122,11 @@ bool computorv2::Complex::isnull(void) const
 	return (ISNULL(this->getReal()) && ISNULL(this->getImage()));
 }
 
+bool computorv2::Complex::isunity(void) const
+{
+	return (ISNULL(this->getReal() - 1.0) && ISNULL(this->getImage()));	
+}
+
 computorv2::Complex operator+(const computorv2::Complex& left, const computorv2::Complex& right)
 {
 	computorv2::Complex res;

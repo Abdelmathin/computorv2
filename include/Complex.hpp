@@ -31,6 +31,7 @@ namespace computorv2
             void                clear(void);
             computorv2::Object* copy(void) const;
             bool                isnull(void) const;
+            bool                isunity(void) const;
     };
 }
 

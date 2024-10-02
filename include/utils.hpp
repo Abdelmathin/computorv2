@@ -73,20 +73,39 @@ typedef int t_error;
 #define COMPUTORV2_TYPE_MATRIX               (1 << 3)
 #define COMPUTORV2_TYPE_COMPLEX              (1 << 4)
 #define COMPUTORV2_TYPE_FUNCTION             (1 << 5)
-#define COMPUTORV2_TYPE_INDEPENDENT_VARIABLE (1 << 6)
+#define COMPUTORV2_TYPE_POLYNOMIAL           (1 << 6)
 
-#define CHARCODE(c)     ((int)(c))
-#define ISDIGIT(c)      (('0' <= c) && (c <= '9'))
-#define ISSPACE(c)      ((c == ' ') || (c == '\t'))
-#define ISVARSTART(c)   ((c == '_') || (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')))
-#define IS_VAR_CHAR(c)  (ISDIGIT(c) || ISVARSTART(c))
+#define CHARCODE(c)        ((int)(c))
+#define ISDIGIT(c)         (('0' <= c) && (c <= '9'))
+#define ISSPACE(c)         ((c == ' ') || (c == '\t'))
+#define ISVARSTART(c)      ((c == '_') || (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')))
+#define IS_VAR_CHAR(c)     (ISDIGIT(c) || ISVARSTART(c))
 
-#define GETTYPEOF(obj)  (obj ? ((obj)->getType()) : 0)
-#define ISRATIONAL(obj) ((GETTYPEOF(obj) & COMPUTORV2_TYPE_RATIONAL) != 0)
+#define OBJECT_TYPE(obj)   (obj ? ((obj)->getType()) : 0)
+#define GETTYPEOF(obj)     OBJECT_TYPE(obj)
+#define IS_RATIONAL(obj)   ((GETTYPEOF(obj) & COMPUTORV2_TYPE_RATIONAL)   != 0)
+#define IS_COMPLEX(obj)    ((GETTYPEOF(obj) & COMPUTORV2_TYPE_COMPLEX)    != 0)
+#define IS_POLYNOMIAL(obj) ((GETTYPEOF(obj) & COMPUTORV2_TYPE_POLYNOMIAL) != 0)
+
+#define AS_OBJECT(obj)      static_cast< const computorv2::Object* >(obj)
+#define AS_RATIONAL(obj)    static_cast< const computorv2::Rational* >(obj)
+#define AS_COMPLEX(obj)     static_cast< const computorv2::Complex* >(obj)
+#define AS_POLYNOMIAL(obj)  static_cast< const computorv2::Polynomial* >(obj)
+
+#define ISRATIONAL   IS_RATIONAL
+#define ISPOLYNOMIAL IS_POLYNOMIAL
 
 namespace computorv2
 {
 	class Object;
+	class Matrix;
+	class Vector;
+	class Complex;
+	class History;
+	class Rational;
+	class Function;
+	class Polynomial;
+
 	class VirtualMachine;
 	typedef struct statment
 	{

@@ -1,7 +1,6 @@
 #include "../include/utils.hpp"
 #include "../include/Object.hpp"
-#include "../include/Function.hpp"
-#include "../include/IndependentVariable.hpp"
+#include "../include/Polynomial.hpp"
 #include <iostream>
 
 std::string computorv2::tolower(const std::string s)
@@ -257,7 +256,7 @@ t_error computorv2::statment_parse_variable(computorv2::statment *st)
 		}
 		else
 		{
-			st->_result = new computorv2::IndependentVariable();
+			st->_result = new computorv2::Polynomial();
 			st->_result->setName(name);
 		}
 		std::cout << "name: " << name << std::endl;
@@ -532,28 +531,21 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 {
 	if (st)
 	{
-		const std::string function_name         = st->_funcname;
-		const std::string variable_variable     = st->_varname;
-		computorv2::Object independent_variable = computorv2::IndependentVariable();
-		independent_variable.setName(variable_variable);
+		const std::string  funcname = st->_funcname;
+		const std::string  varname  = st->_varname;
+		computorv2::Object p = computorv2::Polynomial(); p.setName(varname);
 		if (st->_vm)
 		{
-			st->_vm->setIndependentByName(variable_variable, &independent_variable);
+			st->_vm->setIndependentByName(varname, &p);
 		}
 		t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
-		if ((st->_result) && (st->_vm))
-		{
-			computorv2::Function* f = new computorv2::Function();
-			f->setName(function_name);
-			f->setBody(st->_result->toString());
-			f->setIndependentVariable(variable_variable);			
-			st->_vm->setVariableByName(function_name, f);
-			delete (st->_result);
-			st->_result = f;
+		if (st->_vm)
+		{		
+			st->_vm->setVariableByName(funcname, st->_result);
 		}
 		if (st->_vm)
 		{
-			st->_vm->delIndependentByName(variable_variable);
+			st->_vm->delIndependentByName(varname);
 		}
 		return (err);
 	}

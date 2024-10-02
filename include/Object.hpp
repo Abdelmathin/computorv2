@@ -4,7 +4,7 @@
 
 namespace computorv2
 {
-	class Object
+	class Object // Interface
 	{
 		private:
 			std::string _name;
@@ -22,5 +22,7 @@ namespace computorv2
 			virtual std::string         toString(void) const;
 			void                        clear(void);
 			virtual computorv2::Object* copy(void) const;
+			virtual bool                isnull(void) const;
+			virtual bool                isunity(void) const;
 	};
 }
