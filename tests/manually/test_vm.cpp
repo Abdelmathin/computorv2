@@ -1,7 +1,6 @@
 # include "../../sources/Function.cpp"
 # include "../../sources/Object.cpp"
 # include "../../sources/Rational.cpp"
-# include "../../sources/IndependentVariable.cpp"
 # include "../../sources/VirtualMachine.cpp"
 
 int main(void)

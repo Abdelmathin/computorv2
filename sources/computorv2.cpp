@@ -37,6 +37,12 @@ computorv2::Complex computorv2::add(const computorv2::Complex& left, const compu
 }
 
 /* Polynomial (add) */
+// computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
+// {
+// 	computorv2::Polynomial res;
+// 	return (res);
+// }
+
 computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Rational& right)
 {
 	computorv2::Polynomial res(left);
@@ -381,8 +387,6 @@ computorv2::Polynomial computorv2::derivative(const computorv2::Complex& obj)
 /* derivative (Polynomial) */
 computorv2::Polynomial computorv2::derivative(const computorv2::Polynomial& obj)
 {
-	// if ()
 	computorv2::Polynomial res;
 	return (res);
 }
-

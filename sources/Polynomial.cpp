@@ -1,17 +1,23 @@
 #include "../include/Polynomial.hpp"
 #include "../include/Rational.hpp"
+#include "../include/IndependentVariable.hpp"
 #include "../include/utils.hpp"
 #include "../include/computorv2.hpp"
 #include <iostream>
 #include <sstream>
 #include <exception>
 
-void computorv2::Polynomial::init(void)
+void computorv2::Polynomial::init(const computorv2::Object* base)
 {
-	this->_name        = "";
-	this->_coefficient = new computorv2::Rational(1.0);
-	this->_exponent    = new computorv2::Rational(1.0);
-	this->_freeterm    = new computorv2::Rational(0.0);
+	this->_coefficient = NULL;
+	this->_base        = NULL;
+	this->_exponent    = NULL;
+	this->_freeterm    = NULL;
+
+	this->setCoefficient(computorv2::Rational(1.0));
+	this->setBase(base);
+	this->setExponent(computorv2::Rational(1.0));
+	this->setFreeTerm(computorv2::Rational(0.0));
 }
 
 void computorv2::Polynomial::delCoefficient(void)
@@ -21,6 +27,15 @@ void computorv2::Polynomial::delCoefficient(void)
 		delete (this->_coefficient);
 	}
 	this->_coefficient = NULL;
+}
+
+void computorv2::Polynomial::delBase(void)
+{
+	if (this->_base)
+	{
+		delete (this->_base);
+	}
+	this->_base = NULL;
 }
 
 void computorv2::Polynomial::delExponent(void)
@@ -43,19 +58,37 @@ void computorv2::Polynomial::delFreeTerm(void)
 
 computorv2::Polynomial::Polynomial(void)
 {
-	this->init();
+	this->init(NULL);
+	throw std::logic_error("Can't create Polynomial without Variable!");
+}
+
+computorv2::Polynomial::Polynomial(const std::string& basename)
+{
+	const computorv2::IndependentVariable base(basename);
+	this->init(&base);
+}
+
+computorv2::Polynomial::Polynomial(const computorv2::IndependentVariable& base)
+{
+	this->init(&base);
+}
+
+computorv2::Polynomial::Polynomial(const computorv2::IndependentVariable* base)
+{
+	this->init(base);
 }
 
 computorv2::Polynomial::~Polynomial(void)
 {
 	this->delCoefficient();
+	this->delBase();
 	this->delExponent();
 	this->delFreeTerm();
 }
 
 computorv2::Polynomial::Polynomial(const computorv2::Polynomial& other)
 {
-	this->init();
+	this->init(other.getBase());
 	*this = other;
 }
 
@@ -63,8 +96,8 @@ computorv2::Polynomial& computorv2::Polynomial::operator=(const computorv2::Poly
 {
 	if (this != &other)
 	{
-		this->setName(other.getName());
 		this->setCoefficient(other.getCoefficient());
+		this->setBase(other.getBase());
 		this->setExponent(other.getExponent());
 		this->setFreeTerm(other.getFreeTerm());
 	}
@@ -76,14 +109,14 @@ int computorv2::Polynomial::getType(void) const
 	return (COMPUTORV2_TYPE_POLYNOMIAL);
 }
 
-std::string computorv2::Polynomial::getName(void) const
-{
-	return (this->_name);
-}
-
 computorv2::Object* computorv2::Polynomial::getCoefficient(void) const
 {
 	return (this->_coefficient);
+}
+
+computorv2::Object* computorv2::Polynomial::getBase(void) const
+{
+	return (this->_base);
 }
 
 computorv2::Object* computorv2::Polynomial::getExponent(void) const
@@ -96,11 +129,6 @@ computorv2::Object* computorv2::Polynomial::getFreeTerm(void) const
 	return (this->_freeterm);
 }
 
-void computorv2::Polynomial::setName(const std::string& name)
-{
-	this->_name = name;
-}
-
 void computorv2::Polynomial::setCoefficient(const computorv2::Object* coefficient)
 {
 	this->delCoefficient();
@@ -109,6 +137,16 @@ void computorv2::Polynomial::setCoefficient(const computorv2::Object* coefficien
 		throw std::logic_error("Can't set coefficient to NULL");
 	}
 	this->_coefficient = coefficient->copy();
+}
+
+void computorv2::Polynomial::setBase(const computorv2::Object* base)
+{
+	this->delBase();
+	if (!base)
+	{
+		throw std::logic_error("Can't set base to NULL");
+	}
+	this->_base = base->copy();
 }
 
 void computorv2::Polynomial::setExponent(const computorv2::Object* exponent)
@@ -131,33 +169,53 @@ void computorv2::Polynomial::setFreeTerm(const computorv2::Object* freeterm)
 	this->_freeterm = freeterm->copy();
 }
 
+void computorv2::Polynomial::setCoefficient(const computorv2::Object& coefficient)
+{
+	this->setCoefficient(&coefficient);
+}
+
+void computorv2::Polynomial::setBase(const computorv2::Object& base)
+{
+	this->setBase(&base);
+}
+
+void computorv2::Polynomial::setExponent(const computorv2::Object& exponent)
+{
+	this->setExponent(&exponent);
+}
+
+void computorv2::Polynomial::setFreeTerm(const computorv2::Object& freeterm)
+{
+	this->setFreeTerm(&freeterm);
+}
+
 std::string computorv2::Polynomial::toString(void) const
 {
 	const computorv2::Rational zero(0.0);
 	const computorv2::Rational one(1.0);
 	std::stringstream ss("");
 
-	if (((computorv2::eql(this->_coefficient, &zero))) && ((!this->_freeterm) || (computorv2::eql(this->_freeterm, &zero))))
-	{
-		ss << "0";
-		return (ss.str());
-	}
-	if (this->_coefficient)
-	{
-		if (!computorv2::eql(this->_coefficient, &zero))
-		{
-			ss << "(" << this->_coefficient->toString() << ") * ";
-			ss << this->_name;
-			if (this->_exponent)
-			{
-				ss << "^(" << this->_exponent->toString() << ")";
-			}			
-		}
-	}
-	if (this->_freeterm)
-	{
-		ss << " + (" << this->_freeterm->toString() << ")";
-	}
+	// if (((computorv2::eql(this->_coefficient, &zero))) && ((!this->_freeterm) || (computorv2::eql(this->_freeterm, &zero))))
+	// {
+	// 	ss << "0";
+	// 	return (ss.str());
+	// }
+	// if (this->_coefficient)
+	// {
+	// 	if (!computorv2::eql(this->_coefficient, &zero))
+	// 	{
+	// 		ss << "(" << this->_coefficient->toString() << ") * ";
+	// 		ss << this->_name;
+	// 		if (this->_exponent)
+	// 		{
+	// 			ss << "^(" << this->_exponent->toString() << ")";
+	// 		}			
+	// 	}
+	// }
+	// if (this->_freeterm)
+	// {
+	// 	ss << " + (" << this->_freeterm->toString() << ")";
+	// }
     return (ss.str());
 }
 
@@ -168,10 +226,28 @@ computorv2::Object* computorv2::Polynomial::copy(void) const
 
 bool computorv2::Polynomial::isnull(void) const
 {
-	return (this->_coefficient->isnull() && this->_freeterm->isnull());
+	if ((this->_coefficient->isnull()) || (this->_base->isnull()))
+	{
+		return (this->_freeterm->isnull());
+	}
+	return (false);
 }
 
 bool computorv2::Polynomial::isunity(void) const
 {
-	return (this->_coefficient->isnull() && this->_freeterm->isunity());
+	bool result = false;
+	// if (this->_exponent->isnull())
+	// {
+	// 	const computorv2::Object *tmp = computorv2::add(this->_coefficient, this->_freeterm);
+	// 	if (tmp->isunity())
+	// 	{
+	// 		result = true;
+	// 	}
+	// 	delete (tmp);
+	// }
+	// else if (this->_coefficient->isnull() && this->_freeterm->isunity())
+	// {
+	// 	result = true;
+	// }
+	return (result);
 }

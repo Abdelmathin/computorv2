@@ -73,13 +73,20 @@ typedef int t_error;
 #define COMPUTORV2_TYPE_MATRIX               (1 << 3)
 #define COMPUTORV2_TYPE_COMPLEX              (1 << 4)
 #define COMPUTORV2_TYPE_FUNCTION             (1 << 5)
-#define COMPUTORV2_TYPE_POLYNOMIAL           (1 << 6)
+#define COMPUTORV2_TYPE_USUAL_FUNCTION       (1 << 6)
+#define COMPUTORV2_TYPE_POLYNOMIAL           (1 << 7)
+#define COMPUTORV2_TYPE_INDEPENDENT_VARIABLE (1 << 8)
 
 #define CHARCODE(c)        ((int)(c))
-#define ISDIGIT(c)         (('0' <= c) && (c <= '9'))
-#define ISSPACE(c)         ((c == ' ') || (c == '\t'))
-#define ISVARSTART(c)      ((c == '_') || (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')))
-#define IS_VAR_CHAR(c)     (ISDIGIT(c) || ISVARSTART(c))
+#define IS_DIGIT(c)        (('0' <= c) && (c <= '9'))
+#define IS_SPACE(c)        ((c == ' ') || (c == '\t'))
+#define IS_VARSTART(c)     ((c == '_') || (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')))
+#define IS_VARCHAR(c)      (IS_DIGIT(c) || IS_VARSTART(c))
+
+#define ISDIGIT     IS_DIGIT
+#define ISSPACE     IS_SPACE
+#define ISVARSTART  IS_VARSTART
+#define IS_VAR_CHAR IS_VARCHAR
 
 #define OBJECT_TYPE(obj)   (obj ? ((obj)->getType()) : 0)
 #define GETTYPEOF(obj)     OBJECT_TYPE(obj)
@@ -103,7 +110,6 @@ namespace computorv2
 	class Complex;
 	class History;
 	class Rational;
-	class Function;
 	class Polynomial;
 
 	class VirtualMachine;
@@ -121,7 +127,10 @@ namespace computorv2
 		computorv2::VirtualMachine* _vm        ;
 	} statment;
 
+
 	std::string tolower(const std::string s);
+	bool        isname(const std::string& name);
+	bool        isUsualFunction(const std::string& name);
 	std::string ltrim(const std::string s);
 	char        statment_getc(const computorv2::statment *st);
 	char        statment_next(computorv2::statment *st);

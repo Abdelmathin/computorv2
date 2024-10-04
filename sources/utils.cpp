@@ -13,6 +13,32 @@ std::string computorv2::tolower(const std::string s)
 	return (u);
 }
 
+bool computorv2::isname(const std::string& name)
+{
+	const std::string::size_type len = name.size();
+	if ((len < 1) || (!IS_VARSTART(name[0])))
+	{
+		return (false);
+	}
+	for (std::string::size_type i = 0; i < len; ++i)
+	{
+		if (!IS_VARCHAR(name[i]))
+		{
+			return (false);
+		}
+	}
+	return (true);
+}
+
+bool computorv2::isUsualFunction(const std::string& name)
+{
+	if (name == "ln")
+	{
+		return (true);
+	}
+	return (false);
+}
+
 std::string computorv2::ltrim(const std::string s)
 {
 	std::string::size_type first = s.find_first_not_of("\v\f\t ");
