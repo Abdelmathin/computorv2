@@ -46,3 +46,7 @@ pip install computorv2
 # Derivative:
 
 $$  P(x) = a . x^n + b $$
+
+$$  \frac{d P(x)}{d x} = $$
+
+
