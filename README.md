@@ -45,8 +45,11 @@ pip install computorv2
 
 # Derivative:
 
-$$  P(x) = coefficient . x^n + b $$
+- To differentiate $$  P(x) = a . x^n + b $$ where a, x, n, b are all functions of x, we use the product rule, the chain rule, and the general power rule.
 
-$$  \frac{d P(x)}{d x} = \frac{d coefficient}{d x} . x^n + coefficient . \frac{d x^n}{d x} + \frac{d b}{d x} $$
+<!-- $$  P(x) = a . x^n + b $$
+
+$$  \frac{d P(x)}{d x} = \frac{d a}{d x} . x^n + a . \frac{d x^n}{d x} + \frac{d b}{d x} $$
+$$ \frac{d x^n}{d x} = $$ -->
 
 
