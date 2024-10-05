@@ -1,6 +1,94 @@
+/* **************************************************************************  */
+/*                                                                             */
+/*                                                         :::      ::::::::   */
+/*   UsualFunction.cpp                                  :+:      :+:    :+:    */
+/*                                                    +:+ +:+         +:+      */
+/*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
+/*                                                +#+#+#+#+#+   +#+            */
+/*   Created: 2024/08/19 17:40:12 by ahabachi          #+#    #+#              */
+/*   Updated: 2024/09/24 06:34:37 by ahabachi         ###   ########.fr        */
+/*                                                                             */
+/* **************************************************************************  */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/*    ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗   ██╗████████╗ ██████╗ ██████╗    */
+/*   ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗██╔══██╗   */
+/*   ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║   ██║   ██║   ██║██████╔╝   */
+/*   ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║   ██║   ██║   ██║██╔══██╗   */
+/*   ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝   ██║   ╚██████╔╝██║  ██║   */
+/*    ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝   */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/* **************************************************************************  */
+/*                                                                             */
+/*  █████████            ██████████         ██████████         ██████████      */
+/*  ██     ██                    ██                 ██         ██      ██      */
+/*         ██                    ██                 ██         ██      ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██            ██████████         ██████████                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*      ████████         ██████████         ██████████                 ██      */
+/*                                                                             */
+/* **************************************************************************  */
+
+#ifndef __COMPUTORV2_SOURCES_USUAL_FUNCTION
+# define __COMPUTORV2_SOURCES_USUAL_FUNCTION
+
 #include "../include/UsualFunction.hpp"
 #include "../include/utils.hpp"
 #include <sstream>
+
+int computorv2::UsualFunction::getType(void) const
+{
+    return (COMPUTORV2_TYPE_USUAL_FUNCTION);
+}
+
+std::string computorv2::UsualFunction::toString(void) const
+{
+    std::stringstream ss("");
+    ss << this->getName() << "(" << this->getBody()->toString() << ")";
+    return (ss.str());
+}
+
+computorv2::Object* computorv2::UsualFunction::copy(void) const
+{
+    return ( new computorv2::UsualFunction(*this) );
+}
+
+computorv2::Object* computorv2::UsualFunction::evaluate(void) const
+{
+    throw std::logic_error("computorv2::UsualFunction::evaluate (Not implemented)!");
+    return (NULL);
+}
+
+bool computorv2::UsualFunction::isnull(void) const
+{
+    bool result = false;
+    computorv2::Object* e = this->evaluate();
+    if (IS_COMPLEX(e))
+    {
+        result = e->isnull();
+    }
+    delete (e);
+    return (result);
+}
+
+bool computorv2::UsualFunction::isunity(void) const
+{
+    bool result = false;
+    computorv2::Object* e = this->evaluate();
+    if (IS_COMPLEX(e))
+    {
+        result = e->isunity();
+    }
+    delete (e);
+    return (result);
+}
 
 computorv2::UsualFunction::UsualFunction(void)
 {
@@ -68,11 +156,6 @@ computorv2::UsualFunction& computorv2::UsualFunction::operator=(const computorv2
     return (*this);
 }
 
-int computorv2::UsualFunction::getType(void) const
-{
-    return (COMPUTORV2_TYPE_USUAL_FUNCTION);
-}
-
 std::string computorv2::UsualFunction::getName(void) const
 {
     return (this->_name);
@@ -83,44 +166,4 @@ computorv2::Object* computorv2::UsualFunction::getBody(void) const
     return (this->_body);
 }
 
-std::string computorv2::UsualFunction::toString(void) const
-{
-    std::stringstream ss("");
-    ss << this->getName() << "(" << this->getBody()->toString() << ")";
-    return (ss.str());
-}
-
-computorv2::Object* computorv2::UsualFunction::copy(void) const
-{
-    return ( new computorv2::UsualFunction(*this) );
-}
-
-computorv2::Object* computorv2::UsualFunction::evaluate(void) const
-{
-    throw std::logic_error("computorv2::UsualFunction::evaluate (Not implemented)!");
-    return (NULL);
-}
-
-bool computorv2::UsualFunction::isnull(void) const
-{
-    bool result = false;
-    computorv2::Object* e = this->evaluate();
-    if (IS_RATIONAL(e) || IS_COMPLEX(e))
-    {
-        result = e->isnull();
-    }
-    delete (e);
-    return (result);
-}
-
-bool computorv2::UsualFunction::isunity(void) const
-{
-    bool result = false;
-    computorv2::Object* e = this->evaluate();
-    if (IS_RATIONAL(e) || IS_COMPLEX(e))
-    {
-        result = e->isunity();
-    }
-    delete (e);
-    return (result);
-}
+#endif//!__COMPUTORV2_SOURCES_USUAL_FUNCTION

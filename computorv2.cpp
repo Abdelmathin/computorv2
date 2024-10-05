@@ -1,29 +1,25 @@
-// #include <iostream>
-// #include "include/utils.hpp"
-// #include "include/Object.hpp"
-// #include "sources/Rational.cpp"
-// #include "sources/VirtualMachine.cpp"
-// #include "sources/IndependentVariable.cpp"
-// #include "sources/Object.cpp"
-// #include "sources/Polynomial.cpp"
-// #include "sources/utils.cpp"
-// #include "sources/Client.cpp"
-// #include "sources/Complex.cpp"
-// #include "sources/UsualFunction.cpp"
-// #include "include/computorv2.hpp"
-// #include "sources/computorv2.cpp"
-// #include <unistd.h>
-
-#include "sources/Object.cpp"
-#include "sources/Rational.cpp"
-#include "sources/Polynomial.cpp"
+#include "sources/Client.cpp"
 #include "sources/IndependentVariable.cpp"
+#include "sources/UsualFunction.cpp"
+#include "sources/computorv2.cpp"
+#include "sources/Complex.cpp"
+#include "sources/Polynomial.cpp"
+#include "sources/VirtualMachine.cpp"
+#include "sources/utils.cpp"
+
+std::ostream& operator<<(std::ostream& os, const computorv2::Object& obj)
+{
+	os << obj.toString();
+	return (os);
+}
+
+// isnegative
 
 int main(void)
 {
 	computorv2::Polynomial P("x");
 
-
+	std::cout << computorv2::add(P, P) << std::endl;
 
 
 

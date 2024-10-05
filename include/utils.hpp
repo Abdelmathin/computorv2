@@ -38,11 +38,13 @@
 
 #pragma once
 
+# include <iostream>
+
 typedef int t_error;
 
 #define COMPUTORV2_EPSILON                   0.0000001
 #define ABS(x)                               ( (x) >= 0 ? (x) : -(x) )
-#define ISNULL(x)                            ( ABS(x) < COMPUTORV2_EPSILON )
+#define IS_ZERO(x)                           ( ABS(x) < COMPUTORV2_EPSILON )
 
 #define COMPUTORV2_CASE_INSENSITIVE          1
 #define COMPUTORV2_SUCCESS                   (0 << 0)
@@ -87,17 +89,21 @@ typedef int t_error;
 #define ISSPACE     IS_SPACE
 #define ISVARSTART  IS_VARSTART
 #define IS_VAR_CHAR IS_VARCHAR
+#define ISNULL IS_ZERO
 
-#define OBJECT_TYPE(obj)   (obj ? ((obj)->getType()) : 0)
-#define GETTYPEOF(obj)     OBJECT_TYPE(obj)
-#define IS_RATIONAL(obj)   ((GETTYPEOF(obj) & COMPUTORV2_TYPE_RATIONAL)   != 0)
-#define IS_COMPLEX(obj)    ((GETTYPEOF(obj) & COMPUTORV2_TYPE_COMPLEX)    != 0)
-#define IS_POLYNOMIAL(obj) ((GETTYPEOF(obj) & COMPUTORV2_TYPE_POLYNOMIAL) != 0)
+#define OBJECT_TYPE(obj)    (obj ? ((obj)->getType()) : 0)
+#define GETTYPEOF(obj)      OBJECT_TYPE(obj)
+#define IS_RATIONAL(obj)    ((GETTYPEOF(obj) & COMPUTORV2_TYPE_RATIONAL)             != 0)
+#define IS_COMPLEX(obj)     ((GETTYPEOF(obj) & COMPUTORV2_TYPE_COMPLEX)              != 0)
+#define IS_INDEPENDENT(obj) ((GETTYPEOF(obj) & COMPUTORV2_TYPE_INDEPENDENT_VARIABLE) != 0)
+#define IS_POLYNOMIAL(obj)  ((GETTYPEOF(obj) & COMPUTORV2_TYPE_POLYNOMIAL)           != 0)
 
 #define AS_OBJECT(obj)      static_cast< const computorv2::Object* >(obj)
-#define AS_RATIONAL(obj)    static_cast< const computorv2::Rational* >(obj)
 #define AS_COMPLEX(obj)     static_cast< const computorv2::Complex* >(obj)
+#define AS_INDEPENDENT(obj) static_cast< const computorv2::IndependentVariable* >(obj)
 #define AS_POLYNOMIAL(obj)  static_cast< const computorv2::Polynomial* >(obj)
+
+
 
 #define ISRATIONAL   IS_RATIONAL
 #define ISPOLYNOMIAL IS_POLYNOMIAL
@@ -109,7 +115,6 @@ namespace computorv2
 	class Vector;
 	class Complex;
 	class History;
-	class Rational;
 	class Polynomial;
 
 	class VirtualMachine;

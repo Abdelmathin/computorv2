@@ -1,28 +1,60 @@
+/* **************************************************************************  */
+/*                                                                             */
+/*                                                         :::      ::::::::   */
+/*   Object.hpp                                         :+:      :+:    :+:    */
+/*                                                    +:+ +:+         +:+      */
+/*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
+/*                                                +#+#+#+#+#+   +#+            */
+/*   Created: 2024/08/19 17:40:12 by ahabachi          #+#    #+#              */
+/*   Updated: 2024/09/24 06:34:37 by ahabachi         ###   ########.fr        */
+/*                                                                             */
+/* **************************************************************************  */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/*    ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗   ██╗████████╗ ██████╗ ██████╗    */
+/*   ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗██╔══██╗   */
+/*   ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║   ██║   ██║   ██║██████╔╝   */
+/*   ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║   ██║   ██║   ██║██╔══██╗   */
+/*   ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝   ██║   ╚██████╔╝██║  ██║   */
+/*    ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝   */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/* **************************************************************************  */
+/*                                                                             */
+/*  █████████            ██████████         ██████████         ██████████      */
+/*  ██     ██                    ██                 ██         ██      ██      */
+/*         ██                    ██                 ██         ██      ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██            ██████████         ██████████                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*      ████████         ██████████         ██████████                 ██      */
+/*                                                                             */
+/* **************************************************************************  */
+
 #pragma once
 
 #include <iostream>
 
 namespace computorv2
 {
-	class Object // Interface
+	class Object
 	{
-		private:
-			std::string _name;
 		public:
-			Object(void);
-			virtual ~Object(void);
-			Object(const Object& other);
-			Object& operator=(const Object& other);
+			virtual int                 getType(void)  const = 0;
+			virtual std::string         toString(void) const = 0;
+			virtual computorv2::Object* copy(void)     const = 0;
+			virtual computorv2::Object* evaluate(void) const = 0;
+			virtual bool                isnull(void)   const = 0;
+			virtual bool                isunity(void)  const = 0;
 
-			virtual int                 getType(void) const;
-			virtual std::string         getName(void) const;
-
-			void                        setName(std::string name);
-
-			virtual std::string         toString(void) const;
-			void                        clear(void);
-			virtual computorv2::Object* copy(void) const;
-			virtual bool                isnull(void) const;
-			virtual bool                isunity(void) const;
+			Object(void){};
+			Object(const Object& other){};
+			Object& operator=(const Object& other){return (*this);};
+			virtual ~Object(void){};
 	};
 }

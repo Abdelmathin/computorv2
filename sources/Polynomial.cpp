@@ -1,11 +1,113 @@
+/* **************************************************************************  */
+/*                                                                             */
+/*                                                         :::      ::::::::   */
+/*   Polynomial.cpp                                     :+:      :+:    :+:    */
+/*                                                    +:+ +:+         +:+      */
+/*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
+/*                                                +#+#+#+#+#+   +#+            */
+/*   Created: 2024/08/19 17:40:12 by ahabachi          #+#    #+#              */
+/*   Updated: 2024/09/24 06:34:37 by ahabachi         ###   ########.fr        */
+/*                                                                             */
+/* **************************************************************************  */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/*    ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗   ██╗████████╗ ██████╗ ██████╗    */
+/*   ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗██╔══██╗   */
+/*   ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║   ██║   ██║   ██║██████╔╝   */
+/*   ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║   ██║   ██║   ██║██╔══██╗   */
+/*   ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝   ██║   ╚██████╔╝██║  ██║   */
+/*    ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝   */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/* **************************************************************************  */
+/*                                                                             */
+/*  █████████            ██████████         ██████████         ██████████      */
+/*  ██     ██                    ██                 ██         ██      ██      */
+/*         ██                    ██                 ██         ██      ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██            ██████████         ██████████                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*      ████████         ██████████         ██████████                 ██      */
+/*                                                                             */
+/* **************************************************************************  */
+
+#ifndef __COMPUTORV2_SOURCES_POLYNOMIAL
+# define __COMPUTORV2_SOURCES_POLYNOMIAL
+
 #include "../include/Polynomial.hpp"
-#include "../include/Rational.hpp"
 #include "../include/IndependentVariable.hpp"
 #include "../include/utils.hpp"
 #include "../include/computorv2.hpp"
 #include <iostream>
 #include <sstream>
 #include <exception>
+
+int computorv2::Polynomial::getType(void) const
+{
+    return (COMPUTORV2_TYPE_POLYNOMIAL);
+}
+
+std::string computorv2::Polynomial::toString(void) const
+{
+	std::stringstream ss("");
+	if ((this->_coefficient->isnull()) || (this->_base->isnull()))
+	{
+		return (this->_freeterm->toString());
+	}
+	if (this->_exponent->isnull())
+	{
+		const computorv2::Object* value = computorv2::add(this->_coefficient, this->_freeterm);
+		const std::string s = value->toString();
+		delete (value);
+		return (s);
+	}
+	ss << "(" << this->_coefficient->toString() << ") * (" << this->_base->toString() << ") ^ (" << this->_exponent->toString() << ") + (" << this->_freeterm->toString() << ")";
+    return (ss.str());
+}
+
+computorv2::Object* computorv2::Polynomial::copy(void) const
+{
+    return ( new computorv2::Polynomial(*this) );
+}
+
+computorv2::Object* computorv2::Polynomial::evaluate(void) const
+{
+	throw std::logic_error("computorv2::Polynomial::evaluate (Not implemented)!");
+    return (NULL);
+}
+
+bool computorv2::Polynomial::isnull(void) const
+{
+	if ((this->_coefficient->isnull()) || (this->_base->isnull()))
+	{
+		return (this->_freeterm->isnull());
+	}
+	return (false);
+}
+
+bool computorv2::Polynomial::isunity(void) const
+{
+	bool result = false;
+	// if (this->_exponent->isnull())
+	// {
+	// 	const computorv2::Object *tmp = computorv2::add(this->_coefficient, this->_freeterm);
+	// 	if (tmp->isunity())
+	// 	{
+	// 		result = true;
+	// 	}
+	// 	delete (tmp);
+	// }
+	// else if (this->_coefficient->isnull() && this->_freeterm->isunity())
+	// {
+	// 	result = true;
+	// }
+	return (result);
+}
 
 void computorv2::Polynomial::init(const computorv2::Object* base)
 {
@@ -14,10 +116,10 @@ void computorv2::Polynomial::init(const computorv2::Object* base)
 	this->_exponent    = NULL;
 	this->_freeterm    = NULL;
 
-	this->setCoefficient(computorv2::Rational(1.0));
+	this->setCoefficient(computorv2::Complex(1.0));
 	this->setBase(base);
-	this->setExponent(computorv2::Rational(1.0));
-	this->setFreeTerm(computorv2::Rational(0.0));
+	this->setExponent(computorv2::Complex(1.0));
+	this->setFreeTerm(computorv2::Complex(0.0));
 }
 
 void computorv2::Polynomial::delCoefficient(void)
@@ -73,7 +175,7 @@ computorv2::Polynomial::Polynomial(const computorv2::IndependentVariable& base)
 	this->init(&base);
 }
 
-computorv2::Polynomial::Polynomial(const computorv2::IndependentVariable* base)
+computorv2::Polynomial::Polynomial(const computorv2::Object* base)
 {
 	this->init(base);
 }
@@ -102,11 +204,6 @@ computorv2::Polynomial& computorv2::Polynomial::operator=(const computorv2::Poly
 		this->setFreeTerm(other.getFreeTerm());
 	}
 	return (*this);
-}
-
-int computorv2::Polynomial::getType(void) const
-{
-	return (COMPUTORV2_TYPE_POLYNOMIAL);
 }
 
 computorv2::Object* computorv2::Polynomial::getCoefficient(void) const
@@ -189,65 +286,4 @@ void computorv2::Polynomial::setFreeTerm(const computorv2::Object& freeterm)
 	this->setFreeTerm(&freeterm);
 }
 
-std::string computorv2::Polynomial::toString(void) const
-{
-	const computorv2::Rational zero(0.0);
-	const computorv2::Rational one(1.0);
-	std::stringstream ss("");
-
-	// if (((computorv2::eql(this->_coefficient, &zero))) && ((!this->_freeterm) || (computorv2::eql(this->_freeterm, &zero))))
-	// {
-	// 	ss << "0";
-	// 	return (ss.str());
-	// }
-	// if (this->_coefficient)
-	// {
-	// 	if (!computorv2::eql(this->_coefficient, &zero))
-	// 	{
-	// 		ss << "(" << this->_coefficient->toString() << ") * ";
-	// 		ss << this->_name;
-	// 		if (this->_exponent)
-	// 		{
-	// 			ss << "^(" << this->_exponent->toString() << ")";
-	// 		}			
-	// 	}
-	// }
-	// if (this->_freeterm)
-	// {
-	// 	ss << " + (" << this->_freeterm->toString() << ")";
-	// }
-    return (ss.str());
-}
-
-computorv2::Object* computorv2::Polynomial::copy(void) const
-{
-    return ( new computorv2::Polynomial(*this) );
-}
-
-bool computorv2::Polynomial::isnull(void) const
-{
-	if ((this->_coefficient->isnull()) || (this->_base->isnull()))
-	{
-		return (this->_freeterm->isnull());
-	}
-	return (false);
-}
-
-bool computorv2::Polynomial::isunity(void) const
-{
-	bool result = false;
-	// if (this->_exponent->isnull())
-	// {
-	// 	const computorv2::Object *tmp = computorv2::add(this->_coefficient, this->_freeterm);
-	// 	if (tmp->isunity())
-	// 	{
-	// 		result = true;
-	// 	}
-	// 	delete (tmp);
-	// }
-	// else if (this->_coefficient->isnull() && this->_freeterm->isunity())
-	// {
-	// 	result = true;
-	// }
-	return (result);
-}
+#endif//!__COMPUTORV2_SOURCES_POLYNOMIAL

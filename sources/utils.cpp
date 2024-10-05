@@ -1,3 +1,44 @@
+/* **************************************************************************  */
+/*                                                                             */
+/*                                                         :::      ::::::::   */
+/*   utils.cpp                                          :+:      :+:    :+:    */
+/*                                                    +:+ +:+         +:+      */
+/*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
+/*                                                +#+#+#+#+#+   +#+            */
+/*   Created: 2024/08/19 17:40:12 by ahabachi          #+#    #+#              */
+/*   Updated: 2024/09/24 06:34:37 by ahabachi         ###   ########.fr        */
+/*                                                                             */
+/* **************************************************************************  */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/*    ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗   ██╗████████╗ ██████╗ ██████╗    */
+/*   ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗██╔══██╗   */
+/*   ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║   ██║   ██║   ██║██████╔╝   */
+/*   ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║   ██║   ██║   ██║██╔══██╗   */
+/*   ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝   ██║   ╚██████╔╝██║  ██║   */
+/*    ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝   */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/*                                                                             */
+/* **************************************************************************  */
+/*                                                                             */
+/*  █████████            ██████████         ██████████         ██████████      */
+/*  ██     ██                    ██                 ██         ██      ██      */
+/*         ██                    ██                 ██         ██      ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██            ██████████         ██████████                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*         ██                    ██                 ██                 ██      */
+/*      ████████         ██████████         ██████████                 ██      */
+/*                                                                             */
+/* **************************************************************************  */
+
+#ifndef __COMPUTORV2_SOURCES_UTILS
+# define __COMPUTORV2_SOURCES_UTILS
+
 #include "../include/utils.hpp"
 #include "../include/Object.hpp"
 #include "../include/Polynomial.hpp"
@@ -241,7 +282,7 @@ t_error computorv2::statment_parse_number(computorv2::statment *st)
 	}
 	if (c != '.')
 	{
-		st->_result = new computorv2::Rational(r);
+		st->_result = new computorv2::Complex(r);
 		return (COMPUTORV2_SUCCESS);
 	}
 	c = computorv2::statment_next(st);
@@ -252,7 +293,7 @@ t_error computorv2::statment_parse_number(computorv2::statment *st)
 		c = computorv2::statment_next(st);
 		f = f / 10.0;		
 	}
-	st->_result = new computorv2::Rational(r);
+	st->_result = new computorv2::Complex(r);
 	return (0);
 }
 
@@ -282,8 +323,7 @@ t_error computorv2::statment_parse_variable(computorv2::statment *st)
 		}
 		else
 		{
-			st->_result = new computorv2::Polynomial();
-			st->_result->setName(name);
+			st->_result = new computorv2::Polynomial(name);
 		}
 		std::cout << "name: " << name << std::endl;
 		std::cout << "st->_result->getType(): " << st->_result->getType() << std::endl;
@@ -332,50 +372,6 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 t_error computorv2::statment_operation(computorv2::statment *st, const computorv2::Object* left, const computorv2::Object* right, const int operation_code)
 {
 	st->_result = NULL;
-	if (operation_code == COMPUTORV2_OPERATION_ADD)
-	{
-		if (ISRATIONAL(left) && ISRATIONAL(right))
-		{
-			const computorv2::Rational* rleft  = static_cast<const computorv2::Rational*>(left);
-			const computorv2::Rational* rright = static_cast<const computorv2::Rational*>(right);
-			st->_result = new computorv2::Rational(rleft->getValue() + rright->getValue());
-			return (COMPUTORV2_SUCCESS);
-		}
-	}
-	else if (operation_code == COMPUTORV2_OPERATION_SUB)
-	{
-		if (ISRATIONAL(left) && ISRATIONAL(right))
-		{
-			const computorv2::Rational* rleft  = static_cast<const computorv2::Rational*>(left);
-			const computorv2::Rational* rright = static_cast<const computorv2::Rational*>(right);
-			st->_result = new computorv2::Rational(rleft->getValue() - rright->getValue());
-			return (COMPUTORV2_SUCCESS);
-		}
-	}
-	else if (operation_code == COMPUTORV2_OPERATION_MULT)
-	{
-		if (ISRATIONAL(left) && ISRATIONAL(right))
-		{
-			const computorv2::Rational* rleft  = static_cast<const computorv2::Rational*>(left);
-			const computorv2::Rational* rright = static_cast<const computorv2::Rational*>(right);
-			st->_result = new computorv2::Rational(rleft->getValue() * rright->getValue());
-			return (COMPUTORV2_SUCCESS);
-		}
-	}
-	else if (operation_code == COMPUTORV2_OPERATION_DIV)
-	{
-		if (ISRATIONAL(left) && ISRATIONAL(right))
-		{
-			const computorv2::Rational* rleft  = static_cast<const computorv2::Rational*>(left);
-			const computorv2::Rational* rright = static_cast<const computorv2::Rational*>(right);
-			if (rright->getValue() == 0.0)
-			{
-				throw "Zero Division Error!";
-			}
-			st->_result = new computorv2::Rational(rleft->getValue() / rright->getValue());
-			return (COMPUTORV2_SUCCESS);
-		}
-	}
 	throw "Unknown operation!";
 	return (COMPUTORV2_SUCCESS);
 }
@@ -559,7 +555,7 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 	{
 		const std::string  funcname = st->_funcname;
 		const std::string  varname  = st->_varname;
-		computorv2::Object p = computorv2::Polynomial(); p.setName(varname);
+		computorv2::Polynomial p = computorv2::Polynomial(varname);
 		if (st->_vm)
 		{
 			st->_vm->setIndependentByName(varname, &p);
@@ -613,3 +609,5 @@ t_error computorv2::statment_parse(computorv2::statment *st)
 	}
 	return (COMPUTORV2_ERROR);
 }
+
+#endif//!__COMPUTORV2_SOURCES_UTILS
