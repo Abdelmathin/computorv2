@@ -13,13 +13,11 @@
 // 	return (os);
 // }
 
-// isnegative
-
 int main(void)
 {
 	computorv2::Polynomial P("x");
 
-	std::cout << P.toString() << std::endl;
+	std::cout << (computorv2::add(computorv2::add(P, P), computorv2::mul(P, P))).toString() << std::endl;
 
 	// std::cout << computorv2::add(P, P) << std::endl;
 

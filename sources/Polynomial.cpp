@@ -88,8 +88,8 @@ std::string computorv2::Polynomial::toString(void) const
 			{
 				ss << ")";
 			}
+			ss << " * ";
 		}
-		ss << " * ";
 		if (!computorv2::isfreeterm(x))
 		{
 			ss << "(";
@@ -103,10 +103,6 @@ std::string computorv2::Polynomial::toString(void) const
 		delete (x);
 		const computorv2::Object* n = this->_exponent->evaluate();
 		const std::string s = n->toString();
-		if (s.empty())
-		{
-			throw std::logic_error("exponent is empty!");
-		}
 		if (!n->isunity())
 		{
 			ss << "^";
@@ -125,10 +121,6 @@ std::string computorv2::Polynomial::toString(void) const
 	if (!poly->_freeterm->isnull())
 	{
 		std::string b = poly->_freeterm->toString();
-		if (b.empty())
-		{
-			throw std::logic_error("freeterm is empty string!");
-		}
 		if (b[0] == '-')
 		{
 			ss << " - ";

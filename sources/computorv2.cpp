@@ -46,14 +46,65 @@
 #include <sstream>
 #include <unistd.h>
 
+computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& left, const computorv2::Complex& right)
+{
+	computorv2::Polynomial res(left);
+	res.setExponent(right);
+	return (res);
+}
+
 computorv2::Object* computorv2::pow(const computorv2::Object* left, const computorv2::Object* right)
 {
-	throw std::logic_error("computorv2::pow (Not implemented)!");
+	if (!left)
+	{
+		throw std::logic_error("left is NULL!");
+	}
+	if (!right)
+	{
+		throw std::logic_error("left is NULL!");
+	}
+	if (right->isnull())
+	{
+		if (left->isnull())
+		{
+			throw std::logic_error("Error: Zero to the power of zero!");
+		}
+		return (computorv2::Complex(1.0, 0.0).copy());
+	}
+	if (IS_INDEPENDENT(left))
+	{
+		if (IS_COMPLEX(right))
+			return (computorv2::pow(*AS_INDEPENDENT(left), *AS_COMPLEX(right)).copy());
+	}
+
+	std::stringstream ss("");
+	ss << "Can't add objects!";
+	ss << ", left->getType() = "  << left->getType();
+	ss << ", right->getType() = " << right->getType();
+	ss << std::endl;
+	throw std::logic_error(ss.str());
 	return (NULL);
 }
 
 bool computorv2::isfreeterm(const computorv2::Object* obj)
 {
+	if (IS_COMPLEX(obj))
+	{
+		const computorv2::Complex* z = AS_COMPLEX(obj);
+		if ((z->getReal() > 0) && (IS_ZERO(z->getImage())))
+		{
+			return (true);
+		}
+		else if ((z->getImage() > 0) && (IS_ZERO(z->getReal())))
+		{
+			return (true);
+		}
+		return (z->isnull());
+	}
+	if (IS_INDEPENDENT(obj))
+	{
+		return (true);
+	}
 	std::cout << "Warning: computorv2::isfreeterm((Not implemented)!)" << std::endl;
 	return (false);
 }
@@ -256,6 +307,20 @@ computorv2::Object* computorv2::mul(const computorv2::Object* left, const comput
 }
 
 /* Object (eql) */
+bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
+{
+	return (left.getName() == right.getName());
+}
+
+bool computorv2::eql(const computorv2::Complex& left, const computorv2::Complex& right)
+{
+	if (IS_ZERO(left.getReal() - right.getReal()))
+	{
+		return (IS_ZERO(left.getImage() - right.getImage()));
+	}
+	return (false);
+}
+
 bool computorv2::eql(const computorv2::Object* left, const computorv2::Object* right)
 {
 	if (!left)
@@ -265,6 +330,16 @@ bool computorv2::eql(const computorv2::Object* left, const computorv2::Object* r
 	if (!right)
 	{
 		throw std::logic_error("left is NULL!");
+	}
+	if (IS_COMPLEX(left))
+	{
+		if (IS_COMPLEX(right))
+			return (computorv2::eql(*AS_COMPLEX(left), *AS_COMPLEX(right)));
+	}
+	if (IS_INDEPENDENT(left))
+	{
+		if (IS_INDEPENDENT(right))
+			return (computorv2::eql(*AS_INDEPENDENT(left), *AS_INDEPENDENT(right)));
 	}
 	std::stringstream ss("");
 	ss << "ComparisonError: ";

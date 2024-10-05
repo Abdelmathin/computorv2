@@ -47,6 +47,13 @@ namespace computorv2
 {
 	/* operations */
 	computorv2::Object*    pow(const computorv2::Object* left, const computorv2::Object* right);
+	bool                   eql(const computorv2::Object* left, const computorv2::Object* right);
+
+	bool                   eql(const computorv2::Complex& left, const computorv2::Complex& right);
+	bool                   eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
+
+	computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::Complex& right);
+
 
 
 	bool isfreeterm(const computorv2::Object* obj);
@@ -74,8 +81,6 @@ namespace computorv2
 	computorv2::Polynomial mul(const computorv2::Polynomial& left, const computorv2::Polynomial& right);
 	computorv2::Object*    mul(const computorv2::Object* left, const computorv2::Object* right);
 
-	/* Object (eql) */
-	bool                   eql(const computorv2::Object* left, const computorv2::Object* right);
 
 	/* derivative (Object) */
 	computorv2::Polynomial derivative(const computorv2::Object* obj);
