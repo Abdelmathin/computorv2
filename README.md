@@ -45,3 +45,4 @@ pip install computorv2
 
 # Derivative of $$ a . x^n + b $$ :
 
+$$ a . x^n + b $$
