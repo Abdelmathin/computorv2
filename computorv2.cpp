@@ -7,11 +7,11 @@
 #include "sources/VirtualMachine.cpp"
 #include "sources/utils.cpp"
 
-std::ostream& operator<<(std::ostream& os, const computorv2::Object& obj)
-{
-	os << obj.toString();
-	return (os);
-}
+// std::ostream& operator<<(std::ostream& os, const computorv2::Object& obj)
+// {
+// 	os << obj.toString();
+// 	return (os);
+// }
 
 // isnegative
 
@@ -19,7 +19,9 @@ int main(void)
 {
 	computorv2::Polynomial P("x");
 
-	std::cout << computorv2::add(P, P) << std::endl;
+	std::cout << P.toString() << std::endl;
+
+	// std::cout << computorv2::add(P, P) << std::endl;
 
 
 

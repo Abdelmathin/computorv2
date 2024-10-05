@@ -45,6 +45,14 @@
 
 namespace computorv2
 {
+	/* operations */
+	computorv2::Object*    pow(const computorv2::Object* left, const computorv2::Object* right);
+
+
+	bool isfreeterm(const computorv2::Object* obj);
+
+
+
 	/* Complex (add) */
 	computorv2::Complex    add(const computorv2::Complex& left, const computorv2::Complex& right);
 

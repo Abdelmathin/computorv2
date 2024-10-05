@@ -54,19 +54,93 @@ int computorv2::Polynomial::getType(void) const
 
 std::string computorv2::Polynomial::toString(void) const
 {
-	std::stringstream ss("");
-	if ((this->_coefficient->isnull()) || (this->_base->isnull()))
+	const computorv2::Object* p = this->evaluate();
+	if (!IS_POLYNOMIAL(p))
 	{
-		return (this->_freeterm->toString());
-	}
-	if (this->_exponent->isnull())
-	{
-		const computorv2::Object* value = computorv2::add(this->_coefficient, this->_freeterm);
-		const std::string s = value->toString();
-		delete (value);
+		const std::string s = p->toString();
+		delete (p);
 		return (s);
 	}
-	ss << "(" << this->_coefficient->toString() << ") * (" << this->_base->toString() << ") ^ (" << this->_exponent->toString() << ") + (" << this->_freeterm->toString() << ")";
+	const computorv2::Polynomial* poly = AS_POLYNOMIAL(p);
+	if ((poly->_coefficient->isnull()) || (poly->_base->isnull()))
+	{
+		const std::string s = poly->_freeterm->toString();
+		delete (poly);
+		return (s);
+	}
+	std::stringstream ss("");
+	{
+		const computorv2::Object* a = this->_coefficient->evaluate();
+		const computorv2::Object* x = this->_base->evaluate();
+		const std::string a_str     = a->toString();
+		if (a_str == "-1")
+		{
+			ss << "-";
+		}
+		else if (a_str != "1")
+		{
+			if (!computorv2::isfreeterm(a))
+			{
+				ss << "(";
+			}
+			ss << a_str;
+			if (!computorv2::isfreeterm(a))
+			{
+				ss << ")";
+			}
+		}
+		ss << " * ";
+		if (!computorv2::isfreeterm(x))
+		{
+			ss << "(";
+		}
+		ss << x->toString();
+		if (!computorv2::isfreeterm(x))
+		{
+			ss << ")";
+		}
+		delete (a);
+		delete (x);
+		const computorv2::Object* n = this->_exponent->evaluate();
+		const std::string s = n->toString();
+		if (s.empty())
+		{
+			throw std::logic_error("exponent is empty!");
+		}
+		if (!n->isunity())
+		{
+			ss << "^";
+			if ((s[0] == '-') || (!computorv2::isfreeterm(n)))
+			{
+				ss << "(";
+			}
+			ss << s;
+			if ((s[0] == '-') || (!computorv2::isfreeterm(n)))
+			{
+				ss << ")";
+			}
+		}
+		delete (n);
+	}
+	if (!poly->_freeterm->isnull())
+	{
+		std::string b = poly->_freeterm->toString();
+		if (b.empty())
+		{
+			throw std::logic_error("freeterm is empty string!");
+		}
+		if (b[0] == '-')
+		{
+			ss << " - ";
+			b = b.substr(1, b.size() - 1);
+		}
+		else
+		{
+			ss << " + ";
+		}
+		ss << b;
+	}
+	delete (poly);
     return (ss.str());
 }
 
@@ -77,8 +151,31 @@ computorv2::Object* computorv2::Polynomial::copy(void) const
 
 computorv2::Object* computorv2::Polynomial::evaluate(void) const
 {
-	throw std::logic_error("computorv2::Polynomial::evaluate (Not implemented)!");
-    return (NULL);
+	const computorv2::Object* a = this->_coefficient->evaluate();
+	const computorv2::Object* x = this->_base->evaluate();
+	const computorv2::Object* n = this->_exponent->evaluate();
+	const computorv2::Object* b = this->_freeterm->evaluate();
+	const computorv2::Object* p = computorv2::pow(x, n);
+	const computorv2::Object* e = computorv2::mul(a, p);
+	computorv2::Object* f = computorv2::add(e, b);
+	delete (a);
+	delete (x);
+	delete (n);
+	delete (b);
+	delete (p);
+	delete (e);
+	if (!IS_POLYNOMIAL(f))
+	{
+		return (f);
+	}
+	computorv2::Object* evaluated = f;
+	const computorv2::Polynomial* res = AS_POLYNOMIAL(f);
+	if (res->_coefficient->isunity() && res->_exponent->isunity() && res->_freeterm->isnull())
+	{
+		evaluated = res->_base->evaluate();
+		delete (res);
+	}
+	return (evaluated);
 }
 
 bool computorv2::Polynomial::isnull(void) const

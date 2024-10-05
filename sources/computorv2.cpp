@@ -46,6 +46,18 @@
 #include <sstream>
 #include <unistd.h>
 
+computorv2::Object* computorv2::pow(const computorv2::Object* left, const computorv2::Object* right)
+{
+	throw std::logic_error("computorv2::pow (Not implemented)!");
+	return (NULL);
+}
+
+bool computorv2::isfreeterm(const computorv2::Object* obj)
+{
+	std::cout << "Warning: computorv2::isfreeterm((Not implemented)!)" << std::endl;
+	return (false);
+}
+
 /* Complex (add) */
 
 computorv2::Complex computorv2::add(const computorv2::Complex& left, const computorv2::Complex& right)
