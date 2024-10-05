@@ -45,7 +45,9 @@ pip install computorv2
 
 # Derivative:
 
-To differentiate $$ P(x) = a . x^n + b $$ where a, x, n, b are all functions of x, we use the product rule, the chain rule, and the general power rule.
+- To differentiate
+$$ P(x) = a . x^n + b $$
+where a, x, n, b are all functions of x, we use the product rule, the chain rule, and the general power rule.
 
 <!-- $$  P(x) = a . x^n + b $$
 
