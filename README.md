@@ -47,6 +47,6 @@ pip install computorv2
 
 $$  P(x) = a . x^n + b $$
 
-$$  \frac{d P(x)}{d x} = $$
+$$  \frac{d P(x)}{d x} = \frac{d a}{d x} . x^n + a . \frac{d x^n}{d x} + \frac{d b}{d x} $$
 
 
