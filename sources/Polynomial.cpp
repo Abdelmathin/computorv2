@@ -182,19 +182,12 @@ bool computorv2::Polynomial::isnull(void) const
 bool computorv2::Polynomial::isunity(void) const
 {
 	bool result = false;
-	// if (this->_exponent->isnull())
-	// {
-	// 	const computorv2::Object *tmp = computorv2::add(this->_coefficient, this->_freeterm);
-	// 	if (tmp->isunity())
-	// 	{
-	// 		result = true;
-	// 	}
-	// 	delete (tmp);
-	// }
-	// else if (this->_coefficient->isnull() && this->_freeterm->isunity())
-	// {
-	// 	result = true;
-	// }
+	const computorv2::Object* e = this->evaluate();
+	if (!IS_POLYNOMIAL(e))
+	{
+		result = e->isunity();
+	}
+	delete (e);
 	return (result);
 }
 
@@ -256,6 +249,11 @@ computorv2::Polynomial::Polynomial(void)
 computorv2::Polynomial::Polynomial(const std::string& basename)
 {
 	const computorv2::IndependentVariable base(basename);
+	this->init(&base);
+}
+
+computorv2::Polynomial::Polynomial(const computorv2::UsualFunction& base)
+{
 	this->init(&base);
 }
 

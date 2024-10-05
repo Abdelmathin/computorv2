@@ -91,17 +91,19 @@ typedef int t_error;
 #define IS_VAR_CHAR IS_VARCHAR
 #define ISNULL IS_ZERO
 
-#define OBJECT_TYPE(obj)    (obj ? ((obj)->getType()) : 0)
-#define GETTYPEOF(obj)      OBJECT_TYPE(obj)
-#define IS_RATIONAL(obj)    ((GETTYPEOF(obj) & COMPUTORV2_TYPE_RATIONAL)             != 0)
-#define IS_COMPLEX(obj)     ((GETTYPEOF(obj) & COMPUTORV2_TYPE_COMPLEX)              != 0)
-#define IS_INDEPENDENT(obj) ((GETTYPEOF(obj) & COMPUTORV2_TYPE_INDEPENDENT_VARIABLE) != 0)
-#define IS_POLYNOMIAL(obj)  ((GETTYPEOF(obj) & COMPUTORV2_TYPE_POLYNOMIAL)           != 0)
+#define OBJECT_TYPE(obj)        (obj ? ((obj)->getType()) : 0)
+#define GETTYPEOF(obj)          OBJECT_TYPE(obj)
+#define IS_RATIONAL(obj)        ((GETTYPEOF(obj) & COMPUTORV2_TYPE_RATIONAL)             != 0)
+#define IS_COMPLEX(obj)         ((GETTYPEOF(obj) & COMPUTORV2_TYPE_COMPLEX)              != 0)
+#define IS_INDEPENDENT(obj)     ((GETTYPEOF(obj) & COMPUTORV2_TYPE_INDEPENDENT_VARIABLE) != 0)
+#define IS_USUAL_FUNCTION(obj)  ((GETTYPEOF(obj) & COMPUTORV2_TYPE_USUAL_FUNCTION)       != 0)
+#define IS_POLYNOMIAL(obj)      ((GETTYPEOF(obj) & COMPUTORV2_TYPE_POLYNOMIAL)           != 0)
 
-#define AS_OBJECT(obj)      static_cast< const computorv2::Object* >(obj)
-#define AS_COMPLEX(obj)     static_cast< const computorv2::Complex* >(obj)
-#define AS_INDEPENDENT(obj) static_cast< const computorv2::IndependentVariable* >(obj)
-#define AS_POLYNOMIAL(obj)  static_cast< const computorv2::Polynomial* >(obj)
+#define AS_OBJECT(obj)         static_cast< const computorv2::Object* >(obj)
+#define AS_COMPLEX(obj)        static_cast< const computorv2::Complex* >(obj)
+#define AS_INDEPENDENT(obj)    static_cast< const computorv2::IndependentVariable* >(obj)
+#define AS_USUAL_FUNCTION(obj) static_cast< const computorv2::UsualFunction* >(obj)
+#define AS_POLYNOMIAL(obj)     static_cast< const computorv2::Polynomial* >(obj)
 
 
 

@@ -53,6 +53,13 @@ computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& le
 	return (res);
 }
 
+computorv2::Polynomial computorv2::pow(const computorv2::UsualFunction& left, const computorv2::Complex& right)
+{
+	computorv2::Polynomial res(&left);
+	res.setExponent(right);
+	return (res);
+}
+
 computorv2::Object* computorv2::pow(const computorv2::Object* left, const computorv2::Object* right)
 {
 	if (!left)
@@ -76,9 +83,14 @@ computorv2::Object* computorv2::pow(const computorv2::Object* left, const comput
 		if (IS_COMPLEX(right))
 			return (computorv2::pow(*AS_INDEPENDENT(left), *AS_COMPLEX(right)).copy());
 	}
+	if (IS_USUAL_FUNCTION(left))
+	{
+		if (IS_COMPLEX(right))
+			return (computorv2::pow(*AS_USUAL_FUNCTION(left), *AS_COMPLEX(right)).copy());		
+	}
 
 	std::stringstream ss("");
-	ss << "Can't add objects!";
+	ss << "Can't pow objects!";
 	ss << ", left->getType() = "  << left->getType();
 	ss << ", right->getType() = " << right->getType();
 	ss << std::endl;
@@ -105,6 +117,10 @@ bool computorv2::isfreeterm(const computorv2::Object* obj)
 	{
 		return (true);
 	}
+	if (IS_USUAL_FUNCTION(obj))
+	{
+		return (true);
+	}
 	std::cout << "Warning: computorv2::isfreeterm((Not implemented)!)" << std::endl;
 	return (false);
 }
@@ -120,11 +136,15 @@ computorv2::Complex computorv2::add(const computorv2::Complex& left, const compu
 }
 
 /* Polynomial (add) */
-// computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
-// {
-// 	computorv2::Polynomial res;
-// 	return (res);
-// }
+computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
+{
+	return (computorv2::add(computorv2::Polynomial(&left), computorv2::Polynomial(&right)));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right)
+{
+	return (computorv2::add(computorv2::Polynomial(&left), computorv2::Polynomial(&right)));
+}
 
 computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Complex& right)
 {
@@ -143,6 +163,18 @@ computorv2::Polynomial computorv2::add(const computorv2::Complex& left, const co
 
 computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
 {
+	if (IS_COMPLEX(left.getExponent()) && IS_COMPLEX(right.getExponent()))
+	{
+		const computorv2::Complex* z1 = AS_COMPLEX(left.getExponent());
+		const computorv2::Complex* z2 = AS_COMPLEX(right.getExponent());
+		if (IS_ZERO(z1->getImage()) && IS_ZERO(z2->getImage()))
+		{
+			if (z1->getReal() < z2->getReal())
+			{
+				return (computorv2::add(right, left));
+			}
+		}
+	}
 	if ((computorv2::eql(left.getBase(), right.getBase())) && (computorv2::eql(left.getExponent(), right.getExponent())))
 	{
 		computorv2::Polynomial res(left.getBase());
@@ -321,6 +353,15 @@ bool computorv2::eql(const computorv2::Complex& left, const computorv2::Complex&
 	return (false);
 }
 
+bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right)
+{
+	if (left.getName() == right.getName())
+	{
+		return (computorv2::eql(left.getBody(), right.getBody()));
+	}
+	return (false);
+}
+
 bool computorv2::eql(const computorv2::Object* left, const computorv2::Object* right)
 {
 	if (!left)
@@ -341,6 +382,11 @@ bool computorv2::eql(const computorv2::Object* left, const computorv2::Object* r
 		if (IS_INDEPENDENT(right))
 			return (computorv2::eql(*AS_INDEPENDENT(left), *AS_INDEPENDENT(right)));
 	}
+	if (IS_USUAL_FUNCTION(left))
+	{
+		if (IS_USUAL_FUNCTION(right))
+			return (computorv2::eql(*AS_USUAL_FUNCTION(left), *AS_USUAL_FUNCTION(right)));
+	}
 	std::stringstream ss("");
 	ss << "ComparisonError: ";
 	ss << ", left->getType()  = " << left->getType();
@@ -351,28 +397,28 @@ bool computorv2::eql(const computorv2::Object* left, const computorv2::Object* r
 }
 
 /* derivative (Object) */
-computorv2::Polynomial derivative(const computorv2::Object* obj)
+computorv2::Polynomial computorv2::derivative(const computorv2::Object* obj, const computorv2::IndependentVariable& dx)
 {
 	if (!obj)
 	{
 		throw std::logic_error("Error: Null pointer passed to derivative function.");
 	}
 	if (IS_COMPLEX(obj))
-		return (computorv2::derivative(*AS_COMPLEX(obj)));
-	if (IS_POLYNOMIAL(obj))
-		return (computorv2::derivative(*AS_POLYNOMIAL(obj)));
+		return (computorv2::derivative(*AS_COMPLEX(obj), dx));
+	else if (IS_POLYNOMIAL(obj))
+		return (computorv2::derivative(*AS_POLYNOMIAL(obj), dx));
 	std::stringstream ss("");
 	ss << "DerivativeError: ";
 	ss << ", obj->getType()  = " << obj->getType();
 	ss << std::endl;
 	throw std::logic_error(ss.str());
-	return (computorv2::Polynomial(""));
+	return (computorv2::Polynomial("x"));
 }
 
 /* derivative (Complex) */
-computorv2::Polynomial computorv2::derivative(const computorv2::Complex& obj)
+computorv2::Polynomial computorv2::derivative(const computorv2::Complex& obj, const computorv2::IndependentVariable& dx)
 {
-	computorv2::Polynomial res("");
+	computorv2::Polynomial res(dx);
 	const computorv2::Complex zero(0.0);
 	res.setCoefficient(&zero);
 	res.setExponent(&zero);
@@ -381,9 +427,9 @@ computorv2::Polynomial computorv2::derivative(const computorv2::Complex& obj)
 }
 
 /* derivative (Polynomial) */
-computorv2::Polynomial computorv2::derivative(const computorv2::Polynomial& obj)
+computorv2::Polynomial computorv2::derivative(const computorv2::Polynomial& poly, const computorv2::IndependentVariable& dx)
 {
-	return (obj);
+	return (poly);
 }
 
 #endif//!__COMPUTORV2_SOURCES_COMPUTORV2

@@ -53,13 +53,15 @@ namespace computorv2
             bool                isnull(void)   const;
             bool                isunity(void)  const;
 
+            std::string         getName(void)  const;
+            computorv2::Object* getBody(void)  const;
+
+            UsualFunction(const std::string& name, const computorv2::IndependentVariable& body);
             UsualFunction(const std::string& name, const computorv2::Object* body);
             ~UsualFunction(void);
             UsualFunction(const UsualFunction& other);
             UsualFunction& operator=(const UsualFunction& other);
 
-            std::string          getName(void)    const;
-            computorv2::Object*  getBody(void)    const;
         private:
             UsualFunction(void);
             std::string         _name;

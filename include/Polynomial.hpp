@@ -55,6 +55,7 @@ namespace computorv2
             bool                isunity(void)  const;
 
 			Polynomial(const std::string& basename);
+			Polynomial(const computorv2::UsualFunction& base);
 			Polynomial(const computorv2::IndependentVariable& base);
 			Polynomial(const computorv2::Object* base);
 			~Polynomial(void);

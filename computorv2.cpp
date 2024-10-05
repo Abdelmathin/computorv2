@@ -15,11 +15,15 @@
 
 int main(void)
 {
-	computorv2::Polynomial P("x");
+	computorv2::IndependentVariable x("x");
+	computorv2::UsualFunction ln("ln", x);
 
-	std::cout << (computorv2::add(computorv2::add(P, P), computorv2::mul(P, P))).toString() << std::endl;
+	computorv2::Polynomial P(&x);
 
-	// std::cout << computorv2::add(P, P) << std::endl;
+	std::cout << computorv2::derivative(P, x).toString() << std::endl;
+	// std::cout << computorv2::derivative(computorv2::add(computorv2::add(P, P), computorv2::mul(P, P))).toString() << std::endl;
+
+
 
 
 

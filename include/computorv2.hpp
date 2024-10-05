@@ -42,6 +42,7 @@
 #include "Object.hpp"
 #include "Complex.hpp"
 #include "Polynomial.hpp"
+#include "UsualFunction.hpp"
 
 namespace computorv2
 {
@@ -51,8 +52,10 @@ namespace computorv2
 
 	bool                   eql(const computorv2::Complex& left, const computorv2::Complex& right);
 	bool                   eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
+	bool                   eql(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right);
 
 	computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::Complex& right);
+	computorv2::Polynomial pow(const computorv2::UsualFunction& left, const computorv2::Complex& right);
 
 
 
@@ -65,6 +68,8 @@ namespace computorv2
 
 
 	/* Polynomial (add) */
+	computorv2::Polynomial add(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
+	computorv2::Polynomial add(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right);
 	computorv2::Polynomial add(const computorv2::Polynomial& left, const computorv2::Complex& right);
 	computorv2::Polynomial add(const computorv2::Complex& left, const computorv2::Polynomial& right);
 	computorv2::Polynomial add(const computorv2::Polynomial& left, const computorv2::Polynomial& right);
@@ -83,11 +88,11 @@ namespace computorv2
 
 
 	/* derivative (Object) */
-	computorv2::Polynomial derivative(const computorv2::Object* obj);
+	computorv2::Polynomial derivative(const computorv2::Object* obj, const computorv2::IndependentVariable& dx);
 
 	/* derivative (Complex) */
-	computorv2::Polynomial derivative(const computorv2::Complex& obj);
+	computorv2::Polynomial derivative(const computorv2::Complex& obj, const computorv2::IndependentVariable& dx);
 
 	/* derivative (Polynomial) */
-	computorv2::Polynomial derivative(const computorv2::Polynomial& obj);
+	computorv2::Polynomial derivative(const computorv2::Polynomial& obj, const computorv2::IndependentVariable& dx);
 }

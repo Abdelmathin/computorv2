@@ -62,6 +62,14 @@ computorv2::Object* computorv2::UsualFunction::copy(void) const
 
 computorv2::Object* computorv2::UsualFunction::evaluate(void) const
 {
+    const computorv2::Object* body = this->_body->evaluate();
+    if (!IS_COMPLEX(body))
+    {
+        computorv2::Object* res = new computorv2::UsualFunction(this->getName(), body);
+        delete (body);
+        return (res);
+    }
+    delete (body);
     throw std::logic_error("computorv2::UsualFunction::evaluate (Not implemented)!");
     return (NULL);
 }
@@ -106,6 +114,11 @@ void computorv2::UsualFunction::setName(const std::string& name)
 
 void computorv2::UsualFunction::setBody(const computorv2::Object* body)
 {
+    if (this->_body)
+    {
+        delete (this->_body);
+    }
+    this->_body = NULL;
     if (!body)
     {
         throw std::logic_error("bad function body!");
@@ -128,6 +141,13 @@ void computorv2::UsualFunction::clear(void)
     this->init();
 }
 
+computorv2::UsualFunction::UsualFunction(const std::string& name, const computorv2::IndependentVariable& body)
+{
+    this->init();
+    this->setName(name);
+    this->setBody(&body);
+}
+
 computorv2::UsualFunction::UsualFunction(const std::string& name, const computorv2::Object* body)
 {
     this->init();
@@ -142,6 +162,7 @@ computorv2::UsualFunction::~UsualFunction(void)
 
 computorv2::UsualFunction::UsualFunction(const computorv2::UsualFunction& other)
 {
+    this->init();
     this->setName(other.getName());
     this->setBody(other.getBody());
 }
