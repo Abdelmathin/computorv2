@@ -45,4 +45,4 @@ pip install computorv2
 
 # Derivative:
 
-* $$  P(x) = a . x^n + b $$
+$$  P(x) = a . x^n + b $$
