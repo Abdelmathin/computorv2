@@ -45,8 +45,8 @@ pip install computorv2
 
 # Derivative:
 
-$$  P(x) = a . x^n + b $$
+$$  P(x) = coefficient . x^n + b $$
 
-$$  \frac{d P(x)}{d x} = \frac{d a}{d x} . x^n + a . \frac{d x^n}{d x} + \frac{d b}{d x} $$
+$$  \frac{d P(x)}{d x} = \frac{d coefficient}{d x} . x^n + coefficient . \frac{d x^n}{d x} + \frac{d b}{d x} $$
 
 
