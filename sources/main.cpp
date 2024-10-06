@@ -59,38 +59,35 @@ int main(int argc, const char **argv)
 		client.setFdIn(STDIN_FILENO);
 		client.setFdOut(STDOUT_FILENO);
 		client.setFdErr(STDOUT_FILENO);
-		while (client.connected())
+		while ((client.connected()) && (client.read() > 0))
 		{
-			client.read();
+			continue ;
 		}
 	}
-	else
+	for (int i = 0; i < argc; i++)
 	{
-		for (int i = 0; i < argc; i++)
+		const int fd = open(argv[i], O_RDONLY);
+		if (fd < 0)
 		{
-			const int fd = open(argv[i], O_RDONLY);
-			if (fd < 0)
+			std::cerr << argv[0] << ": " << argv[i] << ": No such file or directory" << std::endl;
+			continue ;
+		}
+		try
+		{
+			computorv2::Client client = computorv2::Client();
+			client.setFdIn(fd);
+			client.setFdOut(STDOUT_FILENO);
+			client.setFdErr(STDOUT_FILENO);
+			while ((client.connected()) && (client.read() > 0))
 			{
-				std::cerr << argv[0] << ": " << argv[i] << ": No such file or directory" << std::endl;
 				continue ;
 			}
-			try
-			{
-				computorv2::Client client = computorv2::Client();
-				client.setFdIn(fd);
-				client.setFdOut(STDOUT_FILENO);
-				client.setFdErr(STDOUT_FILENO);
-				while (client.connected())
-				{
-					client.read();
-				}
-			}
-			catch (const std::exception& e)
-			{
-				std::cerr << e.what() << std::endl;
-			}
-			close(fd);
 		}
+		catch (const std::exception& e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
+		close(fd);
 	}
 	return (0);
 }

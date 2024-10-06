@@ -147,6 +147,10 @@ int computorv2::Client::read(void)
 	const int rd = ::read(this->getFdIn(), buffer, 1024);
 	const std::string s(buffer, rd);
 	this->addBuffer(s);
+	if (rd < 1)
+	{
+		this->_connected = false;
+	}
 	return (rd);
 }
 
