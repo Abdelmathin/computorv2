@@ -39,29 +39,40 @@ int main(void)
 	std::cout << "computorv2::add(x, p) = " << computorv2::add(x, p) << std::endl;
 	std::cout << "computorv2::add(x, z) = " << computorv2::add(x, z) << std::endl;
 	std::cout << "computorv2::add(x, f) = " << computorv2::add(x, f) << std::endl;
-
 	std::cout << "computorv2::add(p, x) = " << computorv2::add(p, x) << std::endl;
 	std::cout << "computorv2::add(p, p) = " << computorv2::add(p, p) << std::endl;
 	std::cout << "computorv2::add(p, z) = " << computorv2::add(p, z) << std::endl;
 	std::cout << "computorv2::add(p, f) = " << computorv2::add(p, f) << std::endl;
-
 	std::cout << "computorv2::add(z, x) = " << computorv2::add(z, x) << std::endl;
 	std::cout << "computorv2::add(z, p) = " << computorv2::add(z, p) << std::endl;
 	std::cout << "computorv2::add(z, z) = " << computorv2::add(z, z) << std::endl;
 	std::cout << "computorv2::add(z, f) = " << computorv2::add(z, f) << std::endl;
-
 	std::cout << "computorv2::add(f, x) = " << computorv2::add(f, x) << std::endl;
 	std::cout << "computorv2::add(f, p) = " << computorv2::add(f, p) << std::endl;
 	std::cout << "computorv2::add(f, z) = " << computorv2::add(f, z) << std::endl;
 	std::cout << "computorv2::add(f, f) = " << computorv2::add(f, f) << std::endl;
 
+	std::cout << "computorv2::sub(x, x) = " << computorv2::sub(x, x) << std::endl;
+	std::cout << "computorv2::sub(x, p) = " << computorv2::sub(x, p) << std::endl;
+	std::cout << "computorv2::sub(x, z) = " << computorv2::sub(x, z) << std::endl;
+	std::cout << "computorv2::sub(x, f) = " << computorv2::sub(x, f) << std::endl;
+	std::cout << "computorv2::sub(p, x) = " << computorv2::sub(p, x) << std::endl;
+	std::cout << "computorv2::sub(p, p) = " << computorv2::sub(p, p) << std::endl;
+	std::cout << "computorv2::sub(p, z) = " << computorv2::sub(p, z) << std::endl;
+	std::cout << "computorv2::sub(p, f) = " << computorv2::sub(p, f) << std::endl;
+	std::cout << "computorv2::sub(z, x) = " << computorv2::sub(z, x) << std::endl;
+	std::cout << "computorv2::sub(z, p) = " << computorv2::sub(z, p) << std::endl;
+	std::cout << "computorv2::sub(z, z) = " << computorv2::sub(z, z) << std::endl;
+	std::cout << "computorv2::sub(z, f) = " << computorv2::sub(z, f) << std::endl;
+	std::cout << "computorv2::sub(f, x) = " << computorv2::sub(f, x) << std::endl;
+	std::cout << "computorv2::sub(f, p) = " << computorv2::sub(f, p) << std::endl;
+	std::cout << "computorv2::sub(f, z) = " << computorv2::sub(f, z) << std::endl;
+	std::cout << "computorv2::sub(f, f) = " << computorv2::sub(f, f) << std::endl;
+
 	std::cout << "dx / dx = " << computorv2::derivative(x, x) << std::endl;
 	std::cout << "dp / dx = " << computorv2::derivative(p, x) << std::endl;
 	std::cout << "dz / dx = " << computorv2::derivative(z, x) << std::endl;
 	std::cout << "df / dx = " << computorv2::derivative(f, x) << std::endl;
-
-
-
 
 	return (0);
 }

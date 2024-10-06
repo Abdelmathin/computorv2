@@ -78,6 +78,7 @@ std::string computorv2::Polynomial::toString(void) const
 	{
 		const computorv2::Object* a = this->_coefficient->evaluate();
 		const computorv2::Object* x = this->_base->evaluate();
+		const computorv2::Object* n = this->_exponent->evaluate();
 		const std::string a_str     = a->toString();
 		if (a_str == "-1")
 		{
@@ -94,32 +95,37 @@ std::string computorv2::Polynomial::toString(void) const
 			{
 				ss << ")";
 			}
-			ss << " * ";
+			if (!n->isnull())
+			{
+				ss << " * ";				
+			}
 		}
-		if (!computorv2::isfreeterm(x))
+		if (!n->isnull())
 		{
-			ss << "(";
-		}
-		ss << x->toString();
-		if (!computorv2::isfreeterm(x))
-		{
-			ss << ")";
-		}
-		delete (a);
-		delete (x);
-		const computorv2::Object* n = this->_exponent->evaluate();
-		const std::string s = n->toString();
-		if (!n->isunity())
-		{
-			ss << "^";
-			if ((s[0] == '-') || (!computorv2::isfreeterm(n)))
+			if (!computorv2::isfreeterm(x))
 			{
 				ss << "(";
 			}
-			ss << s;
-			if ((s[0] == '-') || (!computorv2::isfreeterm(n)))
+			ss << x->toString();
+			if (!computorv2::isfreeterm(x))
 			{
 				ss << ")";
+			}
+			delete (a);
+			delete (x);
+			const std::string s = n->toString();
+			if (!n->isunity())
+			{
+				ss << "^";
+				if ((s[0] == '-') || (!computorv2::isfreeterm(n)))
+				{
+					ss << "(";
+				}
+				ss << s;
+				if ((s[0] == '-') || (!computorv2::isfreeterm(n)))
+				{
+					ss << ")";
+				}
 			}
 		}
 		delete (n);
