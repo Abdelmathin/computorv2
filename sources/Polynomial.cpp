@@ -52,6 +52,11 @@ int computorv2::Polynomial::getType(void) const
     return (COMPUTORV2_TYPE_POLYNOMIAL);
 }
 
+std::string computorv2::Polynomial::getTypeName(void) const
+{
+    return ("Polynomial");
+}
+
 std::string computorv2::Polynomial::toString(void) const
 {
 	const computorv2::Object* p = this->evaluate();

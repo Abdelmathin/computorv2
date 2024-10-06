@@ -1,7 +1,7 @@
 /* **************************************************************************  */
 /*                                                                             */
 /*                                                         :::      ::::::::   */
-/*   Object.hpp                                         :+:      :+:    :+:    */
+/*   Matrix.cpp                                         :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+      */
 /*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
 /*                                                +#+#+#+#+#+   +#+            */
@@ -36,26 +36,79 @@
 /*                                                                             */
 /* **************************************************************************  */
 
-#pragma once
+#ifndef __COMPUTORV2_SOURCES_MATRIX
+# define __COMPUTORV2_SOURCES_MATRIX
 
+#include "../include/Matrix.hpp"
+#include "../include/Object.hpp"
+#include "../include/utils.hpp"
 #include <iostream>
+#include <sstream>
 
-namespace computorv2
+int computorv2::Matrix::getType(void) const
 {
-	class Object
-	{
-		public:
-			virtual int                 getType(void)     const = 0;
-			virtual std::string         getTypeName(void) const = 0;
-			virtual std::string         toString(void)    const = 0;
-			virtual computorv2::Object* copy(void)        const = 0;
-			virtual computorv2::Object* evaluate(void)    const = 0;
-			virtual bool                isnull(void)      const = 0;
-			virtual bool                isunity(void)     const = 0;
-
-			Object(void){};
-			Object(const Object& other){};
-			Object& operator=(const Object& other){return (*this);};
-			virtual ~Object(void){};
-	};
+	return (COMPUTORV2_TYPE_MATRIX);
 }
+
+std::string computorv2::Matrix::getTypeName(void) const
+{
+    return ("Matrix");
+}
+
+std::string computorv2::Matrix::toString(void) const
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix::toString`");
+	return ("");
+}
+
+computorv2::Object* computorv2::Matrix::copy(void) const
+{
+	return ( new computorv2::Matrix(*this) );
+}
+
+computorv2::Object* computorv2::Matrix::evaluate(void) const
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix::evaluate`");
+	return (NULL);
+}
+
+bool computorv2::Matrix::isnull(void) const
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix::isnull`");
+	return (false);
+}
+
+bool computorv2::Matrix::isunity(void) const
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix::isunity`");
+	return (false);
+}
+
+computorv2::Matrix::Matrix(void)
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix`");
+}
+
+computorv2::Matrix::~Matrix(void)
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix::~Matrix`");
+}
+
+computorv2::Matrix::Matrix(const computorv2::Matrix& other)
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix::Matrix(other)`");
+	*this = other;
+}
+
+computorv2::Matrix& computorv2::Matrix::operator=(const computorv2::Matrix& other)
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix::operator=`");
+	return (*this);
+}
+
+computorv2::Matrix::Matrix(const computorv2::Complex& i00, const computorv2::Complex& i01, const computorv2::Complex& i10, const computorv2::Complex& i11)
+{
+	throw std::runtime_error("Not implemented: `computorv2::Matrix(i00, i01, i10, i11)`");
+}
+
+#endif//!__COMPUTORV2_SOURCES_MATRIX

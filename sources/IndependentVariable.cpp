@@ -49,6 +49,11 @@ int computorv2::IndependentVariable::getType(void) const
     return (COMPUTORV2_TYPE_INDEPENDENT_VARIABLE);
 }
 
+std::string computorv2::IndependentVariable::getTypeName(void) const
+{
+    return ("IndependentVariable");
+}
+
 std::string computorv2::IndependentVariable::toString(void) const
 {
     return (this->getName());

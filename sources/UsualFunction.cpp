@@ -48,6 +48,11 @@ int computorv2::UsualFunction::getType(void) const
     return (COMPUTORV2_TYPE_USUAL_FUNCTION);
 }
 
+std::string computorv2::UsualFunction::getTypeName(void) const
+{
+    return ("UsualFunction");
+}
+
 std::string computorv2::UsualFunction::toString(void) const
 {
     std::stringstream ss("");

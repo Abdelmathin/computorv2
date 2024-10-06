@@ -50,6 +50,11 @@ int computorv2::Complex::getType(void) const
 	return (COMPUTORV2_TYPE_COMPLEX);
 }
 
+std::string computorv2::Complex::getTypeName(void) const
+{
+	return ("Complex");
+}
+
 std::string computorv2::Complex::toString(void) const
 {
 	std::stringstream ss("");

@@ -39,397 +39,716 @@
 #ifndef __COMPUTORV2_SOURCES_COMPUTORV2
 # define __COMPUTORV2_SOURCES_COMPUTORV2
 
-#include "../include/computorv2.hpp"
-#include "../include/Object.hpp"
-#include "../include/Polynomial.hpp"
 #include "../include/utils.hpp"
+#include "../include/Object.hpp"
+#include "../include/Matrix.hpp"
+#include "../include/Vector.hpp"
+#include "../include/Complex.hpp"
+#include "../include/Polynomial.hpp"
+#include "../include/UsualFunction.hpp"
+#include "../include/IndependentVariable.hpp"
+#include "../include/computorv2.hpp"
 #include <sstream>
 #include <unistd.h>
 
-computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& left, const computorv2::Complex& right)
+/* --------------------------------------------- eql --------------------------------------------- */
+
+bool computorv2::eql(const computorv2::Object* left, const computorv2::Object* right)
 {
-	computorv2::Polynomial res(left);
-	res.setExponent(right);
-	return (res);
+    if (!left || !right)
+        throw std::logic_error("Can't do operation 'eql' between NULL objects!");
+    else if (IS_VECTOR(left) && IS_VECTOR(right))
+        return (computorv2::eql(*AS_VECTOR(left), *AS_VECTOR(right)));
+    else if (IS_VECTOR(left) && IS_MATRIX(right))
+        return (computorv2::eql(*AS_VECTOR(left), *AS_MATRIX(right)));
+    else if (IS_VECTOR(left) && IS_COMPLEX(right))
+        return (computorv2::eql(*AS_VECTOR(left), *AS_COMPLEX(right)));
+    else if (IS_VECTOR(left) && IS_POLYNOMIAL(right))
+        return (computorv2::eql(*AS_VECTOR(left), *AS_POLYNOMIAL(right)));
+    else if (IS_VECTOR(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::eql(*AS_VECTOR(left), *AS_USUAL_FUNCTION(right)));
+    else if (IS_VECTOR(left) && IS_INDEPENDENT(right))
+        return (computorv2::eql(*AS_VECTOR(left), *AS_INDEPENDENT(right)));
+    else if (IS_MATRIX(left) && IS_VECTOR(right))
+        return (computorv2::eql(*AS_MATRIX(left), *AS_VECTOR(right)));
+    else if (IS_MATRIX(left) && IS_MATRIX(right))
+        return (computorv2::eql(*AS_MATRIX(left), *AS_MATRIX(right)));
+    else if (IS_MATRIX(left) && IS_COMPLEX(right))
+        return (computorv2::eql(*AS_MATRIX(left), *AS_COMPLEX(right)));
+    else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
+        return (computorv2::eql(*AS_MATRIX(left), *AS_POLYNOMIAL(right)));
+    else if (IS_MATRIX(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::eql(*AS_MATRIX(left), *AS_USUAL_FUNCTION(right)));
+    else if (IS_MATRIX(left) && IS_INDEPENDENT(right))
+        return (computorv2::eql(*AS_MATRIX(left), *AS_INDEPENDENT(right)));
+    else if (IS_COMPLEX(left) && IS_VECTOR(right))
+        return (computorv2::eql(*AS_COMPLEX(left), *AS_VECTOR(right)));
+    else if (IS_COMPLEX(left) && IS_MATRIX(right))
+        return (computorv2::eql(*AS_COMPLEX(left), *AS_MATRIX(right)));
+    else if (IS_COMPLEX(left) && IS_COMPLEX(right))
+        return (computorv2::eql(*AS_COMPLEX(left), *AS_COMPLEX(right)));
+    else if (IS_COMPLEX(left) && IS_POLYNOMIAL(right))
+        return (computorv2::eql(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)));
+    else if (IS_COMPLEX(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::eql(*AS_COMPLEX(left), *AS_USUAL_FUNCTION(right)));
+    else if (IS_COMPLEX(left) && IS_INDEPENDENT(right))
+        return (computorv2::eql(*AS_COMPLEX(left), *AS_INDEPENDENT(right)));
+    else if (IS_POLYNOMIAL(left) && IS_VECTOR(right))
+        return (computorv2::eql(*AS_POLYNOMIAL(left), *AS_VECTOR(right)));
+    else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
+        return (computorv2::eql(*AS_POLYNOMIAL(left), *AS_MATRIX(right)));
+    else if (IS_POLYNOMIAL(left) && IS_COMPLEX(right))
+        return (computorv2::eql(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)));
+    else if (IS_POLYNOMIAL(left) && IS_POLYNOMIAL(right))
+        return (computorv2::eql(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)));
+    else if (IS_POLYNOMIAL(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::eql(*AS_POLYNOMIAL(left), *AS_USUAL_FUNCTION(right)));
+    else if (IS_POLYNOMIAL(left) && IS_INDEPENDENT(right))
+        return (computorv2::eql(*AS_POLYNOMIAL(left), *AS_INDEPENDENT(right)));
+    else if (IS_USUAL_FUNCTION(left) && IS_VECTOR(right))
+        return (computorv2::eql(*AS_USUAL_FUNCTION(left), *AS_VECTOR(right)));
+    else if (IS_USUAL_FUNCTION(left) && IS_MATRIX(right))
+        return (computorv2::eql(*AS_USUAL_FUNCTION(left), *AS_MATRIX(right)));
+    else if (IS_USUAL_FUNCTION(left) && IS_COMPLEX(right))
+        return (computorv2::eql(*AS_USUAL_FUNCTION(left), *AS_COMPLEX(right)));
+    else if (IS_USUAL_FUNCTION(left) && IS_POLYNOMIAL(right))
+        return (computorv2::eql(*AS_USUAL_FUNCTION(left), *AS_POLYNOMIAL(right)));
+    else if (IS_USUAL_FUNCTION(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::eql(*AS_USUAL_FUNCTION(left), *AS_USUAL_FUNCTION(right)));
+    else if (IS_USUAL_FUNCTION(left) && IS_INDEPENDENT(right))
+        return (computorv2::eql(*AS_USUAL_FUNCTION(left), *AS_INDEPENDENT(right)));
+    else if (IS_INDEPENDENT(left) && IS_VECTOR(right))
+        return (computorv2::eql(*AS_INDEPENDENT(left), *AS_VECTOR(right)));
+    else if (IS_INDEPENDENT(left) && IS_MATRIX(right))
+        return (computorv2::eql(*AS_INDEPENDENT(left), *AS_MATRIX(right)));
+    else if (IS_INDEPENDENT(left) && IS_COMPLEX(right))
+        return (computorv2::eql(*AS_INDEPENDENT(left), *AS_COMPLEX(right)));
+    else if (IS_INDEPENDENT(left) && IS_POLYNOMIAL(right))
+        return (computorv2::eql(*AS_INDEPENDENT(left), *AS_POLYNOMIAL(right)));
+    else if (IS_INDEPENDENT(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::eql(*AS_INDEPENDENT(left), *AS_USUAL_FUNCTION(right)));
+    else if (IS_INDEPENDENT(left) && IS_INDEPENDENT(right))
+        return (computorv2::eql(*AS_INDEPENDENT(left), *AS_INDEPENDENT(right)));
+    throw std::logic_error("Can't do operation 'eql' between '" + left->getTypeName() + "' and '" + right->getTypeName() + "'!");
+    return (0);
 }
 
-computorv2::Polynomial computorv2::pow(const computorv2::UsualFunction& left, const computorv2::Complex& right)
+bool computorv2::eql(const computorv2::Vector& left, const computorv2::Vector& right)
 {
-	computorv2::Polynomial res(&left);
-	res.setExponent(right);
-	return (res);
+    std::logic_error("Can't do operation 'eql' between 'Vector' and 'Vector'");
+    return (false);
 }
 
-computorv2::Object* computorv2::pow(const computorv2::Object* left, const computorv2::Object* right)
+bool computorv2::eql(const computorv2::Vector& left, const computorv2::Matrix& right)
 {
-	if (!left)
-	{
-		throw std::logic_error("left is NULL!");
-	}
-	if (!right)
-	{
-		throw std::logic_error("left is NULL!");
-	}
-	if (right->isnull())
-	{
-		if (left->isnull())
-		{
-			throw std::logic_error("Error: Zero to the power of zero!");
-		}
-		return (computorv2::Complex(1.0, 0.0).copy());
-	}
-	if (IS_INDEPENDENT(left))
-	{
-		if (IS_COMPLEX(right))
-			return (computorv2::pow(*AS_INDEPENDENT(left), *AS_COMPLEX(right)).copy());
-	}
-	if (IS_USUAL_FUNCTION(left))
-	{
-		if (IS_COMPLEX(right))
-			return (computorv2::pow(*AS_USUAL_FUNCTION(left), *AS_COMPLEX(right)).copy());		
-	}
-
-	std::stringstream ss("");
-	ss << "Can't pow objects!";
-	ss << ", left->getType() = "  << left->getType();
-	ss << ", right->getType() = " << right->getType();
-	ss << std::endl;
-	throw std::logic_error(ss.str());
-	return (NULL);
+    std::logic_error("Can't do operation 'eql' between 'Vector' and 'Matrix'");
+    return (false);
 }
 
-bool computorv2::isfreeterm(const computorv2::Object* obj)
+bool computorv2::eql(const computorv2::Vector& left, const computorv2::Complex& right)
 {
-	if (IS_COMPLEX(obj))
-	{
-		const computorv2::Complex* z = AS_COMPLEX(obj);
-		if ((z->getReal() > 0) && (IS_ZERO(z->getImage())))
-		{
-			return (true);
-		}
-		else if ((z->getImage() > 0) && (IS_ZERO(z->getReal())))
-		{
-			return (true);
-		}
-		return (z->isnull());
-	}
-	if (IS_INDEPENDENT(obj))
-	{
-		return (true);
-	}
-	if (IS_USUAL_FUNCTION(obj))
-	{
-		return (true);
-	}
-	std::cout << "Warning: computorv2::isfreeterm((Not implemented)!)" << std::endl;
-	return (false);
+    std::logic_error("Can't do operation 'eql' between 'Vector' and 'Complex'");
+    return (false);
 }
 
-/* Complex (add) */
-
-computorv2::Complex computorv2::add(const computorv2::Complex& left, const computorv2::Complex& right)
+bool computorv2::eql(const computorv2::Vector& left, const computorv2::Polynomial& right)
 {
-	computorv2::Complex res;
-	res.setReal(left.getReal()   + right.getReal());
-	res.setImage(left.getImage() + right.getImage());
-	return (res);
+    std::logic_error("Can't do operation 'eql' between 'Vector' and 'Polynomial'");
+    return (false);
 }
 
-/* Polynomial (add) */
-computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
+bool computorv2::eql(const computorv2::Vector& left, const computorv2::UsualFunction& right)
 {
-	return (computorv2::add(computorv2::Polynomial(&left), computorv2::Polynomial(&right)));
+    std::logic_error("Can't do operation 'eql' between 'Vector' and 'UsualFunction'");
+    return (false);
 }
 
-computorv2::Polynomial computorv2::add(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right)
+bool computorv2::eql(const computorv2::Vector& left, const computorv2::IndependentVariable& right)
 {
-	return (computorv2::add(computorv2::Polynomial(&left), computorv2::Polynomial(&right)));
+    std::logic_error("Can't do operation 'eql' between 'Vector' and 'IndependentVariable'");
+    return (false);
 }
 
-computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Complex& right)
+bool computorv2::eql(const computorv2::Matrix& left, const computorv2::Vector& right)
 {
-	computorv2::Polynomial res(left);
-	const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), &right);
-	res.setFreeTerm(freeterm);
-	delete (freeterm);
-	return (res);
+    std::logic_error("Can't do operation 'eql' between 'Matrix' and 'Vector'");
+    return (false);
 }
 
-computorv2::Polynomial computorv2::add(const computorv2::Complex& left, const computorv2::Polynomial& right)
+bool computorv2::eql(const computorv2::Matrix& left, const computorv2::Matrix& right)
 {
-	return (computorv2::add(right, left));
+    std::logic_error("Can't do operation 'eql' between 'Matrix' and 'Matrix'");
+    return (false);
 }
 
-
-computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
+bool computorv2::eql(const computorv2::Matrix& left, const computorv2::Complex& right)
 {
-	if (IS_COMPLEX(left.getExponent()) && IS_COMPLEX(right.getExponent()))
-	{
-		const computorv2::Complex* z1 = AS_COMPLEX(left.getExponent());
-		const computorv2::Complex* z2 = AS_COMPLEX(right.getExponent());
-		if (IS_ZERO(z1->getImage()) && IS_ZERO(z2->getImage()))
-		{
-			if (z1->getReal() < z2->getReal())
-			{
-				return (computorv2::add(right, left));
-			}
-		}
-	}
-	if ((computorv2::eql(left.getBase(), right.getBase())) && (computorv2::eql(left.getExponent(), right.getExponent())))
-	{
-		computorv2::Polynomial res(left.getBase());
-		const computorv2::Object* coefficient = computorv2::add(left.getCoefficient(), right.getCoefficient());
-		const computorv2::Object* freeterm    = computorv2::add(left.getFreeTerm(), right.getFreeTerm());
-		res.setCoefficient(coefficient);
-		res.setExponent(left.getExponent());
-		res.setFreeTerm(freeterm);
-		delete (coefficient);
-		delete (freeterm);
-		return (res);
-	}
-	computorv2::Polynomial res(left);
-	const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), &right);
-	res.setFreeTerm(freeterm);
-	delete (freeterm);
-	return (res);
+    std::logic_error("Can't do operation 'eql' between 'Matrix' and 'Complex'");
+    return (false);
 }
 
-/* Object (add) */
-
-computorv2::Object* computorv2::add(const computorv2::Object* left, const computorv2::Object* right)
+bool computorv2::eql(const computorv2::Matrix& left, const computorv2::Polynomial& right)
 {
-	if (!left)
-	{
-		throw std::logic_error("left is NULL!");
-	}
-	if (!right)
-	{
-		throw std::logic_error("left is NULL!");
-	}
-	if (IS_COMPLEX(left))
-	{
-		if (IS_COMPLEX(right))
-			return (computorv2::add(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
-		else if (IS_POLYNOMIAL(right))
-			return (computorv2::add(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
-	}
-	else if (IS_POLYNOMIAL(left))
-	{
-		if (IS_COMPLEX(right))
-			return (computorv2::add(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
-		else if (IS_POLYNOMIAL(right))
-			return (computorv2::add(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
-	}
-	std::stringstream ss("");
-	ss << "Can't add objects!";
-	ss << ", left->getType() = "  << left->getType();
-	ss << ", right->getType() = " << right->getType();
-	ss << std::endl;
-	throw std::logic_error(ss.str());
-	return (NULL);
+    std::logic_error("Can't do operation 'eql' between 'Matrix' and 'Polynomial'");
+    return (false);
 }
 
-/* Complex (mul) */
-computorv2::Complex computorv2::mul(const computorv2::Complex& left, const computorv2::Complex& right)
+bool computorv2::eql(const computorv2::Matrix& left, const computorv2::UsualFunction& right)
 {
-	computorv2::Complex res;
-	res.setReal((left.getReal()  * right.getReal() ) - (left.getImage() * right.getImage()));
-	res.setImage((left.getReal() * right.getImage()) + (left.getImage() * right.getReal() ));
-	return (res);
+    std::logic_error("Can't do operation 'eql' between 'Matrix' and 'UsualFunction'");
+    return (false);
 }
 
-/* Polynomial (mul) */
-
-
-computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::Complex& right)
+bool computorv2::eql(const computorv2::Matrix& left, const computorv2::IndependentVariable& right)
 {
-	computorv2::Polynomial res(left);
-	const computorv2::Object* coefficient = computorv2::mul(left.getCoefficient(), &right);
-	const computorv2::Object* freeterm    = computorv2::mul(left.getFreeTerm(), &right);
-	res.setCoefficient(coefficient);
-	res.setFreeTerm(freeterm);
-	delete (coefficient);
-	delete (freeterm);
-	return (res);
+    std::logic_error("Can't do operation 'eql' between 'Matrix' and 'IndependentVariable'");
+    return (false);
 }
 
-computorv2::Polynomial computorv2::mul(const computorv2::Complex& left, const computorv2::Polynomial& right)
+bool computorv2::eql(const computorv2::Complex& left, const computorv2::Vector& right)
 {
-	return (computorv2::mul(right, left));
+    std::logic_error("Can't do operation 'eql' between 'Complex' and 'Vector'");
+    return (false);
 }
 
-computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
+bool computorv2::eql(const computorv2::Complex& left, const computorv2::Matrix& right)
 {
-	if (computorv2::eql(left.getBase(), right.getBase()))
-	{
-		computorv2::Polynomial first(left.getBase());
-		computorv2::Polynomial second(left.getBase());
-		computorv2::Polynomial third(left.getBase());
-
-		computorv2::Object* coefficient = NULL;
-		computorv2::Object* exponent    = NULL;
-
-		coefficient = computorv2::mul(left.getCoefficient(), right.getCoefficient());
-		first.setCoefficient(coefficient);
-		delete (coefficient);
-
-		coefficient = computorv2::mul(left.getCoefficient(), right.getFreeTerm());
-		second.setCoefficient(coefficient);
-		delete (coefficient);
-
-		coefficient = computorv2::mul(left.getFreeTerm(), right.getCoefficient());
-		third.setCoefficient(coefficient);
-		delete (coefficient);
-
-		exponent = computorv2::add(left.getExponent(), right.getExponent());
-		first.setExponent(exponent);
-		second.setExponent(left.getExponent());
-		third.setExponent(right.getExponent());
-		delete (exponent);
-
-		computorv2::Polynomial tmp   = computorv2::add(computorv2::add(first, second), third);
-		computorv2::Object* freeterm = computorv2::mul(left.getFreeTerm(), right.getFreeTerm());
-		computorv2::Object* tmp_res  = computorv2::add(AS_OBJECT(&tmp), freeterm);
-		computorv2::Polynomial res(*(AS_POLYNOMIAL(tmp_res)));
-		delete (tmp_res);
-		delete (freeterm);
-		return (res);
-	}
-	computorv2::Polynomial res(left);
-	const computorv2::Object* coefficient = computorv2::mul(left.getCoefficient(), &right);
-	const computorv2::Object* freeterm    = computorv2::mul(left.getFreeTerm(), &right);
-	res.setCoefficient(coefficient);
-	res.setFreeTerm(freeterm);
-	delete (coefficient);
-	delete (freeterm);
-	return (res);
-}
-
-computorv2::Object* computorv2::mul(const computorv2::Object* left, const computorv2::Object* right)
-{
-	if (!left)
-	{
-		throw std::logic_error("left is NULL!");
-	}
-	if (!right)
-	{
-		throw std::logic_error("left is NULL!");
-	}
-	if (IS_COMPLEX(left))
-	{
-		if (IS_COMPLEX(right))
-			return (computorv2::mul(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
-		else if (IS_POLYNOMIAL(right))
-			return (computorv2::mul(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
-	}
-	else if (IS_POLYNOMIAL(left))
-	{
-		if (IS_COMPLEX(right))
-			return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
-		else if (IS_POLYNOMIAL(right))
-			return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
-	}
-	std::stringstream ss("");
-	ss << "MultiplicationError: ";
-	ss << ", left->getType()  = " << left->getType();
-	ss << ", right->getType() = " << right->getType();
-	ss << std::endl;
-	throw std::logic_error(ss.str());
-	return (NULL);
-}
-
-/* Object (eql) */
-bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
-{
-	return (left.getName() == right.getName());
+    std::logic_error("Can't do operation 'eql' between 'Complex' and 'Matrix'");
+    return (false);
 }
 
 bool computorv2::eql(const computorv2::Complex& left, const computorv2::Complex& right)
 {
-	if (IS_ZERO(left.getReal() - right.getReal()))
-	{
-		return (IS_ZERO(left.getImage() - right.getImage()));
-	}
-	return (false);
+    std::logic_error("Can't do operation 'eql' between 'Complex' and 'Complex'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Complex& left, const computorv2::Polynomial& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Complex' and 'Polynomial'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Complex& left, const computorv2::UsualFunction& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Complex' and 'UsualFunction'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Complex& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Complex' and 'IndependentVariable'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Polynomial' and 'Vector'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Polynomial' and 'Matrix'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Complex& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Polynomial' and 'Complex'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Polynomial' and 'Polynomial'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::UsualFunction& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Polynomial' and 'UsualFunction'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'Polynomial' and 'IndependentVariable'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'UsualFunction' and 'Vector'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'UsualFunction' and 'Matrix'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::Complex& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'UsualFunction' and 'Complex'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::Polynomial& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'UsualFunction' and 'Polynomial'");
+    return (false);
 }
 
 bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right)
 {
-	if (left.getName() == right.getName())
-	{
-		return (computorv2::eql(left.getBody(), right.getBody()));
-	}
-	return (false);
+    std::logic_error("Can't do operation 'eql' between 'UsualFunction' and 'UsualFunction'");
+    return (false);
 }
 
-bool computorv2::eql(const computorv2::Object* left, const computorv2::Object* right)
+bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::IndependentVariable& right)
 {
-	if (!left)
-	{
-		throw std::logic_error("left is NULL!");
-	}
-	if (!right)
-	{
-		throw std::logic_error("left is NULL!");
-	}
-	if (IS_COMPLEX(left))
-	{
-		if (IS_COMPLEX(right))
-			return (computorv2::eql(*AS_COMPLEX(left), *AS_COMPLEX(right)));
-	}
-	if (IS_INDEPENDENT(left))
-	{
-		if (IS_INDEPENDENT(right))
-			return (computorv2::eql(*AS_INDEPENDENT(left), *AS_INDEPENDENT(right)));
-	}
-	if (IS_USUAL_FUNCTION(left))
-	{
-		if (IS_USUAL_FUNCTION(right))
-			return (computorv2::eql(*AS_USUAL_FUNCTION(left), *AS_USUAL_FUNCTION(right)));
-	}
-	std::stringstream ss("");
-	ss << "ComparisonError: ";
-	ss << ", left->getType()  = " << left->getType();
-	ss << ", right->getType() = " << right->getType();
-	ss << std::endl;
-	throw std::logic_error(ss.str());
-	return (false);
+    std::logic_error("Can't do operation 'eql' between 'UsualFunction' and 'IndependentVariable'");
+    return (false);
 }
 
-/* derivative (Object) */
-computorv2::Polynomial computorv2::derivative(const computorv2::Object* obj, const computorv2::IndependentVariable& dx)
+bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::Vector& right)
 {
-	if (!obj)
-	{
-		throw std::logic_error("Error: Null pointer passed to derivative function.");
-	}
-	if (IS_COMPLEX(obj))
-		return (computorv2::derivative(*AS_COMPLEX(obj), dx));
-	else if (IS_POLYNOMIAL(obj))
-		return (computorv2::derivative(*AS_POLYNOMIAL(obj), dx));
-	std::stringstream ss("");
-	ss << "DerivativeError: ";
-	ss << ", obj->getType()  = " << obj->getType();
-	ss << std::endl;
-	throw std::logic_error(ss.str());
-	return (computorv2::Polynomial("x"));
+    std::logic_error("Can't do operation 'eql' between 'IndependentVariable' and 'Vector'");
+    return (false);
 }
 
-/* derivative (Complex) */
-computorv2::Polynomial computorv2::derivative(const computorv2::Complex& obj, const computorv2::IndependentVariable& dx)
+bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::Matrix& right)
 {
-	computorv2::Polynomial res(dx);
-	const computorv2::Complex zero(0.0);
-	res.setCoefficient(&zero);
-	res.setExponent(&zero);
-	res.setFreeTerm(&zero);
-	return (res);
+    std::logic_error("Can't do operation 'eql' between 'IndependentVariable' and 'Matrix'");
+    return (false);
 }
 
-/* derivative (Polynomial) */
-computorv2::Polynomial computorv2::derivative(const computorv2::Polynomial& poly, const computorv2::IndependentVariable& dx)
+bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::Complex& right)
 {
-	return (poly);
+    std::logic_error("Can't do operation 'eql' between 'IndependentVariable' and 'Complex'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::Polynomial& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'IndependentVariable' and 'Polynomial'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::UsualFunction& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'IndependentVariable' and 'UsualFunction'");
+    return (false);
+}
+
+bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'eql' between 'IndependentVariable' and 'IndependentVariable'");
+    return (false);
+}
+
+/* ----------------------------- isfreeterm ----------------------------- */
+
+bool computorv2::isfreeterm(const computorv2::Object* left)
+{
+    if (!left)
+        throw std::logic_error("Can't do operation 'isfreeterm' for NULL objects!");
+    else if (IS_VECTOR(left))
+        return (computorv2::isfreeterm(*AS_VECTOR(left)));
+    else if (IS_MATRIX(left))
+        return (computorv2::isfreeterm(*AS_MATRIX(left)));
+    else if (IS_COMPLEX(left))
+        return (computorv2::isfreeterm(*AS_COMPLEX(left)));
+    else if (IS_POLYNOMIAL(left))
+        return (computorv2::isfreeterm(*AS_POLYNOMIAL(left)));
+    else if (IS_USUAL_FUNCTION(left))
+        return (computorv2::isfreeterm(*AS_USUAL_FUNCTION(left)));
+    else if (IS_INDEPENDENT(left))
+        return (computorv2::isfreeterm(*AS_INDEPENDENT(left)));
+    throw std::logic_error("Can't do operation 'isfreeterm' for '" + left->getTypeName() + "'!");
+    return (0);
+}
+
+bool computorv2::isfreeterm(const computorv2::Vector& left)
+{
+    std::logic_error("Can't do operation 'isfreeterm' between 'Vector' and 'Vector'");
+    return (false);
+}
+
+bool computorv2::isfreeterm(const computorv2::Matrix& left)
+{
+    std::logic_error("Can't do operation 'isfreeterm' between 'Matrix' and 'Vector'");
+    return (false);
+}
+
+bool computorv2::isfreeterm(const computorv2::Complex& left)
+{
+    std::logic_error("Can't do operation 'isfreeterm' between 'Complex' and 'Vector'");
+    return (false);
+}
+
+bool computorv2::isfreeterm(const computorv2::Polynomial& left)
+{
+    std::logic_error("Can't do operation 'isfreeterm' between 'Polynomial' and 'Vector'");
+    return (false);
+}
+
+bool computorv2::isfreeterm(const computorv2::UsualFunction& left)
+{
+    std::logic_error("Can't do operation 'isfreeterm' between 'UsualFunction' and 'Vector'");
+    return (false);
+}
+
+bool computorv2::isfreeterm(const computorv2::IndependentVariable& left)
+{
+    std::logic_error("Can't do operation 'isfreeterm' between 'IndependentVariable' and 'Vector'");
+    return (false);
+}
+
+/* ------------------------------------------------------ add ------------------------------------------------------ */
+
+computorv2::Object* computorv2::add(const computorv2::Object* left, const computorv2::Object* right)
+{
+    if (!left || !right)
+        throw std::logic_error("Can't do operation 'add' between NULL objects!");
+    else if (IS_VECTOR(left) && IS_VECTOR(right))
+        return (computorv2::add(*AS_VECTOR(left), *AS_VECTOR(right)).copy());
+    else if (IS_VECTOR(left) && IS_MATRIX(right))
+        return (computorv2::add(*AS_VECTOR(left), *AS_MATRIX(right)).copy());
+    else if (IS_VECTOR(left) && IS_POLYNOMIAL(right))
+        return (computorv2::add(*AS_VECTOR(left), *AS_POLYNOMIAL(right)).copy());
+    else if (IS_VECTOR(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::add(*AS_VECTOR(left), *AS_USUAL_FUNCTION(right)).copy());
+    else if (IS_VECTOR(left) && IS_INDEPENDENT(right))
+        return (computorv2::add(*AS_VECTOR(left), *AS_INDEPENDENT(right)).copy());
+    else if (IS_MATRIX(left) && IS_VECTOR(right))
+        return (computorv2::add(*AS_MATRIX(left), *AS_VECTOR(right)).copy());
+    else if (IS_MATRIX(left) && IS_MATRIX(right))
+        return (computorv2::add(*AS_MATRIX(left), *AS_MATRIX(right)).copy());
+    else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
+        return (computorv2::add(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).copy());
+    else if (IS_MATRIX(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::add(*AS_MATRIX(left), *AS_USUAL_FUNCTION(right)).copy());
+    else if (IS_MATRIX(left) && IS_INDEPENDENT(right))
+        return (computorv2::add(*AS_MATRIX(left), *AS_INDEPENDENT(right)).copy());
+    else if (IS_POLYNOMIAL(left) && IS_VECTOR(right))
+        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_VECTOR(right)).copy());
+    else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
+        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).copy());
+    else if (IS_USUAL_FUNCTION(left) && IS_VECTOR(right))
+        return (computorv2::add(*AS_USUAL_FUNCTION(left), *AS_VECTOR(right)).copy());
+    else if (IS_USUAL_FUNCTION(left) && IS_MATRIX(right))
+        return (computorv2::add(*AS_USUAL_FUNCTION(left), *AS_MATRIX(right)).copy());
+    else if (IS_INDEPENDENT(left) && IS_VECTOR(right))
+        return (computorv2::add(*AS_INDEPENDENT(left), *AS_VECTOR(right)).copy());
+    else if (IS_INDEPENDENT(left) && IS_MATRIX(right))
+        return (computorv2::add(*AS_INDEPENDENT(left), *AS_MATRIX(right)).copy());
+    throw std::logic_error("Can't do operation 'add' between '" + left->getTypeName() + "' and '" + right->getTypeName() + "'!");
+    return (0);
+}
+
+computorv2::Vector computorv2::add(const computorv2::Vector& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Vector' and 'Vector'");
+    return (computorv2::Vector(0.0, 0.0));
+}
+
+computorv2::Matrix computorv2::add(const computorv2::Vector& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Vector' and 'Matrix'");
+    return (computorv2::Matrix(0.0, 0.0, 0.0, 0.0));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::Vector& left, const computorv2::Polynomial& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Vector' and 'Polynomial'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::Vector& left, const computorv2::UsualFunction& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Vector' and 'UsualFunction'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::Vector& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Vector' and 'IndependentVariable'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Matrix computorv2::add(const computorv2::Matrix& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Matrix' and 'Vector'");
+    return (computorv2::Matrix(0.0, 0.0, 0.0, 0.0));
+}
+
+computorv2::Matrix computorv2::add(const computorv2::Matrix& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Matrix' and 'Matrix'");
+    return (computorv2::Matrix(0.0, 0.0, 0.0, 0.0));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::Matrix& left, const computorv2::Polynomial& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Matrix' and 'Polynomial'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::Matrix& left, const computorv2::UsualFunction& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Matrix' and 'UsualFunction'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::Matrix& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Matrix' and 'IndependentVariable'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Polynomial' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'add' between 'Polynomial' and 'Matrix'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::UsualFunction& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'add' between 'UsualFunction' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::UsualFunction& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'add' between 'UsualFunction' and 'Matrix'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'add' between 'IndependentVariable' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'add' between 'IndependentVariable' and 'Matrix'");
+    return (computorv2::Polynomial("x"));
+}
+
+/* ------------------------------------------------------ mul ------------------------------------------------------ */
+
+computorv2::Object* computorv2::mul(const computorv2::Object* left, const computorv2::Object* right)
+{
+    if (!left || !right)
+        throw std::logic_error("Can't do operation 'mul' between NULL objects!");
+    else if (IS_VECTOR(left) && IS_VECTOR(right))
+        return (computorv2::mul(*AS_VECTOR(left), *AS_VECTOR(right)).copy());
+    else if (IS_VECTOR(left) && IS_MATRIX(right))
+        return (computorv2::mul(*AS_VECTOR(left), *AS_MATRIX(right)).copy());
+    else if (IS_VECTOR(left) && IS_POLYNOMIAL(right))
+        return (computorv2::mul(*AS_VECTOR(left), *AS_POLYNOMIAL(right)).copy());
+    else if (IS_VECTOR(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::mul(*AS_VECTOR(left), *AS_USUAL_FUNCTION(right)).copy());
+    else if (IS_VECTOR(left) && IS_INDEPENDENT(right))
+        return (computorv2::mul(*AS_VECTOR(left), *AS_INDEPENDENT(right)).copy());
+    else if (IS_MATRIX(left) && IS_VECTOR(right))
+        return (computorv2::mul(*AS_MATRIX(left), *AS_VECTOR(right)).copy());
+    else if (IS_MATRIX(left) && IS_MATRIX(right))
+        return (computorv2::mul(*AS_MATRIX(left), *AS_MATRIX(right)).copy());
+    else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
+        return (computorv2::mul(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).copy());
+    else if (IS_MATRIX(left) && IS_USUAL_FUNCTION(right))
+        return (computorv2::mul(*AS_MATRIX(left), *AS_USUAL_FUNCTION(right)).copy());
+    else if (IS_MATRIX(left) && IS_INDEPENDENT(right))
+        return (computorv2::mul(*AS_MATRIX(left), *AS_INDEPENDENT(right)).copy());
+    else if (IS_POLYNOMIAL(left) && IS_VECTOR(right))
+        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_VECTOR(right)).copy());
+    else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
+        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).copy());
+    else if (IS_USUAL_FUNCTION(left) && IS_VECTOR(right))
+        return (computorv2::mul(*AS_USUAL_FUNCTION(left), *AS_VECTOR(right)).copy());
+    else if (IS_USUAL_FUNCTION(left) && IS_MATRIX(right))
+        return (computorv2::mul(*AS_USUAL_FUNCTION(left), *AS_MATRIX(right)).copy());
+    else if (IS_INDEPENDENT(left) && IS_VECTOR(right))
+        return (computorv2::mul(*AS_INDEPENDENT(left), *AS_VECTOR(right)).copy());
+    else if (IS_INDEPENDENT(left) && IS_MATRIX(right))
+        return (computorv2::mul(*AS_INDEPENDENT(left), *AS_MATRIX(right)).copy());
+    throw std::logic_error("Can't do operation 'mul' between '" + left->getTypeName() + "' and '" + right->getTypeName() + "'!");
+    return (0);
+}
+
+computorv2::Vector computorv2::mul(const computorv2::Vector& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Vector' and 'Vector'");
+    return (computorv2::Vector(0.0, 0.0));
+}
+
+computorv2::Matrix computorv2::mul(const computorv2::Vector& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Vector' and 'Matrix'");
+    return (computorv2::Matrix(0.0, 0.0, 0.0, 0.0));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::Vector& left, const computorv2::Polynomial& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Vector' and 'Polynomial'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::Vector& left, const computorv2::UsualFunction& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Vector' and 'UsualFunction'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::Vector& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Vector' and 'IndependentVariable'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Matrix computorv2::mul(const computorv2::Matrix& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Matrix' and 'Vector'");
+    return (computorv2::Matrix(0.0, 0.0, 0.0, 0.0));
+}
+
+computorv2::Matrix computorv2::mul(const computorv2::Matrix& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Matrix' and 'Matrix'");
+    return (computorv2::Matrix(0.0, 0.0, 0.0, 0.0));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::Matrix& left, const computorv2::Polynomial& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Matrix' and 'Polynomial'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::Matrix& left, const computorv2::UsualFunction& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Matrix' and 'UsualFunction'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::Matrix& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Matrix' and 'IndependentVariable'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Polynomial' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'Polynomial' and 'Matrix'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::UsualFunction& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'UsualFunction' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::UsualFunction& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'UsualFunction' and 'Matrix'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::IndependentVariable& left, const computorv2::Vector& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'IndependentVariable' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::mul(const computorv2::IndependentVariable& left, const computorv2::Matrix& right)
+{
+    std::logic_error("Can't do operation 'mul' between 'IndependentVariable' and 'Matrix'");
+    return (computorv2::Polynomial("x"));
+}
+
+/* ---------------------------------------- pow ---------------------------------------- */
+
+computorv2::Object* computorv2::pow(const computorv2::Object* left, const computorv2::Object* right)
+{
+    if (!left || !right)
+        throw std::logic_error("Can't do operation 'pow' between NULL objects!");
+    throw std::logic_error("Can't do operation 'pow' between '" + left->getTypeName() + "' and '" + right->getTypeName() + "'!");
+    return (0);
+}
+
+/* ------------------------------------------------------------- derivative ------------------------------------------------------------- */
+
+computorv2::Polynomial computorv2::derivative(const computorv2::Object* left, const computorv2::IndependentVariable& right)
+{
+    if (!left)
+        throw std::logic_error("Can't do operation 'derivative' for NULL objects!");
+    else if (IS_VECTOR(left))
+        return (computorv2::derivative(*AS_VECTOR(left), right));
+    else if (IS_MATRIX(left))
+        return (computorv2::derivative(*AS_MATRIX(left), right));
+    else if (IS_COMPLEX(left))
+        return (computorv2::derivative(*AS_COMPLEX(left), right));
+    else if (IS_POLYNOMIAL(left))
+        return (computorv2::derivative(*AS_POLYNOMIAL(left), right));
+    else if (IS_USUAL_FUNCTION(left))
+        return (computorv2::derivative(*AS_USUAL_FUNCTION(left), right));
+    else if (IS_INDEPENDENT(left))
+        return (computorv2::derivative(*AS_INDEPENDENT(left), right));
+    throw std::logic_error("Can't do operation 'derivative' for '" + left->getTypeName() + "'!");
+    return (0);
+}
+
+computorv2::Polynomial computorv2::derivative(const computorv2::Vector& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'derivative' between 'Vector' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::derivative(const computorv2::Matrix& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'derivative' between 'Matrix' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::derivative(const computorv2::Complex& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'derivative' between 'Complex' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::derivative(const computorv2::Polynomial& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'derivative' between 'Polynomial' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::derivative(const computorv2::UsualFunction& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'derivative' between 'UsualFunction' and 'Vector'");
+    return (computorv2::Polynomial("x"));
+}
+
+computorv2::Polynomial computorv2::derivative(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
+{
+    std::logic_error("Can't do operation 'derivative' between 'IndependentVariable' and 'Vector'");
+    return (computorv2::Polynomial("x"));
 }
 
 #endif//!__COMPUTORV2_SOURCES_COMPUTORV2

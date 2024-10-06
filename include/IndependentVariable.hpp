@@ -46,12 +46,13 @@ namespace computorv2
 	class IndependentVariable: public computorv2::Object
 	{
 		public:
-            int                 getType(void)  const;
-            std::string         toString(void) const;
-            computorv2::Object* copy(void)     const;
-            computorv2::Object* evaluate(void) const;
-            bool                isnull(void)   const;
-            bool                isunity(void)  const;
+            int                 getType(void)     const;
+            std::string         getTypeName(void) const;
+            std::string         toString(void)    const;
+            computorv2::Object* copy(void)        const;
+            computorv2::Object* evaluate(void)    const;
+            bool                isnull(void)      const;
+            bool                isunity(void)     const;
 
 			IndependentVariable(const std::string& name);
 			~IndependentVariable(void);

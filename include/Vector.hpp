@@ -1,7 +1,7 @@
 /* **************************************************************************  */
 /*                                                                             */
 /*                                                         :::      ::::::::   */
-/*   Object.hpp                                         :+:      :+:    :+:    */
+/*   Vector.hpp                                         :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+      */
 /*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
 /*                                                +#+#+#+#+#+   +#+            */
@@ -38,24 +38,28 @@
 
 #pragma once
 
+#include "Object.hpp"
+#include "Complex.hpp"
 #include <iostream>
 
 namespace computorv2
 {
-	class Object
-	{
-		public:
-			virtual int                 getType(void)     const = 0;
-			virtual std::string         getTypeName(void) const = 0;
-			virtual std::string         toString(void)    const = 0;
-			virtual computorv2::Object* copy(void)        const = 0;
-			virtual computorv2::Object* evaluate(void)    const = 0;
-			virtual bool                isnull(void)      const = 0;
-			virtual bool                isunity(void)     const = 0;
+    class Vector: public computorv2::Object
+    {
+        public:
+            int                 getType(void)     const;
+            std::string         getTypeName(void) const;
+            std::string         toString(void)    const;
+            computorv2::Object* copy(void)        const;
+            computorv2::Object* evaluate(void)    const;
+            bool                isnull(void)      const;
+            bool                isunity(void)     const;;
 
-			Object(void){};
-			Object(const Object& other){};
-			Object& operator=(const Object& other){return (*this);};
-			virtual ~Object(void){};
-	};
+            Vector(void);
+            ~Vector(void);
+            Vector(const Vector& other);
+            Vector& operator=(const Vector& other);
+
+            Vector(const computorv2::Complex &a, const computorv2::Complex &b);
+    };
 }

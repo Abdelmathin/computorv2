@@ -3,6 +3,8 @@
 #include "sources/UsualFunction.cpp"
 #include "sources/computorv2.cpp"
 #include "sources/Complex.cpp"
+#include "sources/Matrix.cpp"
+#include "sources/Vector.cpp"
 #include "sources/Polynomial.cpp"
 #include "sources/VirtualMachine.cpp"
 #include "sources/utils.cpp"

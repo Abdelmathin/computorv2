@@ -1,7 +1,7 @@
 /* **************************************************************************  */
 /*                                                                             */
 /*                                                         :::      ::::::::   */
-/*   Object.hpp                                         :+:      :+:    :+:    */
+/*   Matrix.hpp                                         :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+      */
 /*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
 /*                                                +#+#+#+#+#+   +#+            */
@@ -38,24 +38,34 @@
 
 #pragma once
 
+#include "Object.hpp"
+#include "Complex.hpp"
 #include <iostream>
 
 namespace computorv2
 {
-	class Object
-	{
-		public:
-			virtual int                 getType(void)     const = 0;
-			virtual std::string         getTypeName(void) const = 0;
-			virtual std::string         toString(void)    const = 0;
-			virtual computorv2::Object* copy(void)        const = 0;
-			virtual computorv2::Object* evaluate(void)    const = 0;
-			virtual bool                isnull(void)      const = 0;
-			virtual bool                isunity(void)     const = 0;
+    class Matrix: public computorv2::Object
+    {
+        public:
+            int                 getType(void)     const;
+            std::string         getTypeName(void) const;
+            std::string         toString(void)    const;
+            computorv2::Object* copy(void)        const;
+            computorv2::Object* evaluate(void)    const;
+            bool                isnull(void)      const;
+            bool                isunity(void)     const;
 
-			Object(void){};
-			Object(const Object& other){};
-			Object& operator=(const Object& other){return (*this);};
-			virtual ~Object(void){};
-	};
+            Matrix(void);
+            ~Matrix(void);
+            Matrix(const Matrix& other);
+            Matrix& operator=(const Matrix& other);
+
+            Matrix(
+                const computorv2::Complex& i00, const computorv2::Complex& i01,
+                const computorv2::Complex& i10, const computorv2::Complex& i11
+            );
+    };
 }
+
+#define IS_MATRIX(obj) ((OBJECT_TYPE(obj) & COMPUTORV2_TYPE_MATRIX) != 0)
+#define AS_MATRIX(obj) static_cast< const computorv2::Matrix* >(obj)
