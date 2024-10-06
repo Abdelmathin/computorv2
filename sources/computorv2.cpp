@@ -1341,23 +1341,50 @@ computorv2::Polynomial computorv2::sub(const computorv2::UsualFunction& left, co
 
 computorv2::Polynomial computorv2::sub(const computorv2::UsualFunction& left, const computorv2::Complex& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'sub' not supported between types 'UsualFunction' and 'Complex'.");
-    return (computorv2::Polynomial("x"));
+    computorv2::Polynomial res(left);
+    const computorv2::Complex z = computorv2::sub(computorv2::Complex(0.0, 0.0), right);
+    res.setFreeTerm(AS_OBJECT(&z));
+    return (res);
 }
 
 computorv2::Polynomial computorv2::sub(const computorv2::UsualFunction& left, const computorv2::Polynomial& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'sub' not supported between types 'UsualFunction' and 'Polynomial'.");
-    return (computorv2::Polynomial("x"));
+    computorv2::Polynomial res(right);
+    const computorv2::Complex zero(0.0, 0.0);
+    if (right.getExponent()->isunity() && computorv2::eql(AS_OBJECT(&left), right.getBase()))
+    {
+        const computorv2::Complex one(1.0, 0.0);
+        const computorv2::Object* a = computorv2::sub(AS_OBJECT(&one), right.getCoefficient());
+        const computorv2::Object* b = computorv2::sub(AS_OBJECT(&zero), right.getFreeTerm());
+        res.setCoefficient(a);
+        res.setFreeTerm(b);
+        delete (a);
+        delete (b);
+        return (res);
+    }
+    const computorv2::Object* a = computorv2::sub(AS_OBJECT(&zero), right.getCoefficient());
+    const computorv2::Object* b = computorv2::sub(AS_OBJECT(&left), right.getFreeTerm());
+    res.setCoefficient(a);
+    res.setFreeTerm(b);
+    delete (a);
+    delete (b);
+    return (res);
 }
 
 computorv2::Polynomial computorv2::sub(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'sub' not supported between types 'UsualFunction' and 'UsualFunction'.");
-    return (computorv2::Polynomial("x"));
+    computorv2::Polynomial res(left);
+    const computorv2::Complex zero(0.0, 0.0);
+    if (computorv2::eql(left, right))
+    {
+        res.setCoefficient(AS_OBJECT(&zero));
+        res.setExponent(AS_OBJECT(&zero));
+        res.setFreeTerm(AS_OBJECT(&zero));
+        return (res);
+    }
+    const computorv2::Polynomial r1 = computorv2::sub(AS_OBJECT(&zero), right);
+    res.setFreeTerm(AS_OBJECT(&r1));
+    return (res);
 }
 
 computorv2::Polynomial computorv2::sub(const computorv2::UsualFunction& left, const computorv2::IndependentVariable& right)
@@ -1409,14 +1436,15 @@ computorv2::Polynomial computorv2::sub(const computorv2::IndependentVariable& le
 computorv2::Polynomial computorv2::sub(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
 {
     computorv2::Polynomial res(left);
+    const computorv2::Complex zero(0.0, 0.0);
     if (computorv2::eql(left, right))
     {
-        res.setCoefficient(computorv2::Complex(0.0, 0.0));
-        res.setExponent(computorv2::Complex(0.0, 0.0));
-        res.setFreeTerm(computorv2::Complex(0.0, 0.0));
+        res.setCoefficient(AS_OBJECT(&zero));
+        res.setExponent(AS_OBJECT(&zero));
+        res.setFreeTerm(AS_OBJECT(&zero));
         return (res);
     }
-    const computorv2::Polynomial r1 = computorv2::sub(computorv2::Complex(0.0, 0.0), right);
+    const computorv2::Polynomial r1 = computorv2::sub(AS_OBJECT(&zero), right);
     res.setFreeTerm(AS_OBJECT(&r1));
     return (res);
 }
