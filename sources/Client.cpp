@@ -44,6 +44,7 @@
 # include "../include/Complex.hpp"
 # include "../include/statment.hpp"
 # include <iostream>
+# include <unistd.h>
 
 computorv2::Client::Client(void)
 {
@@ -90,25 +91,38 @@ int computorv2::Client::getFdErr(void) const
 
 void computorv2::Client::setFdIn(int fd)
 {
+	if (fd >= 0)
+	{
+		this->_connected = true;
+	}
 	this->_fdin = fd;
 }
 
 void computorv2::Client::setFdOut(int fd)
 {
+	if (fd >= 0)
+	{
+		this->_connected = true;
+	}
 	this->_fdout = fd;
 }
 
 void computorv2::Client::setFdErr(int fd)
 {
+	if (fd >= 0)
+	{
+		this->_connected = true;
+	}
 	this->_fderr = fd;
 }
 
 void computorv2::Client::init(void)
 {
-	this->_fdin   = -1;
-	this->_fdout  = -1;
-	this->_fderr  = -1;
-	this->_buffer = "";
+	this->_connected = false;
+	this->_fdin      = -1;
+	this->_fdout     = -1;
+	this->_fderr     = -1;
+	this->_buffer    = "";
 	this->_vm.clear();
 	this->_vm.setConstantByName("i", new computorv2::Complex(0.0, 1.0));
 }
@@ -116,6 +130,24 @@ void computorv2::Client::init(void)
 void computorv2::Client::clear(void)
 {
 	
+}
+
+bool computorv2::Client::connected(void) const
+{
+	return (this->_connected);
+}
+
+int computorv2::Client::read(void)
+{
+	if (!this->connected() || (this->getFdIn() < 0))
+	{
+		return (-1);
+	}
+	char buffer[1024];
+	const int rd = ::read(this->getFdIn(), buffer, 1024);
+	const std::string s(buffer, rd);
+	this->addBuffer(s);
+	return (rd);
 }
 
 int computorv2::Client::parse_line(std::string line)
@@ -177,7 +209,7 @@ int computorv2::Client::check_line(void)
 	return (0);
 }
 
-void computorv2::Client::addBuffer(std::string buffer)
+void computorv2::Client::addBuffer(const std::string& buffer)
 {
 	this->_buffer += buffer;
 	this->check_line();

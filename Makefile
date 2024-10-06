@@ -36,7 +36,7 @@
 #                                                                               #
 #  **************************************************************************   #
 
-.PHONY: clean fclean re push p
+.PHONY: clean fclean re push p docker-container
 
 CPP=c++
 NAME=computorv2
@@ -92,5 +92,8 @@ push:
 	git add . && git commit -m "update" && git push
 
 p: push
+
+docker-container:
+	${sudo} docker run -it -v ${PWD}:/home/computorv2 gcc:latest bash -c "cd '/home/computorv2' && exec bash"
 
 re: fclean all

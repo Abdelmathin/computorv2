@@ -47,6 +47,7 @@ namespace computorv2
     class Client
     {
         private:
+            bool                       _connected;
             int                        _fdin;
             int                        _fdout;
             int                        _fderr;
@@ -68,9 +69,11 @@ namespace computorv2
 
             void init(void);
             void clear(void);
+            bool connected(void) const;
+            int  read(void);
 
             int  parse_line(std::string line);
             int  check_line(void);
-            void addBuffer(std::string buffer);
+            void addBuffer(const std::string& buffer);
     };
 }
