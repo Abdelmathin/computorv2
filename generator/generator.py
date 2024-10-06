@@ -109,47 +109,93 @@ namespace computorv2
 {
 '''
 
+# add, sub, mul, div, mod, eql, drv, pow, neg, replace(old, new)
+
+return_types = {
+	"Integer-Integer"                           : "Integer"   ,
+	"Integer-Rational"                          : "Rational"  ,
+	"Integer-Complex"                           : "Complex"   ,
+	"Integer-Vector"                            : "Vector"    ,
+	"Integer-Matrix"                            : "Matrix"    ,
+	"Integer-Polynomial"                        : "Polynomial",
+	"Integer-UsualFunction"                     : "Polynomial",
+	"Integer-IndependentVariable"               : "Polynomial",
+
+	"Rational-Integer"                          : "Rational"  ,
+	"Rational-Rational"                         : "Rational"  ,
+	"Rational-Complex"                          : "Complex"   ,
+	"Rational-Vector"                           : "Vector"    ,
+	"Rational-Matrix"                           : "Matrix"    ,
+	"Rational-Polynomial"                       : "Polynomial",
+	"Rational-UsualFunction"                    : "Polynomial",
+	"Rational-IndependentVariable"              : "Polynomial",
+
+	"Complex-Integer"                           : "Complex"   ,
+	"Complex-Rational"                          : "Complex"   ,
+	"Complex-Complex"                           : "Complex"   ,
+	"Complex-Vector"                            : "Vector"    ,
+	"Complex-Matrix"                            : "Matrix"    ,
+	"Complex-Polynomial"                        : "Polynomial",
+	"Complex-UsualFunction"                     : "Polynomial",
+	"Complex-IndependentVariable"               : "Polynomial",
+
+	"Vector-Integer"                            : "Vector"    ,
+	"Vector-Rational"                           : "Vector"    ,
+	"Vector-Complex"                            : "Vector"    ,
+	"Vector-Vector"                             : "Vector"    ,
+	"Vector-Matrix"                             : "Matrix"    ,
+	"Vector-Polynomial"                         : "Polynomial",
+	"Vector-UsualFunction"                      : "Polynomial",
+	"Vector-IndependentVariable"                : "Polynomial",
+
+	"Matrix-Integer"                            : "Matrix"    ,
+	"Matrix-Rational"                           : "Matrix"    ,
+	"Matrix-Complex"                            : "Matrix"    ,
+	"Matrix-Vector"                             : "Matrix"    ,
+	"Matrix-Matrix"                             : "Matrix"    ,
+	"Matrix-Polynomial"                         : "Polynomial",
+	"Matrix-UsualFunction"                      : "Polynomial",
+	"Matrix-IndependentVariable"                : "Polynomial",
+
+	"Polynomial-Integer"                        : "Polynomial",
+	"Polynomial-Rational"                       : "Polynomial",
+	"Polynomial-Complex"                        : "Polynomial",
+	"Polynomial-Vector"                         : "Polynomial",
+	"Polynomial-Matrix"                         : "Polynomial",
+	"Polynomial-Polynomial"                     : "Polynomial",
+	"Polynomial-UsualFunction"                  : "Polynomial",
+	"Polynomial-IndependentVariable"            : "Polynomial",
+
+	"UsualFunction-Integer"                     : "Polynomial",
+	"UsualFunction-Rational"                    : "Polynomial",
+	"UsualFunction-Complex"                     : "Polynomial",
+	"UsualFunction-Vector"                      : "Polynomial",
+	"UsualFunction-Matrix"                      : "Polynomial",
+	"UsualFunction-Polynomial"                  : "Polynomial",
+	"UsualFunction-UsualFunction"               : "Polynomial",
+	"UsualFunction-IndependentVariable"         : "Polynomial",
+
+	"IndependentVariable-Integer"               : "Polynomial",
+	"IndependentVariable-Rational"              : "Polynomial",
+	"IndependentVariable-Complex"               : "Polynomial",
+	"IndependentVariable-Vector"                : "Polynomial",
+	"IndependentVariable-Matrix"                : "Polynomial",
+	"IndependentVariable-Polynomial"            : "Polynomial",
+	"IndependentVariable-UsualFunction"         : "Polynomial",
+	"IndependentVariable-IndependentVariable"   : "Polynomial",
+
+}
+
 prototypes = {
-	"bool eql(const computorv2::<left_object> left, const computorv2::<right_object> right);" : 
-		{
-
-		},
-	"bool isfreeterm(const computorv2::<left_object> left);":
-		{
-
-		},
-	"<return_type> add(const computorv2::<left_object> left, const computorv2::<right_object> right);" :
-		{
-			"Vector-Vector"              : "Vector",
-			"Matrix-Matrix"              : "Matrix",
-			"Vector-Matrix"              : "Matrix",
-			"Vector-Polynomial"          : "Polynomial",
-			"Matrix-Polynomial"          : "Polynomial",
-			"Vector-UsualFunction"       : "Polynomial",
-			"Matrix-UsualFunction"       : "Polynomial",
-			"Vector-IndependentVariable" : "Polynomial",
-			"Matrix-IndependentVariable" : "Polynomial",
-		},
-	"<return_type> mul(const computorv2::<left_object> left, const computorv2::<right_object> right);" :
-		{
-			"Vector-Vector"              : "Vector",
-			"Matrix-Matrix"              : "Matrix",
-			"Vector-Matrix"              : "Matrix",
-			"Vector-Polynomial"          : "Polynomial",
-			"Matrix-Polynomial"          : "Polynomial",
-			"Vector-UsualFunction"       : "Polynomial",
-			"Matrix-UsualFunction"       : "Polynomial",
-			"Vector-IndependentVariable" : "Polynomial",
-			"Matrix-IndependentVariable" : "Polynomial",
-		},
-	"<return_type> pow(const computorv2::<left_object> left, const computorv2::<right_object> right);" :
-		{
-			
-		},
-	"computorv2::Polynomial derivative(const computorv2::<left_object> left, const computorv2::IndependentVariable& right);":
-		{
-
-		}
+	"bool isfreeterm(const computorv2::<left_object> left);"                                                                 : {},
+	"bool eql(const computorv2::<left_object> left, const computorv2::<right_object> right);"                                : {},
+	"computorv2::Polynomial derivative(const computorv2::<left_object> left, const computorv2::IndependentVariable& right);" : {},
+	"<return_type> add(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
+	"<return_type> sub(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
+	"<return_type> mul(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
+	"<return_type> div(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
+	"<return_type> mod(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
+	"<return_type> pow(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
 }
 
 objects = [
@@ -216,9 +262,9 @@ for prototype in prototypes:
 	implementations   = []
 	headers.append(prototype.replace("<return_type>", "computorv2::Object*").replace("<left_object>", "Object*").replace("<right_object>", "Object*"))
 	if (have_right_term):
-		implementations.append("{" + NEW_LINE + TAB + "if (!left || !right)" + NEW_LINE + TAB + TAB + 'throw std::logic_error("Can\'t do operation \'' + function_name + '\' between NULL objects!");')
+		implementations.append("{" + NEW_LINE + TAB + "if (!left || !right)" + NEW_LINE + TAB + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported between null types.");')
 	else:
-		implementations.append("{" + NEW_LINE + TAB + "if (!left)" + NEW_LINE + TAB + TAB + 'throw std::logic_error("Can\'t do operation \'' + function_name + '\' for NULL objects!");')
+		implementations.append("{" + NEW_LINE + TAB + "if (!left)" + NEW_LINE + TAB + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported for null types.");')
 	space_index = 0
 	left_index  = -1
 	if ("left," in headers[-1]):
@@ -253,11 +299,14 @@ for prototype in prototypes:
 				implementations[0] += NEW_LINE + TAB + "else if (" + ("IS_" + upleft).upper() + "(left))" + NEW_LINE + TAB + TAB + "return (computorv2::" + function_name + "(*AS_" + upleft + "(left), right)" + NEED_COPY + ");"
 			else:
 				implementations[0] += NEW_LINE + TAB + "else if (" + ("IS_" + upleft).upper() + "(left))" + NEW_LINE + TAB + TAB + "return (computorv2::" + function_name + "(*AS_" + upleft + "(left))" + NEED_COPY + ");"
-			implementations.append('{' + NEW_LINE + TAB + 'std::logic_error("Can\'t do operation \'' + function_name + '\' between \'' + left_object + '\' and \'' + right_object + '\'' + '");' + NEW_LINE + TAB + "return (" + default_returns[return_type] + ");" + NEW_LINE + '}')
+			if (have_right_term):
+				implementations.append('{' + NEW_LINE + TAB + "(void)left; (void) right;" + NEW_LINE + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported between types \'' + left_object + '\' and \'' + right_object + '\'' + '.");' + NEW_LINE + TAB + "return (" + default_returns[return_type] + ");" + NEW_LINE + '}')
+			else:
+				implementations.append('{' + NEW_LINE + TAB + "(void)left;" + NEW_LINE + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported for type: \'' + left_object + '\'' + '");' + NEW_LINE + TAB + "return (" + default_returns[return_type] + ");" + NEW_LINE + '}')
 	if (have_right_term):
-		implementations[0] += NEW_LINE + TAB + 'throw std::logic_error("Can\'t do operation \'' + function_name + '\' between \'" + left->getTypeName() + "\' and \'" + right->getTypeName() + "\'!");'
+		implementations[0] += NEW_LINE + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported between types \'" + left->getTypeName() + "\' and \'" + right->getTypeName() + "\'.");'
 	else:
-		implementations[0] += NEW_LINE + TAB + 'throw std::logic_error("Can\'t do operation \'' + function_name + '\' for \'" + left->getTypeName() + "\'!");'
+		implementations[0] += NEW_LINE + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported for type \'" + left->getTypeName() + "\'.");'
 	implementations[0] += NEW_LINE + TAB + "return (0);" + NEW_LINE + "}"
 	headers_tmp    = []
 	right_index = 0
@@ -313,5 +362,3 @@ with open(REPO_DIR + "/include/computorv2.hpp", "w") as fp:
 
 with open(REPO_DIR + "/sources/computorv2.cpp", "w") as fp:
 	fp.write(fix_file_content(computorv2_cpp))
-
-# add, sub, mul, div, mod, eql, drv, pow, neg, replace(old, new)
