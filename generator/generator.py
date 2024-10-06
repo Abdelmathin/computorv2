@@ -267,8 +267,13 @@ for prototype in prototypes:
 		implementations.append("{" + NEW_LINE + TAB + "if (!left)" + NEW_LINE + TAB + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported for null types.");')
 	space_index = 0
 	left_index  = -1
+	left_string = ""
 	if ("left," in headers[-1]):
-		left_index  = headers[-1].index("left,")
+		left_string = "left,"
+		left_index  = headers[-1].index(left_string)
+	elif ("left)" in headers[-1]):
+		left_string = "left)"
+		left_index  = headers[-1].index(left_string)
 	NEED_COPY = ""
 	for left_object in objects:
 		for right_object in objects:
@@ -316,7 +321,7 @@ for prototype in prototypes:
 		b_header = b_header[:spidx] + (" " * (space_index - spidx)) + b_header[spidx:]
 		headers_tmp.append(b_header)
 		if (left_index >= 0):
-			lfidx    = headers_tmp[-1].index("left,")
+			lfidx    = headers_tmp[-1].index(left_string)
 			if (left_index < lfidx):
 				left_index = lfidx
 	headers1    = []
@@ -324,7 +329,7 @@ for prototype in prototypes:
 	for header in headers_tmp:
 		b_header = header
 		if (left_index >= 0):
-			lfidx    = b_header.index("left,")
+			lfidx    = b_header.index(left_string)
 			b_header = b_header[:lfidx] + (" " * (left_index - lfidx)) + b_header[lfidx:]
 		headers1.append(b_header)
 		if ("right)" in headers1[-1]):
@@ -341,7 +346,7 @@ for prototype in prototypes:
 		function_headers.append(b_header)
 		if (long_header < len(function_headers[-1])):
 			long_header = len(function_headers[-1])
-	n = int(((long_header + len(function_name)) / 2) - 6)
+	n = int(((long_header - len(function_name)) / 2) - 4)
 	computorv2_cpp = computorv2_cpp.strip()
 	computorv2_hpp += NEW_LINE + NEW_LINE + TAB + ("/* " + (n * "-") + " " + function_name + " " + (n * "-") + " */")
 	computorv2_cpp += NEW_LINE + NEW_LINE + ("/* " + (n * "-") + " " + function_name + " " + (n * "-") + " */")

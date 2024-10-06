@@ -51,16 +51,16 @@ namespace computorv2
 {
 
 
-    /* ----------------------------- isfreeterm ----------------------------- */
-    bool isfreeterm(const computorv2::Object* left);
-    bool isfreeterm(const computorv2::Vector& left);
-    bool isfreeterm(const computorv2::Matrix& left);
-    bool isfreeterm(const computorv2::Complex& left);
-    bool isfreeterm(const computorv2::Polynomial& left);
-    bool isfreeterm(const computorv2::UsualFunction& left);
+    /* --------------------- isfreeterm --------------------- */
+    bool isfreeterm(const computorv2::Object*              left);
+    bool isfreeterm(const computorv2::Vector&              left);
+    bool isfreeterm(const computorv2::Matrix&              left);
+    bool isfreeterm(const computorv2::Complex&             left);
+    bool isfreeterm(const computorv2::Polynomial&          left);
+    bool isfreeterm(const computorv2::UsualFunction&       left);
     bool isfreeterm(const computorv2::IndependentVariable& left);
 
-    /* --------------------------------------------- eql --------------------------------------------- */
+    /* -------------------------------------------- eql -------------------------------------------- */
     bool eql(const computorv2::Object*              left, const computorv2::Object*              right);
     bool eql(const computorv2::Vector&              left, const computorv2::Vector&              right);
     bool eql(const computorv2::Vector&              left, const computorv2::Matrix&              right);
@@ -99,7 +99,7 @@ namespace computorv2
     bool eql(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     bool eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
-    /* ------------------------------------------------------------- derivative ------------------------------------------------------------- */
+    /* ----------------------------------------------------- derivative ----------------------------------------------------- */
     computorv2::Polynomial derivative(const computorv2::Object*              left, const computorv2::IndependentVariable& right);
     computorv2::Polynomial derivative(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
     computorv2::Polynomial derivative(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
@@ -108,7 +108,7 @@ namespace computorv2
     computorv2::Polynomial derivative(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
     computorv2::Polynomial derivative(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
-    /* ------------------------------------------------------ add ------------------------------------------------------ */
+    /* ----------------------------------------------------- add ----------------------------------------------------- */
     computorv2::Object*    add(const computorv2::Object*              left, const computorv2::Object*              right);
     computorv2::Vector     add(const computorv2::Vector&              left, const computorv2::Vector&              right);
     computorv2::Matrix     add(const computorv2::Vector&              left, const computorv2::Matrix&              right);
@@ -147,7 +147,7 @@ namespace computorv2
     computorv2::Polynomial add(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial add(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
-    /* ------------------------------------------------------ sub ------------------------------------------------------ */
+    /* ----------------------------------------------------- sub ----------------------------------------------------- */
     computorv2::Object*    sub(const computorv2::Object*              left, const computorv2::Object*              right);
     computorv2::Vector     sub(const computorv2::Vector&              left, const computorv2::Vector&              right);
     computorv2::Matrix     sub(const computorv2::Vector&              left, const computorv2::Matrix&              right);
@@ -186,7 +186,7 @@ namespace computorv2
     computorv2::Polynomial sub(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial sub(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
-    /* ------------------------------------------------------ mul ------------------------------------------------------ */
+    /* ----------------------------------------------------- mul ----------------------------------------------------- */
     computorv2::Object*    mul(const computorv2::Object*              left, const computorv2::Object*              right);
     computorv2::Vector     mul(const computorv2::Vector&              left, const computorv2::Vector&              right);
     computorv2::Matrix     mul(const computorv2::Vector&              left, const computorv2::Matrix&              right);
@@ -225,7 +225,7 @@ namespace computorv2
     computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
-    /* ------------------------------------------------------ div ------------------------------------------------------ */
+    /* ----------------------------------------------------- div ----------------------------------------------------- */
     computorv2::Object*    div(const computorv2::Object*              left, const computorv2::Object*              right);
     computorv2::Vector     div(const computorv2::Vector&              left, const computorv2::Vector&              right);
     computorv2::Matrix     div(const computorv2::Vector&              left, const computorv2::Matrix&              right);
@@ -264,7 +264,7 @@ namespace computorv2
     computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
-    /* ------------------------------------------------------ mod ------------------------------------------------------ */
+    /* ----------------------------------------------------- mod ----------------------------------------------------- */
     computorv2::Object*    mod(const computorv2::Object*              left, const computorv2::Object*              right);
     computorv2::Vector     mod(const computorv2::Vector&              left, const computorv2::Vector&              right);
     computorv2::Matrix     mod(const computorv2::Vector&              left, const computorv2::Matrix&              right);
@@ -303,7 +303,7 @@ namespace computorv2
     computorv2::Polynomial mod(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial mod(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
-    /* ------------------------------------------------------ pow ------------------------------------------------------ */
+    /* ----------------------------------------------------- pow ----------------------------------------------------- */
     computorv2::Object*    pow(const computorv2::Object*              left, const computorv2::Object*              right);
     computorv2::Vector     pow(const computorv2::Vector&              left, const computorv2::Vector&              right);
     computorv2::Matrix     pow(const computorv2::Vector&              left, const computorv2::Matrix&              right);

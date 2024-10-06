@@ -51,7 +51,7 @@
 #include <sstream>
 #include <unistd.h>
 
-/* ----------------------------- isfreeterm ----------------------------- */
+/* --------------------- isfreeterm --------------------- */
 
 bool computorv2::isfreeterm(const computorv2::Object* left)
 {
@@ -115,7 +115,7 @@ bool computorv2::isfreeterm(const computorv2::IndependentVariable& left)
     return (false);
 }
 
-/* --------------------------------------------- eql --------------------------------------------- */
+/* -------------------------------------------- eql -------------------------------------------- */
 
 bool computorv2::eql(const computorv2::Object* left, const computorv2::Object* right)
 {
@@ -449,7 +449,7 @@ bool computorv2::eql(const computorv2::IndependentVariable& left, const computor
     return (false);
 }
 
-/* ------------------------------------------------------------- derivative ------------------------------------------------------------- */
+/* ----------------------------------------------------- derivative ----------------------------------------------------- */
 
 computorv2::Polynomial computorv2::derivative(const computorv2::Object* left, const computorv2::IndependentVariable& right)
 {
@@ -513,7 +513,7 @@ computorv2::Polynomial computorv2::derivative(const computorv2::IndependentVaria
     return (computorv2::Polynomial("x"));
 }
 
-/* ------------------------------------------------------ add ------------------------------------------------------ */
+/* ----------------------------------------------------- add ----------------------------------------------------- */
 
 computorv2::Object* computorv2::add(const computorv2::Object* left, const computorv2::Object* right)
 {
@@ -847,7 +847,7 @@ computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& le
     return (computorv2::Polynomial("x"));
 }
 
-/* ------------------------------------------------------ sub ------------------------------------------------------ */
+/* ----------------------------------------------------- sub ----------------------------------------------------- */
 
 computorv2::Object* computorv2::sub(const computorv2::Object* left, const computorv2::Object* right)
 {
@@ -1181,7 +1181,7 @@ computorv2::Polynomial computorv2::sub(const computorv2::IndependentVariable& le
     return (computorv2::Polynomial("x"));
 }
 
-/* ------------------------------------------------------ mul ------------------------------------------------------ */
+/* ----------------------------------------------------- mul ----------------------------------------------------- */
 
 computorv2::Object* computorv2::mul(const computorv2::Object* left, const computorv2::Object* right)
 {
@@ -1515,7 +1515,7 @@ computorv2::Polynomial computorv2::mul(const computorv2::IndependentVariable& le
     return (computorv2::Polynomial("x"));
 }
 
-/* ------------------------------------------------------ div ------------------------------------------------------ */
+/* ----------------------------------------------------- div ----------------------------------------------------- */
 
 computorv2::Object* computorv2::div(const computorv2::Object* left, const computorv2::Object* right)
 {
@@ -1849,7 +1849,7 @@ computorv2::Polynomial computorv2::div(const computorv2::IndependentVariable& le
     return (computorv2::Polynomial("x"));
 }
 
-/* ------------------------------------------------------ mod ------------------------------------------------------ */
+/* ----------------------------------------------------- mod ----------------------------------------------------- */
 
 computorv2::Object* computorv2::mod(const computorv2::Object* left, const computorv2::Object* right)
 {
@@ -2183,7 +2183,7 @@ computorv2::Polynomial computorv2::mod(const computorv2::IndependentVariable& le
     return (computorv2::Polynomial("x"));
 }
 
-/* ------------------------------------------------------ pow ------------------------------------------------------ */
+/* ----------------------------------------------------- pow ----------------------------------------------------- */
 
 computorv2::Object* computorv2::pow(const computorv2::Object* left, const computorv2::Object* right)
 {
