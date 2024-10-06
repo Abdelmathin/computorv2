@@ -25,91 +25,43 @@ int main(void)
 {
 	computorv2::IndependentVariable x("x");
 	computorv2::Polynomial          p(x);
-	// computorv2::Vector              v;
-	computorv2::Complex             z;
-	// computorv2::Matrix              m;
+	computorv2::Complex             z(1.0, 1.0);
 	computorv2::UsualFunction       f("ln", x);
 
 	/* -------------------------------------- */
 
 	std::cout << "x = " << x << std::endl;
 	std::cout << "p = " << p << std::endl;
-	// std::cout << "v = " << v << std::endl;
 	std::cout << "z = " << z << std::endl;
-	// std::cout << "m = " << m << std::endl;
 	std::cout << "f = " << f << std::endl;
+
+	std::cout << "computorv2::add(x, x) = " << computorv2::add(x, x) << std::endl;
+	std::cout << "computorv2::add(x, p) = " << computorv2::add(x, p) << std::endl;
+	std::cout << "computorv2::add(x, z) = " << computorv2::add(x, z) << std::endl;
+	std::cout << "computorv2::add(x, f) = " << computorv2::add(x, f) << std::endl;
+
+	std::cout << "computorv2::add(p, x) = " << computorv2::add(p, x) << std::endl;
+	std::cout << "computorv2::add(p, p) = " << computorv2::add(p, p) << std::endl;
+	std::cout << "computorv2::add(p, z) = " << computorv2::add(p, z) << std::endl;
+	std::cout << "computorv2::add(p, f) = " << computorv2::add(p, f) << std::endl;
+
+	std::cout << "computorv2::add(z, x) = " << computorv2::add(z, x) << std::endl;
+	std::cout << "computorv2::add(z, p) = " << computorv2::add(z, p) << std::endl;
+	std::cout << "computorv2::add(z, z) = " << computorv2::add(z, z) << std::endl;
+	std::cout << "computorv2::add(z, f) = " << computorv2::add(z, f) << std::endl;
+
+	std::cout << "computorv2::add(f, x) = " << computorv2::add(f, x) << std::endl;
+	std::cout << "computorv2::add(f, p) = " << computorv2::add(f, p) << std::endl;
+	std::cout << "computorv2::add(f, z) = " << computorv2::add(f, z) << std::endl;
+	std::cout << "computorv2::add(f, f) = " << computorv2::add(f, f) << std::endl;
 
 	std::cout << "dx / dx = " << computorv2::derivative(x, x) << std::endl;
 	std::cout << "dp / dx = " << computorv2::derivative(p, x) << std::endl;
-	// std::cout << "dv / dx = " << computorv2::derivative(v, x) << std::endl;
 	std::cout << "dz / dx = " << computorv2::derivative(z, x) << std::endl;
-	// std::cout << "dm / dx = " << computorv2::derivative(m, x) << std::endl;
 	std::cout << "df / dx = " << computorv2::derivative(f, x) << std::endl;
 
-    
-
-// std::ostream& operator<<(std::ostream& os, const computorv2::Object& obj)
-// {
-// 	os << obj.toString();
-// 	return (os);
-// }
 
 
-
-
-	// computorv2::IndependentVariable x("x");
-	// computorv2::UsualFunction ln("ln", x);
-
-	// computorv2::Polynomial P(&x);
-
-	// std::cout << computorv2::derivative(P, x).toString() << std::endl;
-	// std::cout << computorv2::derivative(computorv2::add(computorv2::add(P, P), computorv2::mul(P, P))).toString() << std::endl;
-
-
-
-
-
-
-	// computorv2::IndependentVariable x("x");
-
-
-	// std::cout << computorv2::add(x, x) << std::endl;
-
-
-
-	// computorv2::Rational x = 2.0;
-
-	// computorv2::UsualFunction f = computorv2::UsualFunction("ln", &x);
-
-	// std::cout << f.evaluate()->toString() << std::endl;
-
-
-
-
-/*
-	computorv2::isnull
-	computorv2::isunity
-	computorv2::isname
-	computorv2::copy(object)
-	computorv2::evaluate(object)
-	computorv2::toString(object)
-
-*/
-
-
-
-
-
-	// computorv2::Polynomial x; x.setName("x");
-	// std::cout << computorv2::add(x, x) << std::endl;
-
-	// std::cout << computorv2::derivative(computorv2::Rational(15)).toString() << std::endl;
-	// std::cout << computorv2::derivative(computorv2::Complex(1.0, 1.0)).toString() << std::endl;
-	// std::cout << computorv2::derivative(x).toString() << std::endl;
-
-
-	// computorv2::Client client = computorv2::Client();
-	// client.addBuffer("f(x) = x + x + 1\n");
 
 	return (0);
 }
