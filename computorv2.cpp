@@ -1,13 +1,27 @@
-#include "sources/Client.cpp"
-#include "sources/IndependentVariable.cpp"
-#include "sources/UsualFunction.cpp"
-#include "sources/computorv2.cpp"
-#include "sources/Complex.cpp"
-#include "sources/Matrix.cpp"
-#include "sources/Vector.cpp"
-#include "sources/Polynomial.cpp"
-#include "sources/VirtualMachine.cpp"
-#include "sources/utils.cpp"
+#include "include/Client.hpp"
+#include "include/IndependentVariable.hpp"
+#include "include/Object.hpp"
+#include "include/UsualFunction.hpp"
+#include "include/VirtualMachine.hpp"
+#include "include/statment.hpp"
+#include "include/Complex.hpp"
+#include "include/Matrix.hpp"
+#include "include/Polynomial.hpp"
+#include "include/Vector.hpp"
+#include "include/computorv2.hpp"
+
+// #include "sources/Client.cpp"
+// #include "sources/IndependentVariable.cpp"
+// #include "sources/Polynomial.cpp"
+// #include "sources/Vector.cpp"
+// #include "sources/computorv2.cpp"
+// #include "sources/Complex.cpp"
+// #include "sources/Matrix.cpp"
+// #include "sources/UsualFunction.cpp"
+// #include "sources/VirtualMachine.cpp"
+// #include "sources/statment.cpp"
+
+
 
 // std::ostream& operator<<(std::ostream& os, const computorv2::Object& obj)
 // {
@@ -17,6 +31,7 @@
 
 int main(void)
 {
+
 	computorv2::IndependentVariable x("x");
 	computorv2::UsualFunction ln("ln", x);
 

@@ -37,6 +37,8 @@
 /* **************************************************************************  */
 
 #pragma once
+
+#include "computorv2.hpp"
 #include "Object.hpp"
 #include <iostream>
 #include <map>

@@ -39,10 +39,11 @@
 #ifndef __COMPUTORV2_SOURCES_VIRTUAL_MACHINE
 # define __COMPUTORV2_SOURCES_VIRTUAL_MACHINE
 
-#include "../include/VirtualMachine.hpp"
-#include "../include/Object.hpp"
-#include <iostream>
-#include <map>
+# include "../include/computorv2.hpp"
+# include "../include/VirtualMachine.hpp"
+# include "../include/Object.hpp"
+# include <iostream>
+# include <map>
 
 computorv2::VirtualMachine::VirtualMachine(void)
 {

@@ -39,10 +39,10 @@
 #ifndef __COMPUTORV2_SOURCES_INDEPENDENT_VARIABLE
 # define __COMPUTORV2_SOURCES_INDEPENDENT_VARIABLE
 
-#include "../include/IndependentVariable.hpp"
-#include "../include/utils.hpp"
-#include <iostream>
-#include <exception>
+# include "../include/computorv2.hpp"
+# include "../include/IndependentVariable.hpp"
+# include <iostream>
+# include <exception>
 
 int computorv2::IndependentVariable::getType(void) const
 {

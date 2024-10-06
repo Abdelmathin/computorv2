@@ -1,6 +1,9 @@
 import os
+import sys
 
 computorv2_cpp ='''
+
+
 /* **************************************************************************  */
 /*                                                                             */
 /*                                                         :::      ::::::::   */
@@ -42,17 +45,64 @@ computorv2_cpp ='''
 #ifndef __COMPUTORV2_SOURCES_COMPUTORV2
 # define __COMPUTORV2_SOURCES_COMPUTORV2
 
-#include "../include/utils.hpp"
-#include "../include/Object.hpp"
-#include "../include/Matrix.hpp"
-#include "../include/Vector.hpp"
-#include "../include/Complex.hpp"
-#include "../include/Polynomial.hpp"
-#include "../include/UsualFunction.hpp"
-#include "../include/IndependentVariable.hpp"
-#include "../include/computorv2.hpp"
-#include <sstream>
-#include <unistd.h>
+# include "../include/computorv2.hpp"
+# include "../include/Object.hpp"
+# include "../include/Matrix.hpp"
+# include "../include/Vector.hpp"
+# include "../include/Complex.hpp"
+# include "../include/Polynomial.hpp"
+# include "../include/UsualFunction.hpp"
+# include "../include/IndependentVariable.hpp"
+# include <sstream>
+# include <unistd.h>
+
+std::string computorv2::tolower(const std::string s)
+{
+	std::string u = "";
+	for (size_t i = 0; i < s.length(); i++)
+	{
+		u += std::tolower(s[i]);
+	}
+	return (u);
+}
+
+bool computorv2::isname(const std::string& name)
+{
+	const std::string::size_type len = name.size();
+	if ((len < 1) || (!IS_VARSTART(name[0])))
+	{
+		return (false);
+	}
+	for (std::string::size_type i = 0; i < len; ++i)
+	{
+		if (!IS_VARCHAR(name[i]))
+		{
+			return (false);
+		}
+	}
+	return (true);
+}
+
+bool computorv2::isUsualFunction(const std::string& name)
+{
+	if (name == "ln")
+	{
+		return (true);
+	}
+	return (false);
+}
+
+std::string computorv2::ltrim(const std::string s)
+{
+	std::string::size_type first = s.find_first_not_of("\\v\\f\\t ");
+	if (first == std::string::npos)
+	{
+		return ("");
+	}
+	return (s.substr(first, (s.length() - first)));
+}
+
+
 '''
 
 computorv2_hpp = '''
@@ -96,17 +146,72 @@ computorv2_hpp = '''
 
 #pragma once
 
-#include "utils.hpp"
-#include "Object.hpp"
-#include "Matrix.hpp"
-#include "Vector.hpp"
-#include "Complex.hpp"
-#include "Polynomial.hpp"
-#include "UsualFunction.hpp"
-#include "IndependentVariable.hpp"
+# include <iostream>
+
+typedef int t_error;
+
+#define COMPUTORV2_EPSILON                   0.0000001
+#define ABS(x)                               ( (x) >= 0 ? (x) : -(x) )
+#define IS_ZERO(x)                           ( ABS(x) < COMPUTORV2_EPSILON )
+
+#define COMPUTORV2_CASE_INSENSITIVE          1
+#define COMPUTORV2_SUCCESS                   (0 << 0)
+#define COMPUTORV2_ERROR                     (1 << 0)
+
+#define ERROR_NOT_ENOUGH_MEMORY              (1 << 0)
+#define ERROR_NAN                            (1 << 1)
+
+#define STATMENT_TYPE_UNKNOWN                (0 << 0)
+#define STATMENT_TYPE_GET                    (1 << 0) /* x = ? */
+#define STATMENT_TYPE_SET_VARIABLE           (1 << 1) /* x = y */
+#define STATMENT_TYPE_SET_FUNCTION           (1 << 2) /* f(x) = 2 * x */
+#define STATMENT_TYPE_SOLVE                  (1 << 3) /* x = y ? */
+
+#define COMPUTORV2_OPERATION_NONE            (0 << 0)
+#define COMPUTORV2_OPERATION_ADD             (1 << 0)
+#define COMPUTORV2_OPERATION_SUB             (1 << 1)
+#define COMPUTORV2_OPERATION_MULT            (1 << 2)
+#define COMPUTORV2_OPERATION_DIV             (1 << 3)
+#define COMPUTORV2_OPERATION_EXP             (1 << 4)
+#define COMPUTORV2_OPERATION_MATRIX_MULT     (1 << 5)
+#define COMPUTORV2_OPERATION_MOD             (1 << 6)
+
+#define COMPUTORV2_TYPE_UNKNOWN              (0 << 0)
+#define COMPUTORV2_TYPE_INTEGER              (1 << 0)
+#define COMPUTORV2_TYPE_RATIONAL             (1 << 1)
+#define COMPUTORV2_TYPE_VECTOR               (1 << 2)
+#define COMPUTORV2_TYPE_MATRIX               (1 << 3)
+#define COMPUTORV2_TYPE_COMPLEX              (1 << 4)
+#define COMPUTORV2_TYPE_FUNCTION             (1 << 5)
+#define COMPUTORV2_TYPE_USUAL_FUNCTION       (1 << 6)
+#define COMPUTORV2_TYPE_POLYNOMIAL           (1 << 7)
+#define COMPUTORV2_TYPE_INDEPENDENT_VARIABLE (1 << 8)
+
+#define CHARCODE(c)        ((int)(c))
+#define IS_DIGIT(c)        (('0' <= c) && (c <= '9'))
+#define IS_SPACE(c)        ((c == ' ') || (c == '\\t'))
+#define IS_VARSTART(c)     ((c == '_') || (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')))
+#define IS_VARCHAR(c)      (IS_DIGIT(c) || IS_VARSTART(c))
+
+#define OBJECT_TYPE(obj)   (obj ? ((obj)->getType()) : 0)
 
 namespace computorv2
 {
+	class Object;
+	class Matrix;
+	class Vector;
+	class Complex;
+	class History;
+    class Polynomial;
+	class VirtualMachine;
+    class UsualFunction;
+    class IndependentVariable;
+
+	std::string tolower(const std::string s);
+	bool        isname(const std::string& name);
+	bool        isUsualFunction(const std::string& name);
+	std::string ltrim(const std::string s);
+
 '''
 
 # add, sub, mul, div, mod, eql, drv, pow, neg, replace(old, new)
@@ -220,8 +325,8 @@ default_returns = {
 ignored_prototypes = {}
 
 def fix_file_content(content):
-	content = content.replace("INDEPENDENTVARIABLE(", "INDEPENDENT(")
-	content = content.replace("USUALFUNCTION(", "USUAL_FUNCTION(")
+	content = content.replace("INDEPENDENTVARIABLE(", "INDVAR(")
+	content = content.replace("USUALFUNCTION(", "USFUNC(")
 	return (content)
 
 def clear_prototype(prototype):
@@ -361,6 +466,9 @@ computorv2_hpp = computorv2_hpp.strip() + NEW_LINE + "}" + NEW_LINE
 
 FILE     = os.path.realpath(__file__)
 REPO_DIR = os.path.dirname(os.path.dirname(FILE))
+
+print ("Are you sure, computorv2.cpp and computer v2.hpp will override")
+time.sleep(60)
 
 with open(REPO_DIR + "/include/computorv2.hpp", "w") as fp:
 	fp.write(fix_file_content(computorv2_hpp))

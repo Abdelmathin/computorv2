@@ -38,6 +38,7 @@
 
 #pragma once
 
+#include "computorv2.hpp"
 #include <iostream>
 
 namespace computorv2

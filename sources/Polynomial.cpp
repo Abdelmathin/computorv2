@@ -39,13 +39,12 @@
 #ifndef __COMPUTORV2_SOURCES_POLYNOMIAL
 # define __COMPUTORV2_SOURCES_POLYNOMIAL
 
-#include "../include/Polynomial.hpp"
-#include "../include/IndependentVariable.hpp"
-#include "../include/utils.hpp"
-#include "../include/computorv2.hpp"
-#include <iostream>
-#include <sstream>
-#include <exception>
+# include "../include/computorv2.hpp"
+# include "../include/Polynomial.hpp"
+# include "../include/IndependentVariable.hpp"
+# include <iostream>
+# include <sstream>
+# include <exception>
 
 int computorv2::Polynomial::getType(void) const
 {

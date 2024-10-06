@@ -39,9 +39,10 @@
 #ifndef __COMPUTORV2_SOURCES_CLIENT
 # define __COMPUTORV2_SOURCES_CLIENT
 
+# include "../include/computorv2.hpp"
 # include "../include/Client.hpp"
 # include "../include/Complex.hpp"
-# include "../include/utils.hpp"
+# include "../include/statment.hpp"
 # include <iostream>
 
 computorv2::Client::Client(void)

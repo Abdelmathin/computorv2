@@ -39,11 +39,11 @@
 #ifndef __COMPUTORV2_SOURCES_VECTOR
 # define __COMPUTORV2_SOURCES_VECTOR
 
-#include "../include/Vector.hpp"
-#include "../include/Object.hpp"
-#include "../include/utils.hpp"
-#include <iostream>
-#include <sstream>
+# include "../include/computorv2.hpp"
+# include "../include/Vector.hpp"
+# include "../include/Object.hpp"
+# include <iostream>
+# include <sstream>
 
 int computorv2::Vector::getType(void) const
 {

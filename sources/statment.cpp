@@ -1,7 +1,7 @@
 /* **************************************************************************  */
 /*                                                                             */
 /*                                                         :::      ::::::::   */
-/*   utils.cpp                                          :+:      :+:    :+:    */
+/*   statment.cpp                                       :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+      */
 /*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
 /*                                                +#+#+#+#+#+   +#+            */
@@ -39,56 +39,10 @@
 #ifndef __COMPUTORV2_SOURCES_UTILS
 # define __COMPUTORV2_SOURCES_UTILS
 
-#include "../include/utils.hpp"
-#include "../include/Object.hpp"
-#include "../include/Polynomial.hpp"
-#include <iostream>
-
-std::string computorv2::tolower(const std::string s)
-{
-	std::string u = "";
-	for (size_t i = 0; i < s.length(); i++)
-	{
-		u += std::tolower(s[i]);
-	}
-	return (u);
-}
-
-bool computorv2::isname(const std::string& name)
-{
-	const std::string::size_type len = name.size();
-	if ((len < 1) || (!IS_VARSTART(name[0])))
-	{
-		return (false);
-	}
-	for (std::string::size_type i = 0; i < len; ++i)
-	{
-		if (!IS_VARCHAR(name[i]))
-		{
-			return (false);
-		}
-	}
-	return (true);
-}
-
-bool computorv2::isUsualFunction(const std::string& name)
-{
-	if (name == "ln")
-	{
-		return (true);
-	}
-	return (false);
-}
-
-std::string computorv2::ltrim(const std::string s)
-{
-	std::string::size_type first = s.find_first_not_of("\v\f\t ");
-	if (first == std::string::npos)
-	{
-		return ("");
-	}
-	return (s.substr(first, (s.length() - first)));
-}
+# include "../include/computorv2.hpp"
+# include "../include/Object.hpp"
+# include "../include/Polynomial.hpp"
+# include <iostream>
 
 t_error computorv2::statment_init(computorv2::statment *st)
 {
@@ -159,7 +113,7 @@ t_error computorv2::statment_skip_spaces(computorv2::statment *st)
 	{
 		while (st->_pos < st->_len)
 		{
-			if (!ISSPACE(st->_str[st->_pos]))
+			if (!IS_SPACE(st->_str[st->_pos]))
 			{
 				return (COMPUTORV2_SUCCESS);
 			}
@@ -249,10 +203,10 @@ std::string computorv2::statment_parsename(computorv2::statment *st)
 	{
 		computorv2::statment_skip_spaces(st);
 		char c = computorv2::statment_getc(st);
-		if (ISVARSTART(c))
+		if (IS_VARSTART(c))
 		{
 			std::string name = "";
-			while (IS_VAR_CHAR(c))
+			while (IS_VARCHAR(c))
 			{
 				name += c;
 				c = computorv2::statment_next(st);
@@ -269,13 +223,13 @@ std::string computorv2::statment_parsename(computorv2::statment *st)
 t_error computorv2::statment_parse_number(computorv2::statment *st)
 {
 	char c = computorv2::statment_getc(st);
-	if (ISDIGIT(c) == 0)
+	if (IS_DIGIT(c) == 0)
 	{
 		return (COMPUTORV2_ERROR);
 	}
 	st->_result = NULL;
 	double r = 0.0;
-	while (ISDIGIT(c))
+	while (IS_DIGIT(c))
 	{
 		r = 10 * r + (CHARCODE(c) - CHARCODE('0'));
 		c = computorv2::statment_next(st);
@@ -287,7 +241,7 @@ t_error computorv2::statment_parse_number(computorv2::statment *st)
 	}
 	c = computorv2::statment_next(st);
 	double f = 0.1;
-	while (ISDIGIT(c))
+	while (IS_DIGIT(c))
 	{
 		r = r + f * (CHARCODE(c) - CHARCODE('0'));
 		c = computorv2::statment_next(st);
@@ -344,11 +298,11 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 	st->_result    = 0;
 	computorv2::statment_skip_spaces(st);
 	const char c = computorv2::statment_getc(st);
-	if (ISDIGIT(c))
+	if (IS_DIGIT(c))
 	{
 		st->_err = computorv2::statment_parse_number(st);
 	}
-	else if (ISVARSTART(c))
+	else if (IS_VARSTART(c))
 	{
 		st->_err = computorv2::statment_parse_variable(st);
 	}
@@ -360,7 +314,7 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 			return (COMPUTORV2_SUCCESS);
 		}
 		st->_operation = computorv2::statment_operation_code(st);
-		if (ISVARSTART(computorv2::statment_getc(st)))
+		if (IS_VARSTART(computorv2::statment_getc(st)))
 		{
 			/* caseOf(2i) */
 			st->_operation = COMPUTORV2_OPERATION_MULT;			

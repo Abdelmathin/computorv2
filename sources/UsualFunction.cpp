@@ -39,9 +39,9 @@
 #ifndef __COMPUTORV2_SOURCES_USUAL_FUNCTION
 # define __COMPUTORV2_SOURCES_USUAL_FUNCTION
 
-#include "../include/UsualFunction.hpp"
-#include "../include/utils.hpp"
-#include <sstream>
+# include "../include/computorv2.hpp"
+# include "../include/UsualFunction.hpp"
+# include <sstream>
 
 int computorv2::UsualFunction::getType(void) const
 {

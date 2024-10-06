@@ -39,11 +39,11 @@
 #ifndef __COMPUTORV2_SOURCES_MATRIX
 # define __COMPUTORV2_SOURCES_MATRIX
 
-#include "../include/Matrix.hpp"
-#include "../include/Object.hpp"
-#include "../include/utils.hpp"
-#include <iostream>
-#include <sstream>
+# include "../include/computorv2.hpp"
+# include "../include/Matrix.hpp"
+# include "../include/Object.hpp"
+# include <iostream>
+# include <sstream>
 
 int computorv2::Matrix::getType(void) const
 {

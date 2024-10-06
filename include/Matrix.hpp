@@ -38,6 +38,7 @@
 
 #pragma once
 
+#include "computorv2.hpp"
 #include "Object.hpp"
 #include "Complex.hpp"
 #include <iostream>
@@ -67,5 +68,5 @@ namespace computorv2
     };
 }
 
-#define IS_MATRIX(obj) ((OBJECT_TYPE(obj) & COMPUTORV2_TYPE_MATRIX) != 0)
-#define AS_MATRIX(obj) static_cast< const computorv2::Matrix* >(obj)
+#define IS_MATRIX(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_MATRIX) != 0)
+#define AS_MATRIX(o) static_cast< const computorv2::Matrix* >(o)

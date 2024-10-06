@@ -38,6 +38,7 @@
 
 #pragma once
 
+#include "computorv2.hpp"
 #include "Object.hpp"
 #include <iostream>
 
@@ -76,3 +77,6 @@ namespace computorv2
             double      _imag;
     };
 }
+
+#define IS_COMPLEX(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_COMPLEX) != 0)
+#define AS_COMPLEX(o) static_cast< const computorv2::Complex* >(o)

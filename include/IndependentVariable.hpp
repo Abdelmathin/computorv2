@@ -38,6 +38,7 @@
 
 #pragma once
 
+#include "computorv2.hpp"
 #include "Object.hpp"
 #include <iostream>
 
@@ -65,3 +66,6 @@ namespace computorv2
 			std::string _name;
 	};
 }
+
+#define IS_INDVAR(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_INDEPENDENT_VARIABLE) != 0)
+#define AS_INDVAR(o) static_cast< const computorv2::IndependentVariable* >(o)
