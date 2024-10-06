@@ -69,3 +69,5 @@ namespace computorv2
 
 #define IS_INDVAR(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_INDEPENDENT_VARIABLE) != 0)
 #define AS_INDVAR(o) static_cast< const computorv2::IndependentVariable* >(o)
+
+std::ostream& operator<<(std::ostream& left, const computorv2::IndependentVariable& right);

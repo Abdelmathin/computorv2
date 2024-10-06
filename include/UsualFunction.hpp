@@ -78,3 +78,5 @@ namespace computorv2
 
 #define IS_USFUNC(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_USUAL_FUNCTION) != 0)
 #define AS_USFUNC(o) static_cast< const computorv2::UsualFunction* >(o)
+
+std::ostream& operator<<(std::ostream& left, const computorv2::UsualFunction& right);

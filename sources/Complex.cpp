@@ -188,4 +188,10 @@ void computorv2::Complex::clear(void)
 	this->_imag = 0.0;
 }
 
+std::ostream& operator<<(std::ostream& left, const computorv2::Complex& right)
+{
+	left << right.toString();
+	return (left);
+}
+
 #endif//!__COMPUTORV2_SOURCES_COMPLEX

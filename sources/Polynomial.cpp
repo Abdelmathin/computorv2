@@ -379,4 +379,10 @@ void computorv2::Polynomial::setFreeTerm(const computorv2::Object& freeterm)
 	this->setFreeTerm(&freeterm);
 }
 
+std::ostream& operator<<(std::ostream& left, const computorv2::Polynomial& right)
+{
+	left << right.toString();
+	return (left);
+}
+
 #endif//!__COMPUTORV2_SOURCES_POLYNOMIAL

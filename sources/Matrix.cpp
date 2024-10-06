@@ -111,4 +111,10 @@ computorv2::Matrix::Matrix(const computorv2::Complex& i00, const computorv2::Com
 	throw std::runtime_error("Not implemented: `computorv2::Matrix(i00, i01, i10, i11)`");
 }
 
+std::ostream& operator<<(std::ostream& left, const computorv2::Matrix& right)
+{
+	left << right.toString();
+	return (left);
+}
+
 #endif//!__COMPUTORV2_SOURCES_MATRIX

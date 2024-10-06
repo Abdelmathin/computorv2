@@ -80,3 +80,5 @@ namespace computorv2
 
 #define IS_COMPLEX(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_COMPLEX) != 0)
 #define AS_COMPLEX(o) static_cast< const computorv2::Complex* >(o)
+
+std::ostream& operator<<(std::ostream& left, const computorv2::Complex& right);

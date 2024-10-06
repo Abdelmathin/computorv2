@@ -97,3 +97,5 @@ namespace computorv2
 
 #define IS_POLYNOMIAL(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_POLYNOMIAL) != 0)
 #define AS_POLYNOMIAL(o) static_cast< const computorv2::Polynomial* >(o)
+
+std::ostream& operator<<(std::ostream& left, const computorv2::Polynomial& right);

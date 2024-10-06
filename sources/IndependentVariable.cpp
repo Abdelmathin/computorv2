@@ -131,4 +131,10 @@ void computorv2::IndependentVariable::setName(const std::string& name)
     this->_name = name;
 }
 
+std::ostream& operator<<(std::ostream& left, const computorv2::IndependentVariable& right)
+{
+    left << right.toString();
+    return (left);
+}
+
 #endif//!__COMPUTORV2_SOURCES_INDEPENDENT_VARIABLE

@@ -111,4 +111,10 @@ computorv2::Vector::Vector(const computorv2::Complex &a, const computorv2::Compl
 	throw std::runtime_error("Not implemented: `computorv2::Vector(a, b)`");
 }
 
+std::ostream& operator<<(std::ostream& left, const computorv2::Vector& right)
+{
+	left << right.toString();
+	return (left);
+}
+
 #endif//!__COMPUTORV2_SOURCES_VECTOR

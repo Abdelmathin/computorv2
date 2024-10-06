@@ -70,3 +70,5 @@ namespace computorv2
 
 #define IS_MATRIX(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_MATRIX) != 0)
 #define AS_MATRIX(o) static_cast< const computorv2::Matrix* >(o)
+
+std::ostream& operator<<(std::ostream& left, const computorv2::Matrix& right);

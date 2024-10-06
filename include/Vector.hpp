@@ -67,3 +67,5 @@ namespace computorv2
 
 #define IS_VECTOR(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_VECTOR) != 0)
 #define AS_VECTOR(o) static_cast< const computorv2::Vector* >(o)
+
+std::ostream& operator<<(std::ostream& left, const computorv2::Vector& right);

@@ -194,4 +194,10 @@ computorv2::Object* computorv2::UsualFunction::getBody(void) const
     return (this->_body);
 }
 
+std::ostream& operator<<(std::ostream& left, const computorv2::UsualFunction& right)
+{
+    left << right.toString();
+    return (left);
+}
+
 #endif//!__COMPUTORV2_SOURCES_USUAL_FUNCTION

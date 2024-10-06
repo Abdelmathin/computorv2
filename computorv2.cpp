@@ -10,16 +10,34 @@
 #include "include/Vector.hpp"
 #include "include/computorv2.hpp"
 
-// #include "sources/Client.cpp"
-// #include "sources/IndependentVariable.cpp"
-// #include "sources/Polynomial.cpp"
-// #include "sources/Vector.cpp"
-// #include "sources/computorv2.cpp"
-// #include "sources/Complex.cpp"
-// #include "sources/Matrix.cpp"
-// #include "sources/UsualFunction.cpp"
-// #include "sources/VirtualMachine.cpp"
-// #include "sources/statment.cpp"
+#include "sources/Client.cpp"
+#include "sources/IndependentVariable.cpp"
+#include "sources/Polynomial.cpp"
+#include "sources/Vector.cpp"
+#include "sources/computorv2.cpp"
+#include "sources/Complex.cpp"
+#include "sources/Matrix.cpp"
+#include "sources/UsualFunction.cpp"
+#include "sources/VirtualMachine.cpp"
+#include "sources/statment.cpp"
+
+int main(void)
+{
+	computorv2::IndependentVariable x("x");
+	computorv2::Polynomial          p(x);
+	computorv2::Vector              v;
+	computorv2::Complex             z;
+	computorv2::Matrix              m;
+	computorv2::UsualFunction       f("sin", x);
+
+	/* -------------------------------------- */
+
+	std::cout << "x = " << x << std::endl;
+	std::cout << "p = " << p << std::endl;
+	std::cout << "v = " << v << std::endl;
+	std::cout << "z = " << z << std::endl;
+	std::cout << "m = " << m << std::endl;
+	std::cout << "f = " << f << std::endl;
 
 
 
@@ -29,15 +47,15 @@
 // 	return (os);
 // }
 
-int main(void)
-{
 
-	computorv2::IndependentVariable x("x");
-	computorv2::UsualFunction ln("ln", x);
 
-	computorv2::Polynomial P(&x);
 
-	std::cout << computorv2::derivative(P, x).toString() << std::endl;
+	// computorv2::IndependentVariable x("x");
+	// computorv2::UsualFunction ln("ln", x);
+
+	// computorv2::Polynomial P(&x);
+
+	// std::cout << computorv2::derivative(P, x).toString() << std::endl;
 	// std::cout << computorv2::derivative(computorv2::add(computorv2::add(P, P), computorv2::mul(P, P))).toString() << std::endl;
 
 
