@@ -40,7 +40,9 @@
 # define __COMPUTORV2_SOURCES_USUAL_FUNCTION
 
 # include "../include/computorv2.hpp"
+# include "../include/Complex.hpp"
 # include "../include/UsualFunction.hpp"
+# include "../include/IndependentVariable.hpp"
 # include <sstream>
 
 int computorv2::UsualFunction::getType(void) const

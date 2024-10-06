@@ -41,7 +41,10 @@
 
 # include "../include/computorv2.hpp"
 # include "../include/Object.hpp"
+# include "../include/VirtualMachine.hpp"
+# include "../include/Complex.hpp"
 # include "../include/Polynomial.hpp"
+# include "../include/statment.hpp"
 # include <iostream>
 
 t_error computorv2::statment_init(computorv2::statment *st)

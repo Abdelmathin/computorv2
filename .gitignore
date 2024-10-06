@@ -1,0 +1,8 @@
+*.a
+*.o
+*.pyc
+*.pyo
+.DS_Store
+.vscode
+objects
+__pycache__

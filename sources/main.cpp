@@ -36,17 +36,17 @@
 /*                                                                             */
 /* **************************************************************************  */
 
-#include "include/Client.hpp"
-#include "include/Object.hpp"
-#include "include/Vector.hpp"
-#include "include/Matrix.hpp"
-#include "include/Complex.hpp"
-#include "include/statment.hpp"
-#include "include/Polynomial.hpp"
-#include "include/computorv2.hpp"
-#include "include/UsualFunction.hpp"
-#include "include/VirtualMachine.hpp"
-#include "include/IndependentVariable.hpp"
+#include "../include/Client.hpp"
+#include "../include/Object.hpp"
+#include "../include/Vector.hpp"
+#include "../include/Matrix.hpp"
+#include "../include/Complex.hpp"
+#include "../include/statment.hpp"
+#include "../include/Polynomial.hpp"
+#include "../include/computorv2.hpp"
+#include "../include/UsualFunction.hpp"
+#include "../include/VirtualMachine.hpp"
+#include "../include/IndependentVariable.hpp"
 
 int main(int argc, const char **argv)
 {

@@ -40,7 +40,9 @@
 # define __COMPUTORV2_SOURCES_POLYNOMIAL
 
 # include "../include/computorv2.hpp"
+# include "../include/Complex.hpp"
 # include "../include/Polynomial.hpp"
+# include "../include/UsualFunction.hpp"
 # include "../include/IndependentVariable.hpp"
 # include <iostream>
 # include <sstream>
