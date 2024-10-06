@@ -1,6 +1,6 @@
 import os
 import sys
-
+import time
 computorv2_cpp ='''
 
 
@@ -468,7 +468,9 @@ FILE     = os.path.realpath(__file__)
 REPO_DIR = os.path.dirname(os.path.dirname(FILE))
 
 print ("Are you sure, computorv2.cpp and computer v2.hpp will override")
-time.sleep(60)
+for i in list(range(0, 60))[::-1]:
+	print (i, end = "\r")
+	time.sleep(1)
 
 with open(REPO_DIR + "/include/computorv2.hpp", "w") as fp:
 	fp.write(fix_file_content(computorv2_hpp))
