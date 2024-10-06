@@ -114,7 +114,7 @@ void computorv2::UsualFunction::setName(const std::string& name)
 {
     if (!computorv2::isUsualFunction(name))
     {
-        throw std::logic_error("bad function name!");
+        throw std::logic_error("bad function name: `" + name + "`!");
     }
     this->_name = name;
 }

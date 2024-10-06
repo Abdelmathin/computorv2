@@ -79,10 +79,14 @@ bool computorv2::isname(const std::string& name)
 
 bool computorv2::isUsualFunction(const std::string& name)
 {
-	if (name == "ln")
-	{
-		return (true);
-	}
+    std::string functions[] = {"ln", "sin"};
+    for (int i = 0; i < 2; i++)
+    {
+        if (functions[i] == name)
+        {
+            return (true);
+        }
+    }
 	return (false);
 }
 
@@ -134,8 +138,18 @@ bool computorv2::isfreeterm(const computorv2::Matrix& left)
 
 bool computorv2::isfreeterm(const computorv2::Complex& left)
 {
-    (void)left;
-    throw std::logic_error("Operation 'isfreeterm' not supported for type: 'Complex'");
+    if (IS_ZERO(left.getReal()))
+    {
+        if (IS_ZERO(left.getImage()))
+        {
+            return (true);
+        }
+        return (left.getImage() > 0);
+    }
+    if (IS_ZERO(left.getImage()))
+    {
+        return (left.getReal() > 0);
+    }
     return (false);
 }
 
@@ -155,9 +169,8 @@ bool computorv2::isfreeterm(const computorv2::UsualFunction& left)
 
 bool computorv2::isfreeterm(const computorv2::IndependentVariable& left)
 {
-    (void)left;
-    throw std::logic_error("Operation 'isfreeterm' not supported for type: 'IndependentVariable'");
-    return (false);
+    (void) left;
+    return (true);
 }
 
 /* -------------------------------------------- eql -------------------------------------------- */
@@ -489,9 +502,7 @@ bool computorv2::eql(const computorv2::IndependentVariable& left, const computor
 
 bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'eql' not supported between types 'IndependentVariable' and 'IndependentVariable'.");
-    return (false);
+    return (left.getName() == right.getName());
 }
 
 /* ----------------------------------------------------- derivative ----------------------------------------------------- */
@@ -532,16 +543,56 @@ computorv2::Polynomial computorv2::derivative(const computorv2::Matrix& left, co
 
 computorv2::Polynomial computorv2::derivative(const computorv2::Complex& left, const computorv2::IndependentVariable& right)
 {
-    (void)left;
-    throw std::logic_error("Operation 'derivative' not supported for type: 'Complex'");
-    return (computorv2::Polynomial("x"));
+    computorv2::Polynomial res(right);
+    const computorv2::Complex zero(0.0);
+    res.setCoefficient(&zero);
+    res.setExponent(&zero);
+    res.setFreeTerm(&zero);
+    return (res);
 }
 
 computorv2::Polynomial computorv2::derivative(const computorv2::Polynomial& left, const computorv2::IndependentVariable& right)
 {
-    (void)left;
-    throw std::logic_error("Operation 'derivative' not supported for type: 'Polynomial'");
-    return (computorv2::Polynomial("x"));
+    const computorv2::Object* _a = left.getCoefficient();
+    const computorv2::Object* _x = left.getBase();
+    const computorv2::Object* _n = left.getExponent();
+    const computorv2::Object* _b = left.getFreeTerm();
+
+    const computorv2::Polynomial da = computorv2::derivative(_a, right);
+    const computorv2::Polynomial dx = computorv2::derivative(_x, right);
+    const computorv2::Polynomial dn = computorv2::derivative(_n, right);
+    const computorv2::Polynomial db = computorv2::derivative(_b, right);
+    const computorv2::Polynomial xn = computorv2::pow(_x, _n);
+
+    const computorv2::UsualFunction lx = computorv2::UsualFunction("ln", _x);
+
+    computorv2::Object* r1 = computorv2::mul(&da, &xn);
+    computorv2::Object* r2 = computorv2::mul(&dn, &lx);
+    computorv2::Object* r3 = computorv2::mul(_a, &xn);
+    computorv2::Object* r4 = computorv2::mul(&dx, _n);
+    computorv2::Object* r5 = computorv2::div(r3, _x);
+
+    computorv2::Object* p1 = computorv2::mul(r2, r3);
+    computorv2::Object* p3 = computorv2::mul(r4, r5);
+
+    computorv2::Object* q1 = computorv2::add(r1, p1);
+    computorv2::Object* q2 = computorv2::add(p3, _b);
+
+    computorv2::Object* rs = computorv2::add(q1, q2);
+
+    computorv2::Polynomial res(rs);
+
+    delete (r1);
+    delete (r2);
+    delete (r3);
+    delete (r4);
+    delete (r5);
+    delete (p1);
+    delete (p3);
+    delete (q1);
+    delete (q2);
+    delete (rs);
+    return (res);
 }
 
 computorv2::Polynomial computorv2::derivative(const computorv2::UsualFunction& left, const computorv2::IndependentVariable& right)
@@ -553,9 +604,20 @@ computorv2::Polynomial computorv2::derivative(const computorv2::UsualFunction& l
 
 computorv2::Polynomial computorv2::derivative(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
 {
-    (void)left;
-    throw std::logic_error("Operation 'derivative' not supported for type: 'IndependentVariable'");
-    return (computorv2::Polynomial("x"));
+    computorv2::Polynomial res(right);
+    const computorv2::Complex zero(0.0);
+    const computorv2::Complex one(1.0);
+    if (computorv2::eql(left, right))
+    {
+        res.setCoefficient(&one);
+    }
+    else
+    {
+        res.setCoefficient(&zero);
+    }
+    res.setExponent(&zero);
+    res.setFreeTerm(&zero);
+    return (res);
 }
 
 /* ----------------------------------------------------- add ----------------------------------------------------- */
@@ -740,9 +802,10 @@ computorv2::Matrix computorv2::add(const computorv2::Complex& left, const comput
 
 computorv2::Complex computorv2::add(const computorv2::Complex& left, const computorv2::Complex& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'add' not supported between types 'Complex' and 'Complex'.");
-    return (computorv2::Complex(0.0, 0.0));
+    computorv2::Complex res;
+    res.setReal(left.getReal()   + right.getReal());
+    res.setImage(left.getImage() + right.getImage());
+    return (res);
 }
 
 computorv2::Polynomial computorv2::add(const computorv2::Complex& left, const computorv2::Polynomial& right)
@@ -782,9 +845,11 @@ computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const
 
 computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Complex& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'add' not supported between types 'Polynomial' and 'Complex'.");
-    return (computorv2::Polynomial("x"));
+    computorv2::Polynomial res(left);
+    const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), &right);
+    res.setFreeTerm(freeterm);
+    delete (freeterm);
+    return (res);
 }
 
 computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
@@ -1408,16 +1473,15 @@ computorv2::Matrix computorv2::mul(const computorv2::Complex& left, const comput
 
 computorv2::Complex computorv2::mul(const computorv2::Complex& left, const computorv2::Complex& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'mul' not supported between types 'Complex' and 'Complex'.");
-    return (computorv2::Complex(0.0, 0.0));
+    computorv2::Complex res;
+    res.setReal((left.getReal()  * right.getReal() ) - (left.getImage() * right.getImage()));
+    res.setImage((left.getReal() * right.getImage()) + (left.getImage() * right.getReal() ));
+    return (res);
 }
 
 computorv2::Polynomial computorv2::mul(const computorv2::Complex& left, const computorv2::Polynomial& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'mul' not supported between types 'Complex' and 'Polynomial'.");
-    return (computorv2::Polynomial("x"));
+    return (computorv2::mul(right, left));
 }
 
 computorv2::Polynomial computorv2::mul(const computorv2::Complex& left, const computorv2::UsualFunction& right)
@@ -1450,9 +1514,14 @@ computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const
 
 computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::Complex& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'mul' not supported between types 'Polynomial' and 'Complex'.");
-    return (computorv2::Polynomial("x"));
+    computorv2::Polynomial res(left);
+    const computorv2::Object* coefficient = computorv2::mul(left.getCoefficient(), &right);
+    const computorv2::Object* freeterm    = computorv2::mul(left.getFreeTerm(),    &right);
+    res.setCoefficient(coefficient);
+    res.setFreeTerm(freeterm);
+    delete (coefficient);
+    delete (freeterm);
+    return (res);
 }
 
 computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
@@ -2536,9 +2605,9 @@ computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& le
 
 computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& left, const computorv2::Complex& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'pow' not supported between types 'IndependentVariable' and 'Complex'.");
-    return (computorv2::Polynomial("x"));
+    computorv2::Polynomial res(left);
+    res.setExponent(right);
+    return (res);
 }
 
 computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& left, const computorv2::Polynomial& right)

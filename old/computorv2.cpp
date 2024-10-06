@@ -57,13 +57,6 @@ computorv2::Object* computorv2::div(const computorv2::Object* left, const comput
 	return (NULL);
 }
 
-computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& left, const computorv2::Complex& right)
-{
-	computorv2::Polynomial res(left);
-	res.setExponent(right);
-	return (res);
-}
-
 computorv2::Polynomial computorv2::pow(const computorv2::UsualFunction& left, const computorv2::Complex& right)
 {
 	computorv2::Polynomial res(&left);
@@ -138,13 +131,6 @@ bool computorv2::isfreeterm(const computorv2::Object* obj)
 
 /* Complex (add) */
 
-computorv2::Complex computorv2::add(const computorv2::Complex& left, const computorv2::Complex& right)
-{
-	computorv2::Complex res;
-	res.setReal(left.getReal()   + right.getReal());
-	res.setImage(left.getImage() + right.getImage());
-	return (res);
-}
 
 /* Polynomial (add) */
 computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
@@ -155,15 +141,6 @@ computorv2::Polynomial computorv2::add(const computorv2::IndependentVariable& le
 computorv2::Polynomial computorv2::add(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right)
 {
 	return (computorv2::add(computorv2::Polynomial(&left), computorv2::Polynomial(&right)));
-}
-
-computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Complex& right)
-{
-	computorv2::Polynomial res(left);
-	const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), &right);
-	res.setFreeTerm(freeterm);
-	delete (freeterm);
-	return (res);
 }
 
 computorv2::Polynomial computorv2::add(const computorv2::Complex& left, const computorv2::Polynomial& right)
@@ -240,34 +217,7 @@ computorv2::Object* computorv2::add(const computorv2::Object* left, const comput
 	return (NULL);
 }
 
-/* Complex (mul) */
-computorv2::Complex computorv2::mul(const computorv2::Complex& left, const computorv2::Complex& right)
-{
-	computorv2::Complex res;
-	res.setReal((left.getReal()  * right.getReal() ) - (left.getImage() * right.getImage()));
-	res.setImage((left.getReal() * right.getImage()) + (left.getImage() * right.getReal() ));
-	return (res);
-}
-
 /* Polynomial (mul) */
-
-
-computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::Complex& right)
-{
-	computorv2::Polynomial res(left);
-	const computorv2::Object* coefficient = computorv2::mul(left.getCoefficient(), &right);
-	const computorv2::Object* freeterm    = computorv2::mul(left.getFreeTerm(), &right);
-	res.setCoefficient(coefficient);
-	res.setFreeTerm(freeterm);
-	delete (coefficient);
-	delete (freeterm);
-	return (res);
-}
-
-computorv2::Polynomial computorv2::mul(const computorv2::Complex& left, const computorv2::Polynomial& right)
-{
-	return (computorv2::mul(right, left));
-}
 
 computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
 {
@@ -400,11 +350,6 @@ bool computorv2::eql(const computorv2::Complex& left, const computorv2::Complex&
 	return (false);
 }
 
-bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
-{
-	return (left.getName() == right.getName());
-}
-
 bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right)
 {
 	if (left.getName() == right.getName())
@@ -535,80 +480,6 @@ computorv2::Polynomial computorv2::derivative(const computorv2::Object* obj, con
 	ss << std::endl;
 	throw std::logic_error(ss.str());
 	return (computorv2::Polynomial("x"));
-}
-
-/* derivative (Complex) */
-computorv2::Polynomial computorv2::derivative(const computorv2::Complex& obj, const computorv2::IndependentVariable& x)
-{
-	computorv2::Polynomial res(x);
-	const computorv2::Complex zero(0.0);
-	res.setCoefficient(&zero);
-	res.setExponent(&zero);
-	res.setFreeTerm(&zero);
-	return (res);
-}
-
-computorv2::Polynomial computorv2::derivative(const computorv2::IndependentVariable& y, const computorv2::IndependentVariable& x)
-{
-	computorv2::Polynomial res(x);
-	const computorv2::Complex zero(0.0);
-	const computorv2::Complex one(1.0);
-	if (computorv2::eql(y, x))
-	{
-		res.setCoefficient(&one);
-	}
-	else
-	{
-		res.setCoefficient(&zero);
-	}
-	res.setExponent(&zero);
-	res.setFreeTerm(&zero);
-	return (res);
-}
-
-/* derivative (Polynomial) */
-computorv2::Polynomial computorv2::derivative(const computorv2::Polynomial& poly, const computorv2::IndependentVariable& x)
-{
-	const computorv2::Object* _a = poly.getCoefficient();
-	const computorv2::Object* _x = poly.getBase();
-	const computorv2::Object* _n = poly.getExponent();
-	const computorv2::Object* _b = poly.getFreeTerm();
-
-	const computorv2::Polynomial da = computorv2::derivative(_a, x);
-	const computorv2::Polynomial dx = computorv2::derivative(_x, x);
-	const computorv2::Polynomial dn = computorv2::derivative(_n, x);
-	const computorv2::Polynomial db = computorv2::derivative(_b, x);
-	const computorv2::Polynomial xn = computorv2::pow(_x, _n);
-
-	const computorv2::UsualFunction lx = computorv2::UsualFunction("ln", _x);
-
-	computorv2::Object* r1 = computorv2::mul(&da, &xn);
-	computorv2::Object* r2 = computorv2::mul(&dn, &lx);
-	computorv2::Object* r3 = computorv2::mul(_a, &xn);
-	computorv2::Object* r4 = computorv2::mul(&dx, _n);
-	computorv2::Object* r5 = computorv2::div(r3, _x);
-
-	computorv2::Object* p1 = computorv2::mul(r2, r3);
-	computorv2::Object* p3 = computorv2::mul(r4, r5);
-
-	computorv2::Object* q1 = computorv2::add(r1, p1);
-	computorv2::Object* q2 = computorv2::add(p3, _b);
-
-	computorv2::Object* rs = computorv2::add(q1, q2);
-
-	computorv2::Polynomial res(rs);
-
-	delete (r1);
-	delete (r2);
-	delete (r3);
-	delete (r4);
-	delete (r5);
-	delete (p1);
-	delete (p3);
-	delete (q1);
-	delete (q2);
-	delete (rs);
-	return (res);
 }
 
 #endif//!__COMPUTORV2_SOURCES_COMPUTORV2

@@ -467,13 +467,14 @@ computorv2_hpp = computorv2_hpp.strip() + NEW_LINE + "}" + NEW_LINE
 FILE     = os.path.realpath(__file__)
 REPO_DIR = os.path.dirname(os.path.dirname(FILE))
 
-print ("Are you sure, computorv2.cpp and computer v2.hpp will override")
-for i in list(range(0, 60))[::-1]:
-	print (i, end = "\r")
-	time.sleep(1)
+filename_hpp = REPO_DIR + "/include/computorv2.hpp"
+filename_cpp = REPO_DIR + "/sources/computorv2.cpp"
 
-with open(REPO_DIR + "/include/computorv2.hpp", "w") as fp:
+filename_hpp = "computorv2_tmp.hpp"
+filename_cpp = "computorv2_tmp.cpp"
+
+with open(filename_hpp, "w") as fp:
 	fp.write(fix_file_content(computorv2_hpp))
 
-with open(REPO_DIR + "/sources/computorv2.cpp", "w") as fp:
+with open(filename_cpp, "w") as fp:
 	fp.write(fix_file_content(computorv2_cpp))

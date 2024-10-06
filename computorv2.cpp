@@ -25,19 +25,26 @@ int main(void)
 {
 	computorv2::IndependentVariable x("x");
 	computorv2::Polynomial          p(x);
-	computorv2::Vector              v;
+	// computorv2::Vector              v;
 	computorv2::Complex             z;
-	computorv2::Matrix              m;
-	computorv2::UsualFunction       f("sin", x);
+	// computorv2::Matrix              m;
+	computorv2::UsualFunction       f("ln", x);
 
 	/* -------------------------------------- */
 
 	std::cout << "x = " << x << std::endl;
 	std::cout << "p = " << p << std::endl;
-	std::cout << "v = " << v << std::endl;
+	// std::cout << "v = " << v << std::endl;
 	std::cout << "z = " << z << std::endl;
-	std::cout << "m = " << m << std::endl;
+	// std::cout << "m = " << m << std::endl;
 	std::cout << "f = " << f << std::endl;
+
+	std::cout << "dx / dx = " << computorv2::derivative(x, x) << std::endl;
+	std::cout << "dp / dx = " << computorv2::derivative(p, x) << std::endl;
+	// std::cout << "dv / dx = " << computorv2::derivative(v, x) << std::endl;
+	std::cout << "dz / dx = " << computorv2::derivative(z, x) << std::endl;
+	// std::cout << "dm / dx = " << computorv2::derivative(m, x) << std::endl;
+	std::cout << "df / dx = " << computorv2::derivative(f, x) << std::endl;
 
 
 
