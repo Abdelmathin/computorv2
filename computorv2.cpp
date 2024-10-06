@@ -46,7 +46,7 @@ int main(void)
 	// std::cout << "dm / dx = " << computorv2::derivative(m, x) << std::endl;
 	std::cout << "df / dx = " << computorv2::derivative(f, x) << std::endl;
 
-
+    
 
 // std::ostream& operator<<(std::ostream& os, const computorv2::Object& obj)
 // {

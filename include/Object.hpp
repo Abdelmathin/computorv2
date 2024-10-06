@@ -60,3 +60,5 @@ namespace computorv2
 			virtual ~Object(void){};
 	};
 }
+
+#define AS_OBJECT(o) static_cast< const computorv2::Object* >(o)
