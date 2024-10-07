@@ -31,6 +31,9 @@
 
 	wrong:
 		std::cout << "computorv2::derivative(computorv2::mul(x, f), x) = " << computorv2::derivative(computorv2::mul(x, f), x) << std::endl;
+
+	add, sub, mul, div, ... functions will evaluate polynomials.
+
 */
 
 int main(void)

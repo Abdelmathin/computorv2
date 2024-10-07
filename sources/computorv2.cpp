@@ -474,9 +474,14 @@ bool computorv2::eql(const computorv2::Complex& left, const computorv2::Polynomi
 
 bool computorv2::eql(const computorv2::Complex& left, const computorv2::UsualFunction& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'eql' not supported between types 'Complex' and 'UsualFunction'.");
-    return (false);
+    bool result = false;
+    const computorv2::Object* r = right.evaluate();
+    if (IS_COMPLEX(r))
+    {
+        result = computorv2::eql(left, *AS_COMPLEX(r));
+    }
+    delete (r);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::Complex& left, const computorv2::IndependentVariable& right)
@@ -501,41 +506,64 @@ bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Matri
 
 bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Complex& right)
 {
-    if (left.getCoefficient()->isnull() || left.getBase()->isnull())
+    bool result = false;
+    const computorv2::Object* l = left.evaluate();
+    if (IS_COMPLEX(l))
     {
-        return (computorv2::eql(left.getFreeTerm(), AS_OBJECT(&right)));
+        result = computorv2::eql(*AS_COMPLEX(l), right);
     }
-    return (false);
+    delete (l);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
 {
-    // use evaluate !
-    if (!computorv2::eql(left.getBase(), right.getBase()))
-        return (false);
-    if (!computorv2::eql(left.getExponent(), right.getExponent()))
-        return (false);
-    if (!computorv2::eql(left.getCoefficient(), right.getCoefficient()))
-        return (false);
-    if (!computorv2::eql(left.getFreeTerm(), right.getFreeTerm()))
-        return (false);
-    return (true);
+    bool result = false;
+    const computorv2::Object* l = left.evaluate();
+    const computorv2::Object* r = left.evaluate();
+    if (IS_POLYNOMIAL(l) && IS_POLYNOMIAL(r))
+    {
+        const computorv2::Polynomial* lp = AS_POLYNOMIAL(l);
+        const computorv2::Polynomial* rp = AS_POLYNOMIAL(r);
+        result = true;
+        if (!computorv2::eql(lp->getBase(), rp->getBase()))
+            result = false;
+        else if (!computorv2::eql(lp->getExponent(), rp->getExponent()))
+            result = false;
+        else if (!computorv2::eql(lp->getCoefficient(), rp->getCoefficient()))
+            result = false;
+        else if (!computorv2::eql(lp->getFreeTerm(), rp->getFreeTerm()))
+            result = false;
+    }
+    delete (l);
+    delete (r);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::UsualFunction& right)
 {
-    if (!left.getFreeTerm()->isnull())
-        return (false);
-    if (!left.getCoefficient()->isunity())
-        return (false);
-    if (!left.getExponent()->isunity())
-        return (false);
-    return (computorv2::eql(left.getBase(), AS_OBJECT(&right)));
+    bool result = false;
+    const computorv2::Object* l = left.evaluate();
+    const computorv2::Object* r = left.evaluate();
+    if (l->getType() == r->getType())
+    {
+        result = computorv2::eql(l, r);
+    }
+    delete (l);
+    delete (r);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::IndependentVariable& right)
 {
-    return (computorv2::eql(right, left));
+    bool result = false;
+    const computorv2::Object* l = left.evaluate();
+    if (IS_INDVAR(l))
+    {
+        result = computorv2::eql(*AS_INDVAR(l), right);
+    }
+    delete (l);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::Vector& right)
@@ -554,34 +582,57 @@ bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::Ma
 
 bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::Complex& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'eql' not supported between types 'UsualFunction' and 'Complex'.");
-    return (false);
+    bool result = false;
+    const computorv2::Object* l = left.evaluate();
+    if (IS_COMPLEX(l))
+    {
+        result = computorv2::eql(*AS_COMPLEX(l), right);
+    }
+    delete (l);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::Polynomial& right)
 {
-    if (!right.getCoefficient()->isunity())
-        return (false);
-    if (!right.getExponent()->isunity())
-        return (false);
-    if (!right.getFreeTerm()->isnull())
-        return (false);
-    return (computorv2::eql(AS_OBJECT(&left), right.getBase()));
+    bool result = false;
+    const computorv2::Object* l = left.evaluate();
+    const computorv2::Object* r = right.evaluate();
+    if (l->getType() == r->getType())
+    {
+        result = computorv2::eql(l, r);
+    }
+    delete (l);
+    delete (r);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::UsualFunction& right)
 {
-    if (left.getName() == right.getName())
+    bool result = false;
+    const computorv2::Object* l = left.evaluate();
+    const computorv2::Object* r = right.evaluate();
+    if (IS_USFUNC(l) && IS_USFUNC(r))
     {
-        return (computorv2::eql(left.getBody(), right.getBody()));
+        if (AS_USFUNC(l)->getName() == AS_USFUNC(r)->getName())
+        {
+            result = (computorv2::eql(AS_USFUNC(l)->getBody(), AS_USFUNC(r)->getBody()));
+        }
     }
-    return (false);
+    delete (l);
+    delete (r);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::UsualFunction& left, const computorv2::IndependentVariable& right)
 {
-    return (false);
+    bool result = false;
+    const computorv2::Object* l = left.evaluate();
+    if (IS_INDVAR(l))
+    {
+        result = computorv2::eql(*AS_INDVAR(l), right);
+    }
+    delete (l);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::Vector& right)
@@ -606,19 +657,26 @@ bool computorv2::eql(const computorv2::IndependentVariable& left, const computor
 
 bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::Polynomial& right)
 {
-    if (!right.getCoefficient()->isunity())
-        return (false);
-    if (!right.getExponent()->isunity())
-        return (false);
-    if (!right.getFreeTerm()->isnull())
-        return (false);
-    return (computorv2::eql(AS_OBJECT(&left), right.getBase()));
+    bool result = false;
+    const computorv2::Object* r = right.evaluate();
+    if (IS_INDVAR(r))
+    {
+        result = computorv2::eql(left, *AS_INDVAR(r));
+    }
+    delete (r);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::UsualFunction& right)
 {
-    (void)left; (void) right;
-    return (false);
+    bool result = false;
+    const computorv2::Object* r = right.evaluate();
+    if (IS_INDVAR(r))
+    {
+        result = computorv2::eql(left, *AS_INDVAR(r));
+    }
+    delete (r);
+    return (result);
 }
 
 bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
