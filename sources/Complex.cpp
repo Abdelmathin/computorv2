@@ -118,6 +118,12 @@ computorv2::Complex computorv2::Complex::null(void)
 	return (res);
 }
 
+computorv2::Complex computorv2::Complex::unity(void)
+{
+	computorv2::Complex res(1.0, 0.0);
+	return (res);
+}
+
 computorv2::Complex::Complex(void)
 {
 	this->clear();

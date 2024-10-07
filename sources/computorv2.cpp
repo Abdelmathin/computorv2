@@ -469,9 +469,7 @@ bool computorv2::eql(const computorv2::Complex& left, const computorv2::Complex&
 
 bool computorv2::eql(const computorv2::Complex& left, const computorv2::Polynomial& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'eql' not supported between types 'Complex' and 'Polynomial'.");
-    return (false);
+    return (computorv2::eql(right, left));
 }
 
 bool computorv2::eql(const computorv2::Complex& left, const computorv2::UsualFunction& right)
@@ -484,7 +482,6 @@ bool computorv2::eql(const computorv2::Complex& left, const computorv2::UsualFun
 bool computorv2::eql(const computorv2::Complex& left, const computorv2::IndependentVariable& right)
 {
     (void)left; (void) right;
-    throw std::logic_error("Operation 'eql' not supported between types 'Complex' and 'IndependentVariable'.");
     return (false);
 }
 
@@ -504,8 +501,10 @@ bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Matri
 
 bool computorv2::eql(const computorv2::Polynomial& left, const computorv2::Complex& right)
 {
-    (void)left; (void) right;
-    throw std::logic_error("Operation 'eql' not supported between types 'Polynomial' and 'Complex'.");
+    if (left.getCoefficient()->isnull() || left.getBase()->isnull())
+    {
+        return (computorv2::eql(left.getFreeTerm(), AS_OBJECT(&right)));
+    }
     return (false);
 }
 
@@ -602,7 +601,6 @@ bool computorv2::eql(const computorv2::IndependentVariable& left, const computor
 bool computorv2::eql(const computorv2::IndependentVariable& left, const computorv2::Complex& right)
 {
     (void)left; (void) right;
-    throw std::logic_error("Operation 'eql' not supported between types 'IndependentVariable' and 'Complex'.");
     return (false);
 }
 
@@ -789,7 +787,7 @@ computorv2::Vector computorv2::add(const computorv2::Vector& left, const computo
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'add' not supported between types 'Vector' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::add(const computorv2::Vector& left, const computorv2::Matrix& right)
@@ -803,7 +801,7 @@ computorv2::Vector computorv2::add(const computorv2::Vector& left, const computo
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'add' not supported between types 'Vector' and 'Complex'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Polynomial computorv2::add(const computorv2::Vector& left, const computorv2::Polynomial& right)
@@ -873,7 +871,7 @@ computorv2::Vector computorv2::add(const computorv2::Complex& left, const comput
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'add' not supported between types 'Complex' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::add(const computorv2::Complex& left, const computorv2::Matrix& right)
@@ -1202,7 +1200,7 @@ computorv2::Vector computorv2::sub(const computorv2::Vector& left, const computo
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'sub' not supported between types 'Vector' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::sub(const computorv2::Vector& left, const computorv2::Matrix& right)
@@ -1216,7 +1214,7 @@ computorv2::Vector computorv2::sub(const computorv2::Vector& left, const computo
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'sub' not supported between types 'Vector' and 'Complex'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Polynomial computorv2::sub(const computorv2::Vector& left, const computorv2::Polynomial& right)
@@ -1286,7 +1284,7 @@ computorv2::Vector computorv2::sub(const computorv2::Complex& left, const comput
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'sub' not supported between types 'Complex' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::sub(const computorv2::Complex& left, const computorv2::Matrix& right)
@@ -1622,7 +1620,7 @@ computorv2::Vector computorv2::mul(const computorv2::Vector& left, const computo
     }
     (void)left; (void) right;
     throw std::logic_error("Operation 'mul' not supported between types 'Vector' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::mul(const computorv2::Vector& left, const computorv2::Matrix& right)
@@ -1644,7 +1642,7 @@ computorv2::Vector computorv2::mul(const computorv2::Vector& left, const computo
     }
     (void)left; (void) right;
     throw std::logic_error("Operation 'mul' not supported between types 'Vector' and 'Complex'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Polynomial computorv2::mul(const computorv2::Vector& left, const computorv2::Polynomial& right)
@@ -1754,7 +1752,7 @@ computorv2::Vector computorv2::mul(const computorv2::Complex& left, const comput
     }
     (void)left; (void) right;
     throw std::logic_error("Operation 'mul' not supported between types 'Complex' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::mul(const computorv2::Complex& left, const computorv2::Matrix& right)
@@ -2256,6 +2254,10 @@ computorv2::Polynomial computorv2::div(const computorv2::Vector& left, const com
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2269,14 +2271,26 @@ computorv2::Polynomial computorv2::div(const computorv2::Vector& left, const com
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
 computorv2::Polynomial computorv2::div(const computorv2::Vector& left, const computorv2::IndependentVariable& right)
 {
+    if (right.isnull())
+    {
+        throw std::logic_error("division by zero!");
+    }
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2330,6 +2344,10 @@ computorv2::Polynomial computorv2::div(const computorv2::Matrix& left, const com
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2343,14 +2361,26 @@ computorv2::Polynomial computorv2::div(const computorv2::Matrix& left, const com
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
 computorv2::Polynomial computorv2::div(const computorv2::Matrix& left, const computorv2::IndependentVariable& right)
 {
+    if (right.isnull())
+    {
+        throw std::logic_error("division by zero!");
+    }
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2391,6 +2421,10 @@ computorv2::Complex computorv2::div(const computorv2::Complex& left, const compu
     {
         return (computorv2::Complex::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Complex::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2403,6 +2437,10 @@ computorv2::Polynomial computorv2::div(const computorv2::Complex& left, const co
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2417,14 +2455,26 @@ computorv2::Polynomial computorv2::div(const computorv2::Complex& left, const co
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
 computorv2::Polynomial computorv2::div(const computorv2::Complex& left, const computorv2::IndependentVariable& right)
 {
+    if (right.isnull())
+    {
+        throw std::logic_error("division by zero!");
+    }
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2439,6 +2489,10 @@ computorv2::Polynomial computorv2::div(const computorv2::Polynomial& left, const
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2451,6 +2505,10 @@ computorv2::Polynomial computorv2::div(const computorv2::Polynomial& left, const
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2465,6 +2523,10 @@ computorv2::Polynomial computorv2::div(const computorv2::Polynomial& left, const
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2477,6 +2539,10 @@ computorv2::Polynomial computorv2::div(const computorv2::Polynomial& left, const
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2491,14 +2557,26 @@ computorv2::Polynomial computorv2::div(const computorv2::Polynomial& left, const
     {
         return (computorv2::Polynomial::null());
     }
-    return (computorv2::mul(left, computorv2::inverse(right)));
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
+    return (computorv2::mul(left, computorv2::inverse(right)));;
 }
 
 computorv2::Polynomial computorv2::div(const computorv2::Polynomial& left, const computorv2::IndependentVariable& right)
 {
+    if (right.isnull())
+    {
+        throw std::logic_error("division by zero!");
+    }
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2513,6 +2591,10 @@ computorv2::Polynomial computorv2::div(const computorv2::UsualFunction& left, co
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2525,6 +2607,10 @@ computorv2::Polynomial computorv2::div(const computorv2::UsualFunction& left, co
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2539,6 +2625,10 @@ computorv2::Polynomial computorv2::div(const computorv2::UsualFunction& left, co
     {
         return (computorv2::Polynomial::null());
     }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2551,6 +2641,10 @@ computorv2::Polynomial computorv2::div(const computorv2::UsualFunction& left, co
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2567,18 +2661,24 @@ computorv2::Polynomial computorv2::div(const computorv2::UsualFunction& left, co
     }
     if (computorv2::eql(left, right))
     {
-        computorv2::Polynomial res(right);
-        res.setExponent(0.0);
-        return (res);
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
 computorv2::Polynomial computorv2::div(const computorv2::UsualFunction& left, const computorv2::IndependentVariable& right)
 {
+    if (right.isnull())
+    {
+        throw std::logic_error("division by zero!");
+    }
     if (left.isnull())
     {
         return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2589,6 +2689,14 @@ computorv2::Polynomial computorv2::div(const computorv2::IndependentVariable& le
     {
         throw std::logic_error("division by zero!");
     }
+    if (left.isnull())
+    {
+        return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2597,6 +2705,14 @@ computorv2::Polynomial computorv2::div(const computorv2::IndependentVariable& le
     if (right.isnull())
     {
         throw std::logic_error("division by zero!");
+    }
+    if (left.isnull())
+    {
+        return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2607,6 +2723,14 @@ computorv2::Polynomial computorv2::div(const computorv2::IndependentVariable& le
     {
         throw std::logic_error("division by zero!");
     }
+    if (left.isnull())
+    {
+        return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
@@ -2616,46 +2740,13 @@ computorv2::Polynomial computorv2::div(const computorv2::IndependentVariable& le
     {
         throw std::logic_error("division by zero!");
     }
-    if (computorv2::eql(AS_OBJECT(&left), right.getBase()))
+    if (left.isnull())
     {
-        if (right.getExponent()->isnull())
-        {
-            const computorv2::Object* d = computorv2::add(right.getCoefficient(), right.getFreeTerm());
-            const computorv2::Object* p = computorv2::div(AS_OBJECT(&left), d);
-            delete (d);
-            if (!IS_POLYNOMIAL(p))
-            {
-                delete (p);
-                throw std::logic_error("IndependentVariable / Anything must be Polynomial.");
-            }
-            computorv2::Polynomial res(*AS_POLYNOMIAL(p));
-            delete (p);
-            return (res);
-        }
-        if ((right.getCoefficient()->isnull()) || (right.getBase()->isnull()))
-        {
-            const computorv2::Object* p = computorv2::div(AS_OBJECT(&left), right.getFreeTerm());
-            if (!IS_POLYNOMIAL(p))
-            {
-                delete (p);
-                throw std::logic_error("IndependentVariable / Anything must be Polynomial.");
-            }
-            computorv2::Polynomial res(*AS_POLYNOMIAL(p));
-            delete (p);
-            return (res);
-        }
-        if (right.getFreeTerm()->isnull())
-        {
-            const computorv2::Complex one(1.0, 0.0);
-            const computorv2::Object* a = computorv2::div(AS_OBJECT(&one), right.getCoefficient());
-            const computorv2::Object* n = computorv2::sub(AS_OBJECT(&one), right.getExponent());
-            computorv2::Polynomial res(left);
-            res.setCoefficient(a);
-            res.setExponent(n);
-            delete (a);
-            delete (n);
-            return (res);
-        }
+        return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2666,17 +2757,30 @@ computorv2::Polynomial computorv2::div(const computorv2::IndependentVariable& le
     {
         throw std::logic_error("division by zero!");
     }
+    if (left.isnull())
+    {
+        return (computorv2::Polynomial::null());
+    }
+    if (computorv2::eql(left, right))
+    {
+        return (computorv2::Polynomial::unity());
+    }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
 
 computorv2::Polynomial computorv2::div(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right)
 {
+    if (right.isnull())
+    {
+        throw std::logic_error("division by zero!");
+    }
+    if (left.isnull())
+    {
+        return (computorv2::Polynomial::null());
+    }
     if (computorv2::eql(left, right))
     {
-        computorv2::Polynomial res(right);
-        const computorv2::Complex zero(0.0, 0.0);
-        res.setExponent(AS_OBJECT(&zero));
-        return (res);
+        return (computorv2::Polynomial::unity());
     }
     return (computorv2::mul(left, computorv2::inverse(right)));
 }
@@ -2767,7 +2871,7 @@ computorv2::Vector computorv2::mod(const computorv2::Vector& left, const computo
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'mod' not supported between types 'Vector' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::mod(const computorv2::Vector& left, const computorv2::Matrix& right)
@@ -2781,7 +2885,7 @@ computorv2::Vector computorv2::mod(const computorv2::Vector& left, const computo
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'mod' not supported between types 'Vector' and 'Complex'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Polynomial computorv2::mod(const computorv2::Vector& left, const computorv2::Polynomial& right)
@@ -2851,7 +2955,7 @@ computorv2::Vector computorv2::mod(const computorv2::Complex& left, const comput
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'mod' not supported between types 'Complex' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::mod(const computorv2::Complex& left, const computorv2::Matrix& right)
@@ -2865,7 +2969,7 @@ computorv2::Complex computorv2::mod(const computorv2::Complex& left, const compu
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'mod' not supported between types 'Complex' and 'Complex'.");
-    return (computorv2::Complex(0.0, 0.0));
+    return (computorv2::Complex::null());
 }
 
 computorv2::Polynomial computorv2::mod(const computorv2::Complex& left, const computorv2::Polynomial& right)
@@ -3101,7 +3205,7 @@ computorv2::Vector computorv2::pow(const computorv2::Vector& left, const computo
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'pow' not supported between types 'Vector' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::pow(const computorv2::Vector& left, const computorv2::Matrix& right)
@@ -3115,7 +3219,7 @@ computorv2::Vector computorv2::pow(const computorv2::Vector& left, const computo
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'pow' not supported between types 'Vector' and 'Complex'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Polynomial computorv2::pow(const computorv2::Vector& left, const computorv2::Polynomial& right)
@@ -3215,7 +3319,7 @@ computorv2::Vector computorv2::pow(const computorv2::Complex& left, const comput
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'pow' not supported between types 'Complex' and 'Vector'.");
-    return (computorv2::Vector(0.0, 0.0));
+    return (computorv2::Vector::null());
 }
 
 computorv2::Matrix computorv2::pow(const computorv2::Complex& left, const computorv2::Matrix& right)
@@ -3229,7 +3333,7 @@ computorv2::Complex computorv2::pow(const computorv2::Complex& left, const compu
 {
     (void)left; (void) right;
     throw std::logic_error("Operation 'pow' not supported between types 'Complex' and 'Complex'.");
-    return (computorv2::Complex(0.0, 0.0));
+    return (computorv2::Complex::null());
 }
 
 computorv2::Polynomial computorv2::pow(const computorv2::Complex& left, const computorv2::Polynomial& right)

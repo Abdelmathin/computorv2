@@ -56,6 +56,7 @@ namespace computorv2
             bool                isnull(void)      const;
             bool                isunity(void)     const;
             static Polynomial   null(void);
+            static Polynomial   unity(void);
 
 			Polynomial(const std::string& basename);
 			Polynomial(const Polynomial& other);

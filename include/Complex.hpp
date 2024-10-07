@@ -55,6 +55,7 @@ namespace computorv2
             bool                isnull(void)      const;
             bool                isunity(void)     const;
             static Complex      null(void);
+            static Complex      unity(void);
 
             Complex(void);
             ~Complex(void);
