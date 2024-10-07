@@ -292,6 +292,7 @@ return_types = {
 }
 
 prototypes = {
+	"computorv2::Polynomial inverse(const computorv2::<left_object> left);"                                                                 : {},
 	"bool isfreeterm(const computorv2::<left_object> left);"                                                                 : {},
 	"bool eql(const computorv2::<left_object> left, const computorv2::<right_object> right);"                                : {},
 	"computorv2::Polynomial derivative(const computorv2::<left_object> left, const computorv2::IndependentVariable& right);" : {},

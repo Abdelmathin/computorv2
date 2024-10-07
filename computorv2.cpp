@@ -114,9 +114,19 @@ int main(void)
 	std::cout << "computorv2::div(z, z) = " << computorv2::div(z, z) << std::endl;
 	std::cout << "computorv2::div(z, f) = " << computorv2::div(z, f) << std::endl;
 	std::cout << "computorv2::div(f, x) = " << computorv2::div(f, x) << std::endl;
-	std::cout << "computorv2::div(f, p) = " << computorv2::div(f, p) << std::endl;
-	std::cout << "computorv2::div(f, z) = " << computorv2::div(f, z) << std::endl;
-	std::cout << "computorv2::div(f, f) = " << computorv2::div(f, f) << std::endl;
+	// std::cout << "computorv2::div(f, p) = " << computorv2::div(f, p) << std::endl;
+	// std::cout << "computorv2::div(f, z) = " << computorv2::div(f, z) << std::endl;
+	// std::cout << "computorv2::div(f, f) = " << computorv2::div(f, f) << std::endl;
 
 	return (0);
 }
+
+/*
+
+
+
+	return (computorv2::mul(left, computorv2::pow(right, computorv2::Complex(-1.0, 0.0))));
+
+
+*/
+

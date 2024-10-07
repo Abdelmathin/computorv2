@@ -105,11 +105,12 @@ namespace computorv2
 	std::string ltrim(const std::string s);
 
 
+
     /* ------------------------------ inverse ------------------------------ */
-    computorv2::Object*    inverse(const computorv2::Object*              left);
-    computorv2::Matrix     inverse(const computorv2::Vector&              left);
-    computorv2::Matrix     inverse(const computorv2::Matrix&              left);
-    computorv2::Complex    inverse(const computorv2::Complex&             left);
+    computorv2::Polynomial inverse(const computorv2::Object*              left);
+    computorv2::Polynomial inverse(const computorv2::Vector&              left);
+    computorv2::Polynomial inverse(const computorv2::Matrix&              left);
+    computorv2::Polynomial inverse(const computorv2::Complex&             left);
     computorv2::Polynomial inverse(const computorv2::Polynomial&          left);
     computorv2::Polynomial inverse(const computorv2::UsualFunction&       left);
     computorv2::Polynomial inverse(const computorv2::IndependentVariable& left);
