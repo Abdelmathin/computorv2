@@ -74,6 +74,14 @@ std::string computorv2::Polynomial::toString(void) const
 		delete (poly);
 		return (s);
 	}
+	if (poly->_exponent->isnull())
+	{
+		const computorv2::Object *v = computorv2::add(poly->getCoefficient(), poly->getFreeTerm());
+		const std::string s = v->toString();
+		delete (poly);
+		delete (v);
+		return (s);
+	}
 	std::stringstream ss("");
 	{
 		const computorv2::Object* a = this->_coefficient->evaluate();
@@ -130,7 +138,7 @@ std::string computorv2::Polynomial::toString(void) const
 		}
 		delete (n);
 	}
-	if (!poly->_freeterm->isnull())
+	if (!poly->getFreeTerm()->isnull())
 	{
 		std::string b = poly->_freeterm->toString();
 		if (b[0] == '-')
