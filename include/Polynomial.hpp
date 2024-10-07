@@ -55,13 +55,14 @@ namespace computorv2
             computorv2::Object* evaluate(void)    const;
             bool                isnull(void)      const;
             bool                isunity(void)     const;
+            static Polynomial   null(void);
 
 			Polynomial(const std::string& basename);
+			Polynomial(const Polynomial& other);
 			Polynomial(const computorv2::UsualFunction& base);
 			Polynomial(const computorv2::IndependentVariable& base);
 			Polynomial(const computorv2::Object* base);
 			~Polynomial(void);
-			Polynomial(const Polynomial& other);
 			Polynomial&            operator=(const Polynomial& other);
 
 			computorv2::Object*    getCoefficient(void) const;
@@ -74,24 +75,21 @@ namespace computorv2
 			void                   setExponent(const computorv2::Object* exponent);
 			void                   setFreeTerm(const computorv2::Object* freeterm);
 
-			void                   setCoefficient(const computorv2::Object& coefficient);
-			void                   setBase(const computorv2::Object& base);
-			void                   setExponent(const computorv2::Object& exponent);
-			void                   setFreeTerm(const computorv2::Object& freeterm);
+			void                   setCoefficient(const double coefficient);
+			void                   setExponent(const double exponent);
+			void                   setFreeTerm(const double freeterm);
 
 		private:
 			Polynomial(void);
-			computorv2::Object*    _coefficient;
-			computorv2::Object*    _base;
-			computorv2::Object*    _exponent;
-			computorv2::Object*    _freeterm;
-			void                   init(const computorv2::Object* base);
-			void                   delCoefficient(void);
-			void                   delBase(void);
-			void                   delExponent(void);
-			void                   delFreeTerm(void);
-
-
+			computorv2::Object* _coefficient;
+			computorv2::Object* _base;
+			computorv2::Object* _exponent;
+			computorv2::Object* _freeterm;
+			void                init(const computorv2::Object* base);
+			void                delCoefficient(void);
+			void                delBase(void);
+			void                delExponent(void);
+			void                delFreeTerm(void);
 	};
 }
 

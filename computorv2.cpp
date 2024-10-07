@@ -1,3 +1,5 @@
+#include <libc.h>
+
 #include "include/Client.hpp"
 #include "include/IndependentVariable.hpp"
 #include "include/Object.hpp"
@@ -45,10 +47,19 @@ int main(void)
 	std::cout << "z = " << z << std::endl;
 	std::cout << "f = " << f << std::endl;
 
-	std::cout << "dx / dx = " << computorv2::derivative(x, x) << std::endl;
-	std::cout << "dp / dx = " << computorv2::derivative(p, x) << std::endl;
-	std::cout << "dz / dx = " << computorv2::derivative(z, x) << std::endl;
-	std::cout << "df / dx = " << computorv2::derivative(f, x) << std::endl;
+	// std::cout << "dx / dx = " << computorv2::derivative(x, x) << std::endl;
+	// std::cout << "dp / dx = " << computorv2::derivative(p, x) << std::endl;
+	// std::cout << "dz / dx = " << computorv2::derivative(z, x) << std::endl;
+	// std::cout << "df / dx = " << computorv2::derivative(f, x) << std::endl;
+
+	std::cout << "computorv2::inverse(&x) = " << computorv2::inverse(&x)->toString() << std::endl;
+	std::cout << "computorv2::inverse(&p) = " << computorv2::inverse(&p)->toString() << std::endl;
+	std::cout << "computorv2::inverse(&z) = " << computorv2::inverse(&z)->toString() << std::endl;
+	std::cout << "computorv2::inverse(&f) = " << computorv2::inverse(&f)->toString() << std::endl;
+	std::cout << "computorv2::inverse(x)  = " << computorv2::inverse(x)  << std::endl;
+	std::cout << "computorv2::inverse(p)  = " << computorv2::inverse(p)  << std::endl;
+	std::cout << "computorv2::inverse(z)  = " << computorv2::inverse(z)  << std::endl;
+	std::cout << "computorv2::inverse(f)  = " << computorv2::inverse(f)  << std::endl;
 
 	std::cout << "computorv2::add(x, x) = " << computorv2::add(x, x) << std::endl;
 	std::cout << "computorv2::add(x, p) = " << computorv2::add(x, p) << std::endl;
@@ -114,19 +125,18 @@ int main(void)
 	std::cout << "computorv2::div(z, z) = " << computorv2::div(z, z) << std::endl;
 	std::cout << "computorv2::div(z, f) = " << computorv2::div(z, f) << std::endl;
 	std::cout << "computorv2::div(f, x) = " << computorv2::div(f, x) << std::endl;
-	// std::cout << "computorv2::div(f, p) = " << computorv2::div(f, p) << std::endl;
-	// std::cout << "computorv2::div(f, z) = " << computorv2::div(f, z) << std::endl;
-	// std::cout << "computorv2::div(f, f) = " << computorv2::div(f, f) << std::endl;
+	std::cout << "computorv2::div(f, p) = " << computorv2::div(f, p) << std::endl;
+	std::cout << "computorv2::div(f, z) = " << computorv2::div(f, z) << std::endl;
+	std::cout << "computorv2::div(f, f) = " << computorv2::div(f, f) << std::endl;
 
 	return (0);
 }
 
 /*
 
-
+	negation
+	neg
 
 	return (computorv2::mul(left, computorv2::pow(right, computorv2::Complex(-1.0, 0.0))));
 
-
 */
-

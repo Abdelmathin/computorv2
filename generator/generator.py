@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+
 computorv2_cpp ='''
 
 
@@ -215,6 +216,8 @@ namespace computorv2
 '''
 
 # add, sub, mul, div, mod, eql, drv, pow, neg, replace(old, new)
+
+# there is an exception: number / vector = matrix <===> number * inverse(vector) = matrix
 
 return_types = {
 	"Integer-Integer"                           : "Integer"   ,

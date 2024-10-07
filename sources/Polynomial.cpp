@@ -68,7 +68,7 @@ std::string computorv2::Polynomial::toString(void) const
 		return (s);
 	}
 	const computorv2::Polynomial* poly = AS_POLYNOMIAL(p);
-	if ((poly->_coefficient->isnull()) || (poly->_base->isnull()))
+	if ((poly->getCoefficient()->isnull()) || (poly->getBase()->isnull()))
 	{
 		const std::string s = poly->_freeterm->toString();
 		delete (poly);
@@ -211,6 +211,15 @@ bool computorv2::Polynomial::isunity(void) const
 	return (result);
 }
 
+computorv2::Polynomial computorv2::Polynomial::null(void)
+{
+	computorv2::Polynomial res("computorv2_polynomial_null");
+	res.setCoefficient(0.0);
+	res.setExponent(0.0);
+	res.setFreeTerm(0.0);
+	return (res);
+}
+
 void computorv2::Polynomial::init(const computorv2::Object* base)
 {
 	this->_coefficient = NULL;
@@ -218,10 +227,10 @@ void computorv2::Polynomial::init(const computorv2::Object* base)
 	this->_exponent    = NULL;
 	this->_freeterm    = NULL;
 
-	this->setCoefficient(computorv2::Complex(1.0));
+	this->setCoefficient(1.0);
 	this->setBase(base);
-	this->setExponent(computorv2::Complex(1.0));
-	this->setFreeTerm(computorv2::Complex(0.0));
+	this->setExponent(1.0);
+	this->setFreeTerm(0.0);
 }
 
 void computorv2::Polynomial::delCoefficient(void)
@@ -272,6 +281,12 @@ computorv2::Polynomial::Polynomial(const std::string& basename)
 	this->init(&base);
 }
 
+computorv2::Polynomial::Polynomial(const computorv2::Polynomial& other)
+{
+	this->init(other.getBase());
+	*this = other;
+}
+
 computorv2::Polynomial::Polynomial(const computorv2::UsualFunction& base)
 {
 	this->init(&base);
@@ -293,12 +308,6 @@ computorv2::Polynomial::~Polynomial(void)
 	this->delBase();
 	this->delExponent();
 	this->delFreeTerm();
-}
-
-computorv2::Polynomial::Polynomial(const computorv2::Polynomial& other)
-{
-	this->init(other.getBase());
-	*this = other;
 }
 
 computorv2::Polynomial& computorv2::Polynomial::operator=(const computorv2::Polynomial& other)
@@ -373,24 +382,22 @@ void computorv2::Polynomial::setFreeTerm(const computorv2::Object* freeterm)
 	this->_freeterm = freeterm->copy();
 }
 
-void computorv2::Polynomial::setCoefficient(const computorv2::Object& coefficient)
+void computorv2::Polynomial::setCoefficient(const double coefficient)
 {
-	this->setCoefficient(&coefficient);
+	const computorv2::Complex z = computorv2::Complex(coefficient, 0.0);
+	this->setCoefficient(&z);
 }
 
-void computorv2::Polynomial::setBase(const computorv2::Object& base)
+void computorv2::Polynomial::setExponent(const double exponent)
 {
-	this->setBase(&base);
+	const computorv2::Complex z = computorv2::Complex(exponent, 0.0);
+	this->setExponent(&z);
 }
 
-void computorv2::Polynomial::setExponent(const computorv2::Object& exponent)
+void computorv2::Polynomial::setFreeTerm(const double freeterm)
 {
-	this->setExponent(&exponent);
-}
-
-void computorv2::Polynomial::setFreeTerm(const computorv2::Object& freeterm)
-{
-	this->setFreeTerm(&freeterm);
+	const computorv2::Complex z = computorv2::Complex(freeterm, 0.0);
+	this->setFreeTerm(&z);
 }
 
 std::ostream& operator<<(std::ostream& left, const computorv2::Polynomial& right)

@@ -54,6 +54,7 @@ namespace computorv2
             computorv2::Object* evaluate(void)    const;
             bool                isnull(void)      const;
             bool                isunity(void)     const;
+            static Complex      null(void);
 
             Complex(void);
             ~Complex(void);

@@ -84,6 +84,12 @@ bool computorv2::Vector::isunity(void) const
 	return (false);
 }
 
+computorv2::Vector computorv2::Vector::null(void)
+{
+	computorv2::Vector res(0.0, 0.0);
+	return (res);
+}
+
 computorv2::Vector::Vector(void)
 {
 	throw std::runtime_error("Not implemented: `computorv2::Vector`");

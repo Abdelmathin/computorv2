@@ -84,6 +84,12 @@ bool computorv2::Matrix::isunity(void) const
 	return (false);
 }
 
+computorv2::Matrix computorv2::Matrix::null(void)
+{
+	computorv2::Matrix res(0.0, 0.0, 0.0, 0.0);
+	return (res);
+}
+
 computorv2::Matrix::Matrix(void)
 {
 	throw std::runtime_error("Not implemented: `computorv2::Matrix`");

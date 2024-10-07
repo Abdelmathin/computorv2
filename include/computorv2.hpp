@@ -104,7 +104,6 @@ namespace computorv2
 	bool        isUsualFunction(const std::string& name);
 	std::string ltrim(const std::string s);
 
-
     /* ------------------------------ inverse ------------------------------ */
     computorv2::Object*    inverse(const computorv2::Object*              left);
     computorv2::Matrix     inverse(const computorv2::Vector&              left);
@@ -290,7 +289,7 @@ namespace computorv2
 
     /* ----------------------------------------------------- div ----------------------------------------------------- */
     computorv2::Object*    div(const computorv2::Object*              left, const computorv2::Object*              right);
-    computorv2::Vector     div(const computorv2::Vector&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     div(const computorv2::Vector&              left, const computorv2::Vector&              right);
     computorv2::Matrix     div(const computorv2::Vector&              left, const computorv2::Matrix&              right);
     computorv2::Vector     div(const computorv2::Vector&              left, const computorv2::Complex&             right);
     computorv2::Polynomial div(const computorv2::Vector&              left, const computorv2::Polynomial&          right);
@@ -302,7 +301,7 @@ namespace computorv2
     computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
     computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
-    computorv2::Vector     div(const computorv2::Complex&             left, const computorv2::Vector&              right);
+    computorv2::Matrix     div(const computorv2::Complex&             left, const computorv2::Vector&              right);
     computorv2::Matrix     div(const computorv2::Complex&             left, const computorv2::Matrix&              right);
     computorv2::Complex    div(const computorv2::Complex&             left, const computorv2::Complex&             right);
     computorv2::Polynomial div(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
