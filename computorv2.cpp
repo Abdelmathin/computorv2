@@ -58,6 +58,7 @@ int main(void)
 	std::cout << "z = " << z << std::endl;
 	std::cout << "f = " << f << std::endl;
 
+
 	// std::cout << "dx / dx = " << computorv2::derivative(x, x) << std::endl;
 	// std::cout << "dp / dx = " << computorv2::derivative(p, x) << std::endl;
 	// std::cout << "dz / dx = " << computorv2::derivative(z, x) << std::endl;
@@ -109,6 +110,8 @@ int main(void)
 	std::cout << "computorv2::sub(f, p) = " << computorv2::sub(f, p) << std::endl;
 	std::cout << "computorv2::sub(f, z) = " << computorv2::sub(f, z) << std::endl;
 	std::cout << "computorv2::sub(f, f) = " << computorv2::sub(f, f) << std::endl;
+
+	exit(0);
 
 	std::cout << "computorv2::mul(x, x) = " << computorv2::mul(x, x) << std::endl;
 	std::cout << "computorv2::mul(x, p) = " << computorv2::mul(x, p) << std::endl;

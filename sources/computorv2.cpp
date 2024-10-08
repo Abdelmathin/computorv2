@@ -485,7 +485,7 @@ computorv2::Polynomial computorv2::neg(const computorv2::Polynomial& left)
     const computorv2::Object* a = computorv2::neg(left.getCoefficient());
     const computorv2::Object* b = computorv2::neg(left.getFreeTerm());
     res.setCoefficient(a);
-    res.setExponent(left.getBase());
+    res.setBase(left.getBase());
     res.setExponent(left.getExponent());
     res.setFreeTerm(b);
     delete (a);
@@ -551,7 +551,7 @@ computorv2::Polynomial computorv2::inv(const computorv2::Polynomial& left)
     {
         throw std::logic_error("Division by zero!");
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(-1.0);
     return (res);
@@ -563,7 +563,7 @@ computorv2::Polynomial computorv2::inv(const computorv2::UsualFunction& left)
     {
         throw std::logic_error("Division by zero!");
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(-1.0);
     return (res);
@@ -571,7 +571,7 @@ computorv2::Polynomial computorv2::inv(const computorv2::UsualFunction& left)
 
 computorv2::Polynomial computorv2::inv(const computorv2::IndependentVariable& left)
 {
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(-1.0);
     return (res);
@@ -1228,7 +1228,42 @@ computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const
             }
         }
     }
-
+    if (left.getCoefficient()->isnull() || left.getBase()->isnull())
+    {
+        computorv2::Polynomial res(right);
+        const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), right.getFreeTerm());
+        res.setFreeTerm(freeterm);
+        delete (freeterm);
+        return (res);
+    }
+    if (right.getCoefficient()->isnull() || right.getBase()->isnull())
+    {
+        computorv2::Polynomial res(left);
+        const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), right.getFreeTerm());
+        res.setFreeTerm(freeterm);
+        delete (freeterm);
+        return (res);
+    }
+    if (left.getExponent()->isnull())
+    {
+        computorv2::Polynomial res(right);
+        const computorv2::Object* a = computorv2::add(left.getCoefficient(), left.getFreeTerm());
+        const computorv2::Object* freeterm = computorv2::add(a, right.getFreeTerm());
+        res.setFreeTerm(freeterm);
+        delete (a);
+        delete (freeterm);
+        return (res);
+    }
+    if (right.getExponent()->isnull())
+    {
+        computorv2::Polynomial res(left);
+        const computorv2::Object* a = computorv2::add(right.getCoefficient(), right.getFreeTerm());
+        const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), a);
+        res.setFreeTerm(freeterm);
+        delete (a);
+        delete (freeterm);
+        return (res);
+    }
     if ((computorv2::eql(left.getBase(), right.getBase())) && (computorv2::eql(left.getExponent(), right.getExponent())))
     {
         const computorv2::Object* coefficient = computorv2::add(left.getCoefficient(), right.getCoefficient());
@@ -1243,7 +1278,7 @@ computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const
         return (res);
     }
     computorv2::Polynomial res(left);
-    const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), &right);
+    const computorv2::Object* freeterm = computorv2::add(left.getFreeTerm(), AS_OBJECT(&right));
     res.setFreeTerm(freeterm);
     delete (freeterm);
     return (res);
@@ -1817,7 +1852,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Matrix& left, const com
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -1837,7 +1872,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Matrix& left, const com
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -1857,7 +1892,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Matrix& left, const com
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -1891,7 +1926,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Complex& left, const co
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -1911,7 +1946,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Complex& left, const co
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -1931,7 +1966,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Complex& left, const co
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -1951,7 +1986,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Polynomial& left, const
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -1971,7 +2006,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Polynomial& left, const
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -1991,7 +2026,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Polynomial& left, const
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2011,7 +2046,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Polynomial& left, const
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2031,7 +2066,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::Polynomial& left, const
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2051,7 +2086,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::UsualFunction& left, co
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2071,7 +2106,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::UsualFunction& left, co
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2091,7 +2126,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::UsualFunction& left, co
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2111,7 +2146,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::UsualFunction& left, co
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2131,7 +2166,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::UsualFunction& left, co
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2151,7 +2186,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& le
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2171,7 +2206,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& le
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2191,7 +2226,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& le
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2211,7 +2246,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& le
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);
@@ -2231,7 +2266,7 @@ computorv2::Polynomial computorv2::pow(const computorv2::IndependentVariable& le
     {
         return (computorv2::Polynomial::unity());
     }
-    computorv2::Polynomial res("undefined");
+    computorv2::Polynomial res(computorv2::IndependentVariable::null());
     res.setBase(AS_OBJECT(&left));
     res.setExponent(AS_OBJECT(&right));
     return (res);

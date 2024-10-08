@@ -221,7 +221,7 @@ bool computorv2::Polynomial::isnegative(void) const
 
 computorv2::Polynomial computorv2::Polynomial::null(void)
 {
-	computorv2::Polynomial res("computorv2_polynomial");
+	computorv2::Polynomial res(computorv2::IndependentVariable::null());
 	res.setCoefficient(0.0);
 	res.setExponent(0.0);
 	res.setFreeTerm(0.0);
@@ -230,7 +230,7 @@ computorv2::Polynomial computorv2::Polynomial::null(void)
 
 computorv2::Polynomial computorv2::Polynomial::unity(void)
 {
-	computorv2::Polynomial res("computorv2_polynomial");
+	computorv2::Polynomial res(computorv2::IndependentVariable::null());
 	res.setCoefficient(1.0);
 	res.setExponent(0.0);
 	res.setFreeTerm(0.0);

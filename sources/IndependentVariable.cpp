@@ -86,7 +86,7 @@ bool computorv2::IndependentVariable::isnegative(void) const
 
 computorv2::IndependentVariable computorv2::IndependentVariable::null(void)
 {
-    return (computorv2::IndependentVariable("undefined"));
+    return (computorv2::IndependentVariable("undefined_variable"));
 }
 
 computorv2::IndependentVariable::IndependentVariable(void)
