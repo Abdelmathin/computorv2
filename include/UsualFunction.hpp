@@ -54,6 +54,7 @@ namespace computorv2
             computorv2::Object*  evaluate(void)    const;
             bool                 isnull(void)      const;
             bool                 isunity(void)     const;
+            bool                 isnegative(void)  const;
 
             std::string         getName(void)  const;
             computorv2::Object* getBody(void)  const;

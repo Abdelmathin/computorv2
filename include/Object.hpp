@@ -53,6 +53,7 @@ namespace computorv2
 			virtual computorv2::Object* evaluate(void)    const = 0;
 			virtual bool                isnull(void)      const = 0;
 			virtual bool                isunity(void)     const = 0;
+			virtual bool                isnegative(void)  const = 0;
 
 			Object(void){};
 			Object(const Object& other){};

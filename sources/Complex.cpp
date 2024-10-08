@@ -112,6 +112,19 @@ bool computorv2::Complex::isunity(void) const
 	return ((IS_ZERO(this->getReal() - 1.0)) && (IS_ZERO(this->getImage())));
 }
 
+bool computorv2::Complex::isnegative(void) const
+{
+	if (this->isnull())
+	{
+		return (false);
+	}
+	if (IS_ZERO(this->getImage()))
+	{
+		return (this->getReal() < 0);
+	}
+	return (false);
+}
+
 computorv2::Complex computorv2::Complex::null(void)
 {
 	computorv2::Complex res(0.0, 0.0);

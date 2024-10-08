@@ -79,6 +79,16 @@ bool computorv2::IndependentVariable::isunity(void) const
     return (false);
 }
 
+bool computorv2::IndependentVariable::isnegative(void) const
+{
+    return (false);
+}
+
+computorv2::IndependentVariable computorv2::IndependentVariable::null(void)
+{
+    return (computorv2::IndependentVariable("undefined"));
+}
+
 computorv2::IndependentVariable::IndependentVariable(void)
 {
     this->_name = "";

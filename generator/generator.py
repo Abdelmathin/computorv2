@@ -107,6 +107,7 @@ std::string computorv2::ltrim(const std::string s)
 '''
 
 computorv2_hpp = '''
+
 /* **************************************************************************  */
 /*                                                                             */
 /*                                                         :::      ::::::::   */
@@ -190,7 +191,7 @@ typedef int t_error;
 
 #define CHARCODE(c)        ((int)(c))
 #define IS_DIGIT(c)        (('0' <= c) && (c <= '9'))
-#define IS_SPACE(c)        ((c == ' ') || (c == '\\t'))
+#define IS_SPACE(c)        ((c == ' ') || (c == '\t'))
 #define IS_VARSTART(c)     ((c == '_') || (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')))
 #define IS_VARCHAR(c)      (IS_DIGIT(c) || IS_VARSTART(c))
 
@@ -295,20 +296,120 @@ return_types = {
 }
 
 prototypes = {
-	"computorv2::Polynomial inverse(const computorv2::<left_object> left);"                                                                 : {},
-	"bool isfreeterm(const computorv2::<left_object> left);"                                                                 : {},
-	"bool eql(const computorv2::<left_object> left, const computorv2::<right_object> right);"                                : {},
-	"computorv2::Polynomial derivative(const computorv2::<left_object> left, const computorv2::IndependentVariable& right);" : {},
-	"<return_type> add(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
-	"<return_type> sub(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
-	"<return_type> mul(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
-	"<return_type> div(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
-	"<return_type> mod(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
-	"<return_type> pow(const computorv2::<left_object> left, const computorv2::<right_object> right);"                       : return_types,
+	"<return_type> neg(const computorv2::<left_object> left);" : {
+		"return_types": {
+			"Integer"             : "Integer"   ,
+			"Rational"            : "Rational"  ,
+			"Vector"              : "Vector"    ,
+			"Matrix"              : "Matrix"    ,
+			"Complex"             : "Complex"   ,
+			"Polynomial"          : "Polynomial",
+			"UsualFunction"       : "Polynomial",
+			"IndependentVariable" : "Polynomial",		
+		}
+	},
+	"<return_type> inv(const computorv2::<left_object> left);" : {
+		"return_types" : {
+			"Integer"             : "Integer"   ,
+			"Rational"            : "Rational"  ,
+			"Vector"              : "Vector"    ,
+			"Matrix"              : "Matrix"    ,
+			"Complex"             : "Complex"   ,
+			"Polynomial"          : "Polynomial",
+			"UsualFunction"       : "Polynomial",
+			"IndependentVariable" : "Polynomial",
+		}
+	},
+	"bool isfreeterm(const computorv2::<left_object> left);": {
+		"return_types": {
+
+		}
+	},
+	"bool eql(const computorv2::<left_object> left, const computorv2::<right_object> right);": {
+		"return_types": {
+
+		}
+	},
+	"computorv2::Polynomial drv(const computorv2::<left_object> left, const computorv2::IndependentVariable& right);": {
+		"return_types": {
+
+		}
+	},
+	"<return_type> add(const computorv2::<left_object> left, const computorv2::<right_object> right);": {
+		"return_types": return_types,
+	},
+	"<return_type> sub(const computorv2::<left_object> left, const computorv2::<right_object> right);": {
+		"return_types": return_types,
+		"default_body": {
+			"*" : """ return (computorv2::add(left, computorv2::neg(right))); """,
+		}
+	},
+	"<return_type> mul(const computorv2::<left_object> left, const computorv2::<right_object> right);": {
+		"return_types": return_types,
+		"default_body": {
+			"*" : """
+    if (left.isnull() || right.isnull())
+    {
+        return (computorv2::<return_type>::null());
+    }
+    throw std::logic_error("Operation 'mul' not supported between types '<left_object>' and '<right_object>'.");
+    return (computorv2::<return_type>::null());
+    """,
+		}
+	},
+	"<return_type> div(const computorv2::<left_object> left, const computorv2::<right_object> right);": {
+		"return_types": return_types,
+		"default_body": {
+			"*" : """ return (computorv2::mul(left, computorv2::inv(right))); """,
+		}
+	},
+	"<return_type> mod(const computorv2::<left_object> left, const computorv2::<right_object> right);": {
+		"return_types": return_types,
+	},
+	"<return_type> pow(const computorv2::<left_object> left, const computorv2::<right_object> right);": {
+		"return_types": return_types,
+		"default_body": {
+			"computorv2::Complex" : "",
+			"computorv2::Matrix"  : "",
+			"*" : """
+    if (left.isnull())
+    {
+        if (right.isnull())
+            throw std::logic_error("Zero to the power of zero!");
+        if (right.isnegative())
+            throw std::logic_error("Division by zero!");
+        return (computorv2::Polynomial::null());
+    }
+    if (left.isunity() || right.isnull())
+    {
+        return (computorv2::Polynomial::unity());
+    }
+    computorv2::Polynomial res("undefined");
+    res.setBase(AS_OBJECT(&left));
+    res.setExponent(AS_OBJECT(&right));
+    return (res);""",
+		}
+	},
 }
 
+user_prototypes = [
+	"bool isfreeterm(const computorv2::<left_object> left);",
+	"bool eql(const computorv2::<left_object> left, const computorv2::<right_object> right);",
+	"<return_type> neg(const computorv2::<left_object> left);",
+	"<return_type> inv(const computorv2::<left_object> left);",
+	"<return_type> mul(const computorv2::<left_object> left, const computorv2::<right_object> right);",
+	"<return_type> div(const computorv2::<left_object> left, const computorv2::<right_object> right);",
+	"<return_type> add(const computorv2::<left_object> left, const computorv2::<right_object> right);",
+	"<return_type> sub(const computorv2::<left_object> left, const computorv2::<right_object> right);",
+	"<return_type> mod(const computorv2::<left_object> left, const computorv2::<right_object> right);",
+	"<return_type> pow(const computorv2::<left_object> left, const computorv2::<right_object> right);",
+	"computorv2::Polynomial drv(const computorv2::<left_object> left, const computorv2::IndependentVariable& right);",
+]
+
 objects = [
-	"Vector",
+	# "Integer",
+	# "Rational",
+	# "Vector",
 	"Matrix",
 	"Complex",
 	"Polynomial",
@@ -318,12 +419,14 @@ objects = [
 
 default_returns = {
 	"bool"               : "false",
-	"Vector"             : "computorv2::Vector(0.0, 0.0)",
-	"Matrix"             : "computorv2::Matrix(0.0, 0.0, 0.0, 0.0)",
-	"Complex"            : "computorv2::Complex(0.0, 0.0)",
-	"Polynomial"         : 'computorv2::Polynomial("x")',
-	"UsualFunction"      : 'computorv2::UsualFunction("ln", "x")',
-	"IndependentVariable": 'computorv2::IndependentVariable("x")',
+	"Integer"            : "computorv2::Integer::null()",
+	"Rational"           : "computorv2::Rational::null()",
+	"Vector"             : "computorv2::Vector::null()",
+	"Matrix"             : "computorv2::Matrix::null()",
+	"Complex"            : "computorv2::Complex::null()",
+	"Polynomial"         : 'computorv2::Polynomial::null()',
+	"UsualFunction"      : 'computorv2::UsualFunction::null()',
+	"IndependentVariable": 'computorv2::IndependentVariable::null()',
 }
 
 ignored_prototypes = {}
@@ -362,8 +465,7 @@ def ignore_prototype(prototype):
 TAB      = " " * 4
 NEW_LINE = "\n"
 
-
-for prototype in prototypes:
+for prototype in user_prototypes:
 	function_name     = prototype.split("(")[0].strip().split("\t")[-1].split(" ")[-1]
 	have_right_term   = ("<right_object>" in prototype)
 	have_static_right = (("<right_object>" not in prototype) and ("right)" in prototype))
@@ -387,21 +489,44 @@ for prototype in prototypes:
 	for left_object in objects:
 		for right_object in objects:
 			line = ""
+			default_return = "*"
 			if ("<return_type>" in prototype):
-				for key in prototypes[prototype]:
-					key1 = (left_object + "-" + right_object).lower()
+				return_types = prototypes[prototype]['return_types']
+				for key in return_types:
+					if not ("<right_object>" in prototype):
+						if (key.lower() == left_object.lower()):
+							default_return = "computorv2::" + return_types[key]
+							line = prototype.replace("<return_type>", default_return)
+							line = line.replace("<left_object>", left_object + "&")
+							NEED_COPY = ".copy()"
+							break
+						continue
+					key1 = (left_object  + "-" + right_object).lower()
 					key2 = (right_object + "-" + left_object).lower()
 					if (key.lower() == key1) or (key.lower() == key2):
-						line = prototype.replace("<return_type>", "computorv2::" + prototypes[prototype][key])
+						default_return = "computorv2::" + return_types[key]
+						line = prototype.replace("<return_type>", default_return)
 						line = line.replace("<left_object>", left_object + "&").replace("<right_object>", right_object + "&")
 						NEED_COPY = ".copy()"
 						break
 			else:
 				line = prototype.replace("<left_object>", left_object + "&").replace("<right_object>", right_object + "&")
+			return_type    = line.strip().split(" ")[0].split(":")[-1]
+			default_body   = ""
+			default_bodies = prototypes[prototype].get("default_body", {})
+			for rt in [default_return, "*"]:
+				if (rt in default_bodies):
+					default_body = default_bodies.get(rt, "")
+					if default_body and default_body.strip():
+						default_body = default_body.strip().replace("<left_object>"  , left_object)
+						default_body = default_body.strip().replace("<right_object>" , right_object)
+						default_body = default_body.strip().replace("<return_type>"  , return_type)
+					break
+
 			line = clear_prototype(line)
 			if ignore_prototype(line):
 				continue
-			return_type = line.strip().split(" ")[0].split(":")[-1]
+			
 			headers.append(line)
 			if (headers[-1].index(" ") > space_index):
 				space_index = headers[-1].index(" ")
@@ -413,7 +538,10 @@ for prototype in prototypes:
 				implementations[0] += NEW_LINE + TAB + "else if (" + ("IS_" + upleft).upper() + "(left))" + NEW_LINE + TAB + TAB + "return (computorv2::" + function_name + "(*AS_" + upleft + "(left), right)" + NEED_COPY + ");"
 			else:
 				implementations[0] += NEW_LINE + TAB + "else if (" + ("IS_" + upleft).upper() + "(left))" + NEW_LINE + TAB + TAB + "return (computorv2::" + function_name + "(*AS_" + upleft + "(left))" + NEED_COPY + ");"
-			if (have_right_term):
+			
+			if (default_body):
+				implementations.append('{' + NEW_LINE + TAB + default_body + NEW_LINE + '}')
+			elif (have_right_term):
 				implementations.append('{' + NEW_LINE + TAB + "(void)left; (void) right;" + NEW_LINE + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported between types \'' + left_object + '\' and \'' + right_object + '\'' + '.");' + NEW_LINE + TAB + "return (" + default_returns[return_type] + ");" + NEW_LINE + '}')
 			else:
 				implementations.append('{' + NEW_LINE + TAB + "(void)left;" + NEW_LINE + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported for type: \'' + left_object + '\'' + '");' + NEW_LINE + TAB + "return (" + default_returns[return_type] + ");" + NEW_LINE + '}')
@@ -457,11 +585,11 @@ for prototype in prototypes:
 			long_header = len(function_headers[-1])
 	n = int(((long_header - len(function_name)) / 2) - 4)
 	computorv2_cpp = computorv2_cpp.strip()
-	computorv2_hpp += NEW_LINE + NEW_LINE + TAB + ("/* " + (n * "-") + " " + function_name + " " + (n * "-") + " */")
+	computorv2_hpp = computorv2_hpp.strip() + NEW_LINE + NEW_LINE + TAB + ("/* " + (n * "-") + " " + function_name + " " + (n * "-") + " */")
 	computorv2_cpp += NEW_LINE + NEW_LINE + ("/* " + (n * "-") + " " + function_name + " " + (n * "-") + " */")
 	header_index = 0
 	for header in function_headers:
-		computorv2_hpp += NEW_LINE + TAB + header
+		computorv2_hpp  = computorv2_hpp.strip() + NEW_LINE + TAB + header.strip()
 		computorv2_cpp  = computorv2_cpp.strip() + NEW_LINE + NEW_LINE + function_implementation("computorv2", header).strip() + NEW_LINE + implementations[header_index].strip() + NEW_LINE
 		header_index += 1
 

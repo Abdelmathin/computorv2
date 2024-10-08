@@ -105,6 +105,12 @@ bool computorv2::UsualFunction::isunity(void) const
     return (result);
 }
 
+bool computorv2::UsualFunction::isnegative(void) const
+{
+    throw std::logic_error("Not implemented: computorv2::UsualFunction::isnegative");
+    return (false);
+}
+
 computorv2::UsualFunction::UsualFunction(void)
 {
     this->init();

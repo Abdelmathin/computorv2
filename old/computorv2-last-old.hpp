@@ -81,7 +81,7 @@ typedef int t_error;
 
 #define CHARCODE(c)        ((int)(c))
 #define IS_DIGIT(c)        (('0' <= c) && (c <= '9'))
-#define IS_SPACE(c)        ((c == ' ') || (c == '	'))
+#define IS_SPACE(c)        ((c == ' ') || (c == '\t'))
 #define IS_VARSTART(c)     ((c == '_') || (('a' <= c) && (c <= 'z')) || (('A' <= c) && (c <= 'Z')))
 #define IS_VARCHAR(c)      (IS_DIGIT(c) || IS_VARSTART(c))
 
@@ -104,8 +104,18 @@ namespace computorv2
 	bool        isUsualFunction(const std::string& name);
 	std::string ltrim(const std::string s);
 
+    /* ------------------------------ inverse ------------------------------ */
+    computorv2::Object*    inverse(const computorv2::Object*              left);
+    computorv2::Matrix     inverse(const computorv2::Vector&              left);
+    computorv2::Matrix     inverse(const computorv2::Matrix&              left);
+    computorv2::Complex    inverse(const computorv2::Complex&             left);
+    computorv2::Polynomial inverse(const computorv2::Polynomial&          left);
+    computorv2::Polynomial inverse(const computorv2::UsualFunction&       left);
+    computorv2::Polynomial inverse(const computorv2::IndependentVariable& left);
+
     /* --------------------- isfreeterm --------------------- */
     bool isfreeterm(const computorv2::Object*              left);
+    bool isfreeterm(const computorv2::Vector&              left);
     bool isfreeterm(const computorv2::Matrix&              left);
     bool isfreeterm(const computorv2::Complex&             left);
     bool isfreeterm(const computorv2::Polynomial&          left);
@@ -114,126 +124,85 @@ namespace computorv2
 
     /* -------------------------------------------- eql -------------------------------------------- */
     bool eql(const computorv2::Object*              left, const computorv2::Object*              right);
+    bool eql(const computorv2::Vector&              left, const computorv2::Vector&              right);
+    bool eql(const computorv2::Vector&              left, const computorv2::Matrix&              right);
+    bool eql(const computorv2::Vector&              left, const computorv2::Complex&             right);
+    bool eql(const computorv2::Vector&              left, const computorv2::Polynomial&          right);
+    bool eql(const computorv2::Vector&              left, const computorv2::UsualFunction&       right);
+    bool eql(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
+    bool eql(const computorv2::Matrix&              left, const computorv2::Vector&              right);
     bool eql(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
     bool eql(const computorv2::Matrix&              left, const computorv2::Complex&             right);
     bool eql(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
     bool eql(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
     bool eql(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
+    bool eql(const computorv2::Complex&             left, const computorv2::Vector&              right);
     bool eql(const computorv2::Complex&             left, const computorv2::Matrix&              right);
     bool eql(const computorv2::Complex&             left, const computorv2::Complex&             right);
     bool eql(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
     bool eql(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
     bool eql(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
+    bool eql(const computorv2::Polynomial&          left, const computorv2::Vector&              right);
     bool eql(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
     bool eql(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
     bool eql(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
     bool eql(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
     bool eql(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
+    bool eql(const computorv2::UsualFunction&       left, const computorv2::Vector&              right);
     bool eql(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
     bool eql(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
     bool eql(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
     bool eql(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
     bool eql(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
+    bool eql(const computorv2::IndependentVariable& left, const computorv2::Vector&              right);
     bool eql(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
     bool eql(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
     bool eql(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
     bool eql(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     bool eql(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
-    /* ------------------------------ neg ------------------------------ */
-    computorv2::Object*    neg(const computorv2::Object*              left);
-    computorv2::Matrix     neg(const computorv2::Matrix&              left);
-    computorv2::Complex    neg(const computorv2::Complex&             left);
-    computorv2::Polynomial neg(const computorv2::Polynomial&          left);
-    computorv2::Polynomial neg(const computorv2::UsualFunction&       left);
-    computorv2::Polynomial neg(const computorv2::IndependentVariable& left);
-
-    /* ------------------------------ inv ------------------------------ */
-    computorv2::Object*    inv(const computorv2::Object*              left);
-    computorv2::Matrix     inv(const computorv2::Matrix&              left);
-    computorv2::Complex    inv(const computorv2::Complex&             left);
-    computorv2::Polynomial inv(const computorv2::Polynomial&          left);
-    computorv2::Polynomial inv(const computorv2::UsualFunction&       left);
-    computorv2::Polynomial inv(const computorv2::IndependentVariable& left);
-
-    /* ----------------------------------------------------- mul ----------------------------------------------------- */
-    computorv2::Object*    mul(const computorv2::Object*              left, const computorv2::Object*              right);
-    computorv2::Matrix     mul(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
-    computorv2::Matrix     mul(const computorv2::Matrix&              left, const computorv2::Complex&             right);
-    computorv2::Polynomial mul(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial mul(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial mul(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
-    computorv2::Matrix     mul(const computorv2::Complex&             left, const computorv2::Matrix&              right);
-    computorv2::Complex    mul(const computorv2::Complex&             left, const computorv2::Complex&             right);
-    computorv2::Polynomial mul(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial mul(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial mul(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
-    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
-    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
-    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
-    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
-    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
-    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
-
-    /* ----------------------------------------------------- div ----------------------------------------------------- */
-    computorv2::Object*    div(const computorv2::Object*              left, const computorv2::Object*              right);
-    computorv2::Matrix     div(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
-    computorv2::Matrix     div(const computorv2::Matrix&              left, const computorv2::Complex&             right);
-    computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
-    computorv2::Matrix     div(const computorv2::Complex&             left, const computorv2::Matrix&              right);
-    computorv2::Complex    div(const computorv2::Complex&             left, const computorv2::Complex&             right);
-    computorv2::Polynomial div(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial div(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial div(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
-    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
-    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
-    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
-    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
-    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
-    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
-    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
-    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
+    /* ----------------------------------------------------- derivative ----------------------------------------------------- */
+    computorv2::Polynomial derivative(const computorv2::Object*              left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial derivative(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial derivative(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial derivative(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial derivative(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial derivative(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial derivative(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
     /* ----------------------------------------------------- add ----------------------------------------------------- */
     computorv2::Object*    add(const computorv2::Object*              left, const computorv2::Object*              right);
+    computorv2::Vector     add(const computorv2::Vector&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     add(const computorv2::Vector&              left, const computorv2::Matrix&              right);
+    computorv2::Vector     add(const computorv2::Vector&              left, const computorv2::Complex&             right);
+    computorv2::Polynomial add(const computorv2::Vector&              left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial add(const computorv2::Vector&              left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial add(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
+    computorv2::Matrix     add(const computorv2::Matrix&              left, const computorv2::Vector&              right);
     computorv2::Matrix     add(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
     computorv2::Matrix     add(const computorv2::Matrix&              left, const computorv2::Complex&             right);
     computorv2::Polynomial add(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
     computorv2::Polynomial add(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial add(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
+    computorv2::Vector     add(const computorv2::Complex&             left, const computorv2::Vector&              right);
     computorv2::Matrix     add(const computorv2::Complex&             left, const computorv2::Matrix&              right);
     computorv2::Complex    add(const computorv2::Complex&             left, const computorv2::Complex&             right);
     computorv2::Polynomial add(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
     computorv2::Polynomial add(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial add(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial add(const computorv2::Polynomial&          left, const computorv2::Vector&              right);
     computorv2::Polynomial add(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
     computorv2::Polynomial add(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
     computorv2::Polynomial add(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
     computorv2::Polynomial add(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial add(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial add(const computorv2::UsualFunction&       left, const computorv2::Vector&              right);
     computorv2::Polynomial add(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
     computorv2::Polynomial add(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
     computorv2::Polynomial add(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
     computorv2::Polynomial add(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial add(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial add(const computorv2::IndependentVariable& left, const computorv2::Vector&              right);
     computorv2::Polynomial add(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
     computorv2::Polynomial add(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
     computorv2::Polynomial add(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
@@ -242,54 +211,154 @@ namespace computorv2
 
     /* ----------------------------------------------------- sub ----------------------------------------------------- */
     computorv2::Object*    sub(const computorv2::Object*              left, const computorv2::Object*              right);
+    computorv2::Vector     sub(const computorv2::Vector&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     sub(const computorv2::Vector&              left, const computorv2::Matrix&              right);
+    computorv2::Vector     sub(const computorv2::Vector&              left, const computorv2::Complex&             right);
+    computorv2::Polynomial sub(const computorv2::Vector&              left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial sub(const computorv2::Vector&              left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial sub(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
+    computorv2::Matrix     sub(const computorv2::Matrix&              left, const computorv2::Vector&              right);
     computorv2::Matrix     sub(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
     computorv2::Matrix     sub(const computorv2::Matrix&              left, const computorv2::Complex&             right);
     computorv2::Polynomial sub(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
     computorv2::Polynomial sub(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial sub(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
+    computorv2::Vector     sub(const computorv2::Complex&             left, const computorv2::Vector&              right);
     computorv2::Matrix     sub(const computorv2::Complex&             left, const computorv2::Matrix&              right);
     computorv2::Complex    sub(const computorv2::Complex&             left, const computorv2::Complex&             right);
     computorv2::Polynomial sub(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
     computorv2::Polynomial sub(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial sub(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial sub(const computorv2::Polynomial&          left, const computorv2::Vector&              right);
     computorv2::Polynomial sub(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
     computorv2::Polynomial sub(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
     computorv2::Polynomial sub(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
     computorv2::Polynomial sub(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial sub(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial sub(const computorv2::UsualFunction&       left, const computorv2::Vector&              right);
     computorv2::Polynomial sub(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
     computorv2::Polynomial sub(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
     computorv2::Polynomial sub(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
     computorv2::Polynomial sub(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial sub(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial sub(const computorv2::IndependentVariable& left, const computorv2::Vector&              right);
     computorv2::Polynomial sub(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
     computorv2::Polynomial sub(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
     computorv2::Polynomial sub(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
     computorv2::Polynomial sub(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial sub(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
+    /* ----------------------------------------------------- mul ----------------------------------------------------- */
+    computorv2::Object*    mul(const computorv2::Object*              left, const computorv2::Object*              right);
+    computorv2::Vector     mul(const computorv2::Vector&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     mul(const computorv2::Vector&              left, const computorv2::Matrix&              right);
+    computorv2::Vector     mul(const computorv2::Vector&              left, const computorv2::Complex&             right);
+    computorv2::Polynomial mul(const computorv2::Vector&              left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial mul(const computorv2::Vector&              left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial mul(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
+    computorv2::Matrix     mul(const computorv2::Matrix&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     mul(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
+    computorv2::Matrix     mul(const computorv2::Matrix&              left, const computorv2::Complex&             right);
+    computorv2::Polynomial mul(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial mul(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial mul(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
+    computorv2::Vector     mul(const computorv2::Complex&             left, const computorv2::Vector&              right);
+    computorv2::Matrix     mul(const computorv2::Complex&             left, const computorv2::Matrix&              right);
+    computorv2::Complex    mul(const computorv2::Complex&             left, const computorv2::Complex&             right);
+    computorv2::Polynomial mul(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial mul(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial mul(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::Vector&              right);
+    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
+    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
+    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial mul(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::Vector&              right);
+    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
+    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
+    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial mul(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::Vector&              right);
+    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
+    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
+    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial mul(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
+
+    /* ----------------------------------------------------- div ----------------------------------------------------- */
+    computorv2::Object*    div(const computorv2::Object*              left, const computorv2::Object*              right);
+    computorv2::Matrix     div(const computorv2::Vector&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     div(const computorv2::Vector&              left, const computorv2::Matrix&              right);
+    computorv2::Vector     div(const computorv2::Vector&              left, const computorv2::Complex&             right);
+    computorv2::Polynomial div(const computorv2::Vector&              left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial div(const computorv2::Vector&              left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial div(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
+    computorv2::Matrix     div(const computorv2::Matrix&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     div(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
+    computorv2::Matrix     div(const computorv2::Matrix&              left, const computorv2::Complex&             right);
+    computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial div(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
+    computorv2::Matrix     div(const computorv2::Complex&             left, const computorv2::Vector&              right);
+    computorv2::Matrix     div(const computorv2::Complex&             left, const computorv2::Matrix&              right);
+    computorv2::Complex    div(const computorv2::Complex&             left, const computorv2::Complex&             right);
+    computorv2::Polynomial div(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial div(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial div(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::Vector&              right);
+    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
+    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
+    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial div(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::Vector&              right);
+    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
+    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
+    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial div(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::Vector&              right);
+    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
+    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
+    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial div(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
+
     /* ----------------------------------------------------- mod ----------------------------------------------------- */
     computorv2::Object*    mod(const computorv2::Object*              left, const computorv2::Object*              right);
+    computorv2::Vector     mod(const computorv2::Vector&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     mod(const computorv2::Vector&              left, const computorv2::Matrix&              right);
+    computorv2::Vector     mod(const computorv2::Vector&              left, const computorv2::Complex&             right);
+    computorv2::Polynomial mod(const computorv2::Vector&              left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial mod(const computorv2::Vector&              left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial mod(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
+    computorv2::Matrix     mod(const computorv2::Matrix&              left, const computorv2::Vector&              right);
     computorv2::Matrix     mod(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
     computorv2::Matrix     mod(const computorv2::Matrix&              left, const computorv2::Complex&             right);
     computorv2::Polynomial mod(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
     computorv2::Polynomial mod(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial mod(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
+    computorv2::Vector     mod(const computorv2::Complex&             left, const computorv2::Vector&              right);
     computorv2::Matrix     mod(const computorv2::Complex&             left, const computorv2::Matrix&              right);
     computorv2::Complex    mod(const computorv2::Complex&             left, const computorv2::Complex&             right);
     computorv2::Polynomial mod(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
     computorv2::Polynomial mod(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial mod(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial mod(const computorv2::Polynomial&          left, const computorv2::Vector&              right);
     computorv2::Polynomial mod(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
     computorv2::Polynomial mod(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
     computorv2::Polynomial mod(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
     computorv2::Polynomial mod(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial mod(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial mod(const computorv2::UsualFunction&       left, const computorv2::Vector&              right);
     computorv2::Polynomial mod(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
     computorv2::Polynomial mod(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
     computorv2::Polynomial mod(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
     computorv2::Polynomial mod(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial mod(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial mod(const computorv2::IndependentVariable& left, const computorv2::Vector&              right);
     computorv2::Polynomial mod(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
     computorv2::Polynomial mod(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
     computorv2::Polynomial mod(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
@@ -298,37 +367,40 @@ namespace computorv2
 
     /* ----------------------------------------------------- pow ----------------------------------------------------- */
     computorv2::Object*    pow(const computorv2::Object*              left, const computorv2::Object*              right);
+    computorv2::Vector     pow(const computorv2::Vector&              left, const computorv2::Vector&              right);
+    computorv2::Matrix     pow(const computorv2::Vector&              left, const computorv2::Matrix&              right);
+    computorv2::Vector     pow(const computorv2::Vector&              left, const computorv2::Complex&             right);
+    computorv2::Polynomial pow(const computorv2::Vector&              left, const computorv2::Polynomial&          right);
+    computorv2::Polynomial pow(const computorv2::Vector&              left, const computorv2::UsualFunction&       right);
+    computorv2::Polynomial pow(const computorv2::Vector&              left, const computorv2::IndependentVariable& right);
+    computorv2::Matrix     pow(const computorv2::Matrix&              left, const computorv2::Vector&              right);
     computorv2::Matrix     pow(const computorv2::Matrix&              left, const computorv2::Matrix&              right);
     computorv2::Matrix     pow(const computorv2::Matrix&              left, const computorv2::Complex&             right);
     computorv2::Polynomial pow(const computorv2::Matrix&              left, const computorv2::Polynomial&          right);
     computorv2::Polynomial pow(const computorv2::Matrix&              left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial pow(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
+    computorv2::Vector     pow(const computorv2::Complex&             left, const computorv2::Vector&              right);
     computorv2::Matrix     pow(const computorv2::Complex&             left, const computorv2::Matrix&              right);
     computorv2::Complex    pow(const computorv2::Complex&             left, const computorv2::Complex&             right);
     computorv2::Polynomial pow(const computorv2::Complex&             left, const computorv2::Polynomial&          right);
     computorv2::Polynomial pow(const computorv2::Complex&             left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial pow(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial pow(const computorv2::Polynomial&          left, const computorv2::Vector&              right);
     computorv2::Polynomial pow(const computorv2::Polynomial&          left, const computorv2::Matrix&              right);
     computorv2::Polynomial pow(const computorv2::Polynomial&          left, const computorv2::Complex&             right);
     computorv2::Polynomial pow(const computorv2::Polynomial&          left, const computorv2::Polynomial&          right);
     computorv2::Polynomial pow(const computorv2::Polynomial&          left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial pow(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial pow(const computorv2::UsualFunction&       left, const computorv2::Vector&              right);
     computorv2::Polynomial pow(const computorv2::UsualFunction&       left, const computorv2::Matrix&              right);
     computorv2::Polynomial pow(const computorv2::UsualFunction&       left, const computorv2::Complex&             right);
     computorv2::Polynomial pow(const computorv2::UsualFunction&       left, const computorv2::Polynomial&          right);
     computorv2::Polynomial pow(const computorv2::UsualFunction&       left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial pow(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
+    computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::Vector&              right);
     computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::Matrix&              right);
     computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::Complex&             right);
     computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::Polynomial&          right);
     computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::UsualFunction&       right);
     computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
-
-    /* ----------------------------------------------------- drv ----------------------------------------------------- */
-    computorv2::Polynomial drv(const computorv2::Object*              left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial drv(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial drv(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial drv(const computorv2::Polynomial&          left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial drv(const computorv2::UsualFunction&       left, const computorv2::IndependentVariable& right);
-    computorv2::Polynomial drv(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 }

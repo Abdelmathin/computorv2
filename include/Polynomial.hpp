@@ -55,6 +55,7 @@ namespace computorv2
             computorv2::Object* evaluate(void)    const;
             bool                isnull(void)      const;
             bool                isunity(void)     const;
+            bool                isnegative(void)  const;
             static Polynomial   null(void);
             static Polynomial   unity(void);
 

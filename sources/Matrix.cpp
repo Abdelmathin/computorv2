@@ -84,6 +84,11 @@ bool computorv2::Matrix::isunity(void) const
 	return (false);
 }
 
+bool computorv2::Matrix::isnegative(void) const
+{
+    return (false);
+}
+
 computorv2::Matrix computorv2::Matrix::null(void)
 {
 	computorv2::Matrix res(0.0, 0.0, 0.0, 0.0);

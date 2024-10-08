@@ -42,6 +42,7 @@
 #include "Object.hpp"
 #include "Complex.hpp"
 #include <iostream>
+#include <vector>
 
 namespace computorv2
 {
@@ -54,7 +55,8 @@ namespace computorv2
             computorv2::Object* copy(void)        const;
             computorv2::Object* evaluate(void)    const;
             bool                isnull(void)      const;
-            bool                isunity(void)     const;;
+            bool                isunity(void)     const;
+            bool                isnegative(void)  const;
             static Vector       null(void);
 
             Vector(void);
@@ -62,7 +64,17 @@ namespace computorv2
             Vector(const Vector& other);
             Vector& operator=(const Vector& other);
 
+            typedef std::vector< computorv2::Object* >::const_iterator const_iterator;
             Vector(const computorv2::Complex &a, const computorv2::Complex &b);
+            Vector(const computorv2::Complex &a, const computorv2::Complex &b, const computorv2::Complex &c);
+            void                 init(void);
+            void                 clear(void);
+            void                 push(const computorv2::Object* element);
+            unsigned int         size(void)  const;
+            const_iterator       begin(void) const;
+            const_iterator       end(void)   const;
+        private:
+            std::vector< computorv2::Object* > _data;
     };
 }
 

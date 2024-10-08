@@ -57,8 +57,21 @@ std::string computorv2::Vector::getTypeName(void) const
 
 std::string computorv2::Vector::toString(void) const
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector::toString`");
-	return ("");
+	std::stringstream ss("");
+	ss << "[";
+	for (
+		computorv2::Vector::const_iterator it = this->begin();
+		it != this->end(); it++
+	)
+	{
+		ss << " " << (*it)->toString() << " ";
+		if ((it + 1) != this->end())
+		{
+			ss << ",";
+		}
+	}
+	ss << "]";
+	return (ss.str());
 }
 
 computorv2::Object* computorv2::Vector::copy(void) const
@@ -68,53 +81,125 @@ computorv2::Object* computorv2::Vector::copy(void) const
 
 computorv2::Object* computorv2::Vector::evaluate(void) const
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector::evaluate`");
-	return (NULL);
+	return ( new computorv2::Vector(*this) );
 }
 
 bool computorv2::Vector::isnull(void) const
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector::isnull`");
-	return (false);
+	for (
+		computorv2::Vector::const_iterator it = this->begin();
+		it != this->end(); it++
+	)
+	{
+		if (!((*it)->isnull()))
+		{
+			return (false);
+		}
+	}
+	return (true);
 }
 
 bool computorv2::Vector::isunity(void) const
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector::isunity`");
 	return (false);
+}
+
+bool computorv2::Vector::isnegative(void) const
+{
+    return (false);
 }
 
 computorv2::Vector computorv2::Vector::null(void)
 {
-	computorv2::Vector res(0.0, 0.0);
-	return (res);
+	return (computorv2::Vector(0.0, 0.0));
 }
 
 computorv2::Vector::Vector(void)
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector`");
+	this->init();
 }
 
 computorv2::Vector::~Vector(void)
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector::~Vector`");
+	this->clear();
 }
 
 computorv2::Vector::Vector(const computorv2::Vector& other)
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector::Vector(other)`");
 	*this = other;
 }
 
 computorv2::Vector& computorv2::Vector::operator=(const computorv2::Vector& other)
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector::operator=`");
+	if (this != &other)
+	{
+		this->clear();
+		for (
+			computorv2::Vector::const_iterator it = other.begin();
+			it != other.end(); it++
+		)
+		{
+			this->push(*it);
+		}
+	}
 	return (*this);
 }
 
 computorv2::Vector::Vector(const computorv2::Complex &a, const computorv2::Complex &b)
 {
-	throw std::runtime_error("Not implemented: `computorv2::Vector(a, b)`");
+	this->init();
+	this->push(AS_OBJECT(&a));
+	this->push(AS_OBJECT(&b));
+}
+
+computorv2::Vector::Vector(const computorv2::Complex &a, const computorv2::Complex &b, const computorv2::Complex &c)
+{
+	this->init();
+	this->push(AS_OBJECT(&a));
+	this->push(AS_OBJECT(&b));
+	this->push(AS_OBJECT(&c));
+}
+
+void computorv2::Vector::init(void)
+{
+	this->_data.clear();
+}
+
+void computorv2::Vector::clear(void)
+{
+	for (
+		computorv2::Vector::const_iterator it = this->begin();
+		it != this->end(); it++
+	)
+	{
+		delete (*it);
+	}
+	this->_data.clear();
+}
+
+void computorv2::Vector::push(const computorv2::Object* element)
+{
+	if (!element)
+	{
+		throw std::logic_error("Can't add NULL elements");
+	}
+	computorv2::Object* e = element->evaluate();
+	this->_data.push_back(e);
+}
+
+unsigned int computorv2::Vector::size(void) const
+{
+	return (this->_data.size());
+}
+
+computorv2::Vector::const_iterator computorv2::Vector::begin(void) const
+{
+	return (this->_data.begin());
+}
+
+computorv2::Vector::const_iterator computorv2::Vector::end(void) const
+{
+	return (this->_data.end());
 }
 
 std::ostream& operator<<(std::ostream& left, const computorv2::Vector& right)

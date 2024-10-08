@@ -34,11 +34,19 @@
 
 	add, sub, mul, div, ... functions will evaluate polynomials.
 
+	neg
+
+
+>>>>>>>
+computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
+
+
 */
 
 int main(void)
 {
 	computorv2::IndependentVariable x("x");
+	computorv2::IndependentVariable y("y");
 	computorv2::Polynomial          p(x);
 	computorv2::Complex             z(1.0, 1.0);
 	computorv2::UsualFunction       f("ln", x);
@@ -55,31 +63,35 @@ int main(void)
 	// std::cout << "dz / dx = " << computorv2::derivative(z, x) << std::endl;
 	// std::cout << "df / dx = " << computorv2::derivative(f, x) << std::endl;
 
-	std::cout << "computorv2::inverse(&x) = " << computorv2::inverse(&x)->toString() << std::endl;
-	std::cout << "computorv2::inverse(&p) = " << computorv2::inverse(&p)->toString() << std::endl;
-	std::cout << "computorv2::inverse(&z) = " << computorv2::inverse(&z)->toString() << std::endl;
-	std::cout << "computorv2::inverse(&f) = " << computorv2::inverse(&f)->toString() << std::endl;
-	std::cout << "computorv2::inverse(x)  = " << computorv2::inverse(x)  << std::endl;
-	std::cout << "computorv2::inverse(p)  = " << computorv2::inverse(p)  << std::endl;
-	std::cout << "computorv2::inverse(z)  = " << computorv2::inverse(z)  << std::endl;
-	std::cout << "computorv2::inverse(f)  = " << computorv2::inverse(f)  << std::endl;
+	std::cout << "computorv2::inv(&x) = " << computorv2::inv(&x)->toString() << std::endl;
+	std::cout << "computorv2::inv(&p) = " << computorv2::inv(&p)->toString() << std::endl;
+	std::cout << "computorv2::inv(&z) = " << computorv2::inv(&z)->toString() << std::endl;
+	std::cout << "computorv2::inv(&f) = " << computorv2::inv(&f)->toString() << std::endl;
+	std::cout << "computorv2::inv(x)  = " << computorv2::inv(x)  << std::endl;
+	std::cout << "computorv2::inv(p)  = " << computorv2::inv(p)  << std::endl;
+	std::cout << "computorv2::inv(z)  = " << computorv2::inv(z)  << std::endl;
+	std::cout << "computorv2::inv(f)  = " << computorv2::inv(f)  << std::endl;
 
 	std::cout << "computorv2::add(x, x) = " << computorv2::add(x, x) << std::endl;
 	std::cout << "computorv2::add(x, p) = " << computorv2::add(x, p) << std::endl;
 	std::cout << "computorv2::add(x, z) = " << computorv2::add(x, z) << std::endl;
 	std::cout << "computorv2::add(x, f) = " << computorv2::add(x, f) << std::endl;
+	std::cout << "computorv2::add(x, y) = " << computorv2::add(x, f) << std::endl;
 	std::cout << "computorv2::add(p, x) = " << computorv2::add(p, x) << std::endl;
 	std::cout << "computorv2::add(p, p) = " << computorv2::add(p, p) << std::endl;
 	std::cout << "computorv2::add(p, z) = " << computorv2::add(p, z) << std::endl;
 	std::cout << "computorv2::add(p, f) = " << computorv2::add(p, f) << std::endl;
+	std::cout << "computorv2::add(p, y) = " << computorv2::add(p, f) << std::endl;
 	std::cout << "computorv2::add(z, x) = " << computorv2::add(z, x) << std::endl;
 	std::cout << "computorv2::add(z, p) = " << computorv2::add(z, p) << std::endl;
 	std::cout << "computorv2::add(z, z) = " << computorv2::add(z, z) << std::endl;
 	std::cout << "computorv2::add(z, f) = " << computorv2::add(z, f) << std::endl;
+	std::cout << "computorv2::add(z, y) = " << computorv2::add(z, f) << std::endl;
 	std::cout << "computorv2::add(f, x) = " << computorv2::add(f, x) << std::endl;
 	std::cout << "computorv2::add(f, p) = " << computorv2::add(f, p) << std::endl;
 	std::cout << "computorv2::add(f, z) = " << computorv2::add(f, z) << std::endl;
 	std::cout << "computorv2::add(f, f) = " << computorv2::add(f, f) << std::endl;
+	std::cout << "computorv2::add(f, y) = " << computorv2::add(f, f) << std::endl;
 
 	std::cout << "computorv2::sub(x, x) = " << computorv2::sub(x, x) << std::endl;
 	std::cout << "computorv2::sub(x, p) = " << computorv2::sub(x, p) << std::endl;
@@ -132,14 +144,21 @@ int main(void)
 	std::cout << "computorv2::div(f, z) = " << computorv2::div(f, z) << std::endl;
 	std::cout << "computorv2::div(f, f) = " << computorv2::div(f, f) << std::endl;
 
+	const computorv2::Polynomial e1 = computorv2::add(computorv2::div(computorv2::add(computorv2::mul(computorv2::add(computorv2::add(computorv2::add(x, computorv2::mul(x, x)), computorv2::add(x, computorv2::add(x, x))), computorv2::add(x, x)), x), x), x), z);
+	const computorv2::Polynomial e2 = computorv2::add(computorv2::add(computorv2::div(computorv2::mul(computorv2::add(computorv2::add(computorv2::add(x, computorv2::mul(x, x)), computorv2::add(x, computorv2::add(x, x))), computorv2::add(x, x)), x), x), x), z);
+	const computorv2::Polynomial e3 = computorv2::div(computorv2::add(computorv2::div(computorv2::div(computorv2::add(computorv2::div(computorv2::add(x, computorv2::mul(z, f)), computorv2::div(x, computorv2::add(x, f))), computorv2::add(f, x)), x), x), x), z);
+	const computorv2::Polynomial e4 = computorv2::add(computorv2::mul(f, computorv2::mul(f, x)), computorv2::div(f, x));
+	const computorv2::Polynomial e5 = computorv2::div(computorv2::sub(z, computorv2::add(computorv2::mul(f, p), x)), 2.0);
+	const computorv2::Polynomial e6 = computorv2::mul(computorv2::div(x, f), computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::div(x, f), computorv2::div(x, f)), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))));
+	const computorv2::Polynomial e7 = computorv2::mul(computorv2::add(x, f), computorv2::mul(computorv2::add(computorv2::add(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::div(x, f), computorv2::div(x, f)), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::add(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::sub(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::sub(x, f), computorv2::div(x, f))));
+	const computorv2::Polynomial e8 = computorv2::mul(computorv2::add(x, z), computorv2::mul(computorv2::add(computorv2::add(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::mul(computorv2::div(x, f), computorv2::div(x, f)), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::add(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, z))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::div(x, f), computorv2::div(x, f))), computorv2::sub(computorv2::div(x, f), computorv2::div(x, f))), computorv2::mul(computorv2::sub(x, z), computorv2::div(x, f))));
+	std::cout << "e1 = " << e1 << std::endl;
+	std::cout << "e2 = " << e2 << std::endl;
+	std::cout << "e3 = " << e3 << std::endl;
+	std::cout << "e4 = " << e4 << std::endl;
+	std::cout << "e5 = " << e5 << std::endl;
+	std::cout << "e6 = " << e6 << std::endl;
+	std::cout << "e7 = " << e7 << std::endl;
+	std::cout << "e8 = " << e8 << std::endl;
 	return (0);
 }
-
-/*
-
-	negation
-	neg
-
-	return (computorv2::mul(left, computorv2::pow(right, computorv2::Complex(-1.0, 0.0))));
-
-*/

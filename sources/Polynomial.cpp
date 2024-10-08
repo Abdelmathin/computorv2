@@ -163,10 +163,12 @@ computorv2::Object* computorv2::Polynomial::copy(void) const
 
 computorv2::Object* computorv2::Polynomial::evaluate(void) const
 {
-	const computorv2::Object* a = this->_coefficient->evaluate();
-	const computorv2::Object* x = this->_base->evaluate();
-	const computorv2::Object* n = this->_exponent->evaluate();
-	const computorv2::Object* b = this->_freeterm->evaluate();
+	return (this->copy());
+	std::cout << ">>>> evaluate(" << this->getTypeName() << ")" << std::endl;
+	const computorv2::Object* a = this->getCoefficient()->evaluate();
+	const computorv2::Object* x = this->getBase()->evaluate();
+	const computorv2::Object* n = this->getExponent()->evaluate();
+	const computorv2::Object* b = this->getFreeTerm()->evaluate();
 	const computorv2::Object* p = computorv2::pow(x, n);
 	const computorv2::Object* e = computorv2::mul(a, p);
 	computorv2::Object* f = computorv2::add(e, b);
@@ -182,9 +184,9 @@ computorv2::Object* computorv2::Polynomial::evaluate(void) const
 	}
 	computorv2::Object* evaluated = f;
 	const computorv2::Polynomial* res = AS_POLYNOMIAL(f);
-	if (res->_coefficient->isunity() && res->_exponent->isunity() && res->_freeterm->isnull())
+	if (res->getCoefficient()->isunity() && res->getBase()->isunity() && res->getFreeTerm()->isnull())
 	{
-		evaluated = res->_base->evaluate();
+		evaluated = res->getBase()->evaluate();
 		delete (res);
 	}
 	return (evaluated);
@@ -209,6 +211,12 @@ bool computorv2::Polynomial::isunity(void) const
 	}
 	delete (e);
 	return (result);
+}
+
+bool computorv2::Polynomial::isnegative(void) const
+{
+	throw std::logic_error("Not implemented: computorv2::Polynomial::isnegative");
+    return (false);
 }
 
 computorv2::Polynomial computorv2::Polynomial::null(void)
@@ -358,7 +366,16 @@ void computorv2::Polynomial::setCoefficient(const computorv2::Object* coefficien
 	{
 		throw std::logic_error("Can't set coefficient to NULL");
 	}
-	this->_coefficient = coefficient->evaluate();
+	if (coefficient->isnull())
+	{
+		this->delBase();
+		this->_coefficient = computorv2::Complex::null().copy();
+		this->_base        = computorv2::IndependentVariable::null().copy();
+	}
+	else
+	{
+		this->_coefficient = coefficient->evaluate();
+	}
 }
 
 void computorv2::Polynomial::setBase(const computorv2::Object* base)
@@ -368,7 +385,16 @@ void computorv2::Polynomial::setBase(const computorv2::Object* base)
 	{
 		throw std::logic_error("Can't set base to NULL");
 	}
-	this->_base = base->evaluate();
+	if (base->isnull())
+	{
+		this->delCoefficient();
+		this->_coefficient = computorv2::Complex::null().copy();
+		this->_base        = computorv2::IndependentVariable::null().copy();
+	}
+	else
+	{
+		this->_base = base->evaluate();
+	}
 }
 
 void computorv2::Polynomial::setExponent(const computorv2::Object* exponent)
@@ -378,7 +404,16 @@ void computorv2::Polynomial::setExponent(const computorv2::Object* exponent)
 	{
 		throw std::logic_error("Can't set exponent to NULL");
 	}
-	this->_exponent = exponent->evaluate();
+	if (exponent->isnull())
+	{
+		this->delBase();
+		this->_exponent = computorv2::Complex::null().copy();
+		this->_base     = computorv2::IndependentVariable::null().copy();
+	}
+	else
+	{
+		this->_exponent = exponent->evaluate();
+	}
 }
 
 void computorv2::Polynomial::setFreeTerm(const computorv2::Object* freeterm)
@@ -388,7 +423,14 @@ void computorv2::Polynomial::setFreeTerm(const computorv2::Object* freeterm)
 	{
 		throw std::logic_error("Can't set freeterm to NULL");
 	}
-	this->_freeterm = freeterm->evaluate();
+	if (freeterm->isnull())
+	{
+		this->_freeterm = computorv2::Complex::null().copy();
+	}
+	else
+	{
+		this->_freeterm = freeterm->evaluate();
+	}
 }
 
 void computorv2::Polynomial::setCoefficient(const double coefficient)
