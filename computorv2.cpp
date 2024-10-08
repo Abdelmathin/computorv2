@@ -53,11 +53,12 @@ int main(void)
 
 	/* -------------------------------------- */
 
+	computorv2::Polynomial w(f);
+
 	std::cout << "x = " << x << std::endl;
 	std::cout << "p = " << p << std::endl;
 	std::cout << "z = " << z << std::endl;
 	std::cout << "f = " << f << std::endl;
-
 
 	// std::cout << "dx / dx = " << computorv2::derivative(x, x) << std::endl;
 	// std::cout << "dp / dx = " << computorv2::derivative(p, x) << std::endl;
@@ -111,8 +112,6 @@ int main(void)
 	std::cout << "computorv2::sub(f, z) = " << computorv2::sub(f, z) << std::endl;
 	std::cout << "computorv2::sub(f, f) = " << computorv2::sub(f, f) << std::endl;
 
-	exit(0);
-
 	std::cout << "computorv2::mul(x, x) = " << computorv2::mul(x, x) << std::endl;
 	std::cout << "computorv2::mul(x, p) = " << computorv2::mul(x, p) << std::endl;
 	std::cout << "computorv2::mul(x, z) = " << computorv2::mul(x, z) << std::endl;
@@ -146,6 +145,9 @@ int main(void)
 	std::cout << "computorv2::div(f, p) = " << computorv2::div(f, p) << std::endl;
 	std::cout << "computorv2::div(f, z) = " << computorv2::div(f, z) << std::endl;
 	std::cout << "computorv2::div(f, f) = " << computorv2::div(f, f) << std::endl;
+
+	// exit(0);
+
 
 	const computorv2::Polynomial e1 = computorv2::add(computorv2::div(computorv2::add(computorv2::mul(computorv2::add(computorv2::add(computorv2::add(x, computorv2::mul(x, x)), computorv2::add(x, computorv2::add(x, x))), computorv2::add(x, x)), x), x), x), z);
 	const computorv2::Polynomial e2 = computorv2::add(computorv2::add(computorv2::div(computorv2::mul(computorv2::add(computorv2::add(computorv2::add(x, computorv2::mul(x, x)), computorv2::add(x, computorv2::add(x, x))), computorv2::add(x, x)), x), x), x), z);
