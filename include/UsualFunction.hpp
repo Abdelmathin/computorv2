@@ -58,6 +58,7 @@ namespace computorv2
 
             std::string         getName(void)  const;
             computorv2::Object* getBody(void)  const;
+            void                setBody(const computorv2::Object* body);
 
             UsualFunction(const std::string& name, const computorv2::IndependentVariable& body);
             UsualFunction(const std::string& name, const computorv2::UsualFunction& body);
@@ -71,7 +72,6 @@ namespace computorv2
             std::string         _name;
             computorv2::Object* _body;
             void                setName(const std::string& name);
-            void                setBody(const computorv2::Object* body);
             void                init(void);
             void                clear(void);
 

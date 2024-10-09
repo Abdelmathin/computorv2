@@ -296,6 +296,7 @@ return_types = {
 }
 
 prototypes = {
+
 	"<return_type> neg(const computorv2::<left_object> left);" : {
 		"return_types": {
 			"Integer"             : "Integer"   ,
@@ -392,7 +393,35 @@ prototypes = {
 	},
 }
 
-user_prototypes = [
+default_usual_functions_config = {
+	"return_types": {
+
+	},
+	"default_body": {
+		"*" : """
+	computorv2::UsualFunction res("<function-name>", computorv2::IndependentVariable::null());
+	res.setBody(AS_OBJECT(&left));
+	return (res);
+""",
+	}
+}
+
+user_prototypes = []
+
+for name in [
+		"ln"     , "exp"    , "    "   ,
+		"sin"    , "cos"    , "tan"    ,
+		"sinh"   , "cosh"   , "tanh"   ,
+		"arcsin" , "arccos" , "arctan" ,
+		"arcsinh", "arccosh", "arctanh"
+	]:
+	name = name.strip()
+	if name:
+		funcdef = "computorv2::UsualFunction " + name + "(const computorv2::<left_object> left);"
+		user_prototypes.append(funcdef)
+		prototypes[funcdef] = default_usual_functions_config
+
+user_prototypes += [
 	"bool isfreeterm(const computorv2::<left_object> left);",
 	"bool eql(const computorv2::<left_object> left, const computorv2::<right_object> right);",
 	"<return_type> neg(const computorv2::<left_object> left);",
@@ -462,8 +491,9 @@ def ignore_prototype(prototype):
 	ignored_prototypes[prototype] = 1
 	return (0)
 
-TAB      = " " * 4
-NEW_LINE = "\n"
+TAB       = " " * 4
+NEW_LINE  = "\n"
+namespace = "computorv2::"
 
 for prototype in user_prototypes:
 	function_name     = prototype.split("(")[0].strip().split("\t")[-1].split(" ")[-1]
@@ -521,6 +551,7 @@ for prototype in user_prototypes:
 						default_body = default_body.strip().replace("<left_object>"  , left_object)
 						default_body = default_body.strip().replace("<right_object>" , right_object)
 						default_body = default_body.strip().replace("<return_type>"  , return_type)
+						default_body = default_body.strip().replace("<function-name>", function_name)
 					break
 
 			line = clear_prototype(line)
@@ -549,7 +580,13 @@ for prototype in user_prototypes:
 		implementations[0] += NEW_LINE + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported between types \'" + left->getTypeName() + "\' and \'" + right->getTypeName() + "\'.");'
 	else:
 		implementations[0] += NEW_LINE + TAB + 'throw std::logic_error("Operation \'' + function_name + '\' not supported for type \'" + left->getTypeName() + "\'.");'
-	implementations[0] += NEW_LINE + TAB + "return (0);" + NEW_LINE + "}"
+	default_implementation_return = headers[0].strip().split("\t")[0].split(" ")[0].strip()
+
+	if (default_implementation_return.startswith(namespace)) and (not (default_implementation_return.endswith("*"))):
+		implementations[0] +=(NEW_LINE + TAB + "return (" + default_implementation_return + "::null());" + NEW_LINE + "}")
+	else:
+		implementations[0] += NEW_LINE + TAB + "return (0);" + NEW_LINE + "}"
+	
 	headers_tmp    = []
 	right_index = 0
 	for header in headers:

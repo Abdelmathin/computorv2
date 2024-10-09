@@ -36,10 +36,8 @@
 
 	neg
 
-
 >>>>>>>
 computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const computorv2::Polynomial& right)
-
 
 */
 
@@ -55,21 +53,26 @@ int main(void)
 	computorv2::UsualFunction       sin("sin"      , x);
 	computorv2::UsualFunction       cos("cos"      , x);
 	computorv2::UsualFunction       tan("tan"      , x);
-	computorv2::UsualFunction       arcsin("arcsin", sin);
-	computorv2::UsualFunction       arccos("arccos", cos);
-	computorv2::UsualFunction       arctan("arctan", tan);
-
+	computorv2::UsualFunction       arcsin("arcsin", x);
+	computorv2::UsualFunction       arccos("arccos", x);
+	computorv2::UsualFunction       arctan("arctan", x);
 
 	/* -------------------------------------- */
 
-	std::cout << "d(" << ln.toString()     << ") / dx = " << computorv2::drv(ln, x)     << std::endl;
-	std::cout << "d(" << exp.toString()    << ") / dx = " << computorv2::drv(exp, x)    << std::endl;
-	std::cout << "d(" << sin.toString()    << ") / dx = " << computorv2::drv(sin, x)    << std::endl;
-	std::cout << "d(" << cos.toString()    << ") / dx = " << computorv2::drv(cos, x)    << std::endl;
-	std::cout << "d(" << tan.toString()    << ") / dx = " << computorv2::drv(tan, x)    << std::endl;
-	std::cout << "d(" << arcsin.toString() << ") / dx = " << computorv2::drv(arcsin, x) << std::endl;
-	std::cout << "d(" << arccos.toString() << ") / dx = " << computorv2::drv(arccos, x) << std::endl;
-	std::cout << "d(" << arctan.toString() << ") / dx = " << computorv2::drv(arctan, x) << std::endl;
+	std::cout << "d(" << computorv2::ln(x)      << ") / dx = " <<  computorv2::drv(computorv2::ln(x)     , x) << std::endl;
+	std::cout << "d(" << computorv2::exp(x)     << ") / dx = " <<  computorv2::drv(computorv2::exp(x)    , x) << std::endl;
+	std::cout << "d(" << computorv2::sin(x)     << ") / dx = " <<  computorv2::drv(computorv2::sin(x)    , x) << std::endl;
+	std::cout << "d(" << computorv2::cos(x)     << ") / dx = " <<  computorv2::drv(computorv2::cos(x)    , x) << std::endl;
+	std::cout << "d(" << computorv2::tan(x)     << ") / dx = " <<  computorv2::drv(computorv2::tan(x)    , x) << std::endl;
+	std::cout << "d(" << computorv2::arcsin(x)  << ") / dx = " <<  computorv2::drv(computorv2::arcsin(x) , x) << std::endl;
+	std::cout << "d(" << computorv2::arccos(x)  << ") / dx = " <<  computorv2::drv(computorv2::arccos(x) , x) << std::endl;
+	std::cout << "d(" << computorv2::arctan(x)  << ") / dx = " <<  computorv2::drv(computorv2::arctan(x) , x) << std::endl;
+	std::cout << "d(" << computorv2::sinh(x)    << ") / dx = " <<  computorv2::drv(computorv2::sinh(x)   , x) << std::endl;
+	std::cout << "d(" << computorv2::cosh(x)    << ") / dx = " <<  computorv2::drv(computorv2::cosh(x)   , x) << std::endl;
+	std::cout << "d(" << computorv2::tanh(x)    << ") / dx = " <<  computorv2::drv(computorv2::tanh(x)   , x) << std::endl;
+	std::cout << "d(" << computorv2::arcsinh(x) << ") / dx = " <<  computorv2::drv(computorv2::arcsinh(x), x) << std::endl;
+	std::cout << "d(" << computorv2::arccosh(x) << ") / dx = " <<  computorv2::drv(computorv2::arccosh(x), x) << std::endl;
+	std::cout << "d(" << computorv2::arctanh(x) << ") / dx = " <<  computorv2::drv(computorv2::arctanh(x), x) << std::endl;
 
 
 	/*
