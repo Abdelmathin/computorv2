@@ -60,10 +60,10 @@ int main(void)
 	std::cout << "z = " << z << std::endl;
 	std::cout << "f = " << f << std::endl;
 
-	// std::cout << "dx / dx = " << computorv2::derivative(x, x) << std::endl;
-	// std::cout << "dp / dx = " << computorv2::derivative(p, x) << std::endl;
-	// std::cout << "dz / dx = " << computorv2::derivative(z, x) << std::endl;
-	// std::cout << "df / dx = " << computorv2::derivative(f, x) << std::endl;
+	std::cout << "d(" << x.toString() << ") / dx = " << computorv2::drv(x, x) << std::endl;
+	std::cout << "d(" << p.toString() << ") / dx = " << computorv2::drv(p, x) << std::endl;
+	std::cout << "d(" << z.toString() << ") / dx = " << computorv2::drv(z, x) << std::endl;
+	std::cout << "d(" << f.toString() << ") / dx = " << computorv2::drv(f, x) << std::endl;
 
 	std::cout << "computorv2::inv(&x) = " << computorv2::inv(&x)->toString() << std::endl;
 	std::cout << "computorv2::inv(&p) = " << computorv2::inv(&p)->toString() << std::endl;
@@ -146,8 +146,9 @@ int main(void)
 	std::cout << "computorv2::div(f, z) = " << computorv2::div(f, z) << std::endl;
 	std::cout << "computorv2::div(f, f) = " << computorv2::div(f, f) << std::endl;
 
-	// exit(0);
+	return (0);
 
+	// exit(0);
 
 	const computorv2::Polynomial e1 = computorv2::add(computorv2::div(computorv2::add(computorv2::mul(computorv2::add(computorv2::add(computorv2::add(x, computorv2::mul(x, x)), computorv2::add(x, computorv2::add(x, x))), computorv2::add(x, x)), x), x), x), z);
 	const computorv2::Polynomial e2 = computorv2::add(computorv2::add(computorv2::div(computorv2::mul(computorv2::add(computorv2::add(computorv2::add(x, computorv2::mul(x, x)), computorv2::add(x, computorv2::add(x, x))), computorv2::add(x, x)), x), x), x), z);
