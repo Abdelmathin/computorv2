@@ -60,6 +60,7 @@ namespace computorv2
             computorv2::Object* getBody(void)  const;
 
             UsualFunction(const std::string& name, const computorv2::IndependentVariable& body);
+            UsualFunction(const std::string& name, const computorv2::UsualFunction& body);
             UsualFunction(const std::string& name, const computorv2::Object* body);
             ~UsualFunction(void);
             UsualFunction(const UsualFunction& other);

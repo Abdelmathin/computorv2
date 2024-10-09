@@ -366,6 +366,10 @@ void computorv2::Polynomial::setCoefficient(const computorv2::Object* coefficien
 	{
 		throw std::logic_error("Can't set coefficient to NULL");
 	}
+	if (coefficient == this)
+	{
+		throw std::logic_error("coefficient == this!");
+	}
 	if (coefficient->isnull())
 	{
 		this->delBase();
@@ -385,6 +389,10 @@ void computorv2::Polynomial::setBase(const computorv2::Object* base)
 	{
 		throw std::logic_error("Can't set base to NULL");
 	}
+	if (base == this)
+	{
+		throw std::logic_error("base == this!");
+	}
 	if (base->isnull())
 	{
 		this->delCoefficient();
@@ -403,6 +411,10 @@ void computorv2::Polynomial::setExponent(const computorv2::Object* exponent)
 	if (!exponent)
 	{
 		throw std::logic_error("Can't set exponent to NULL");
+	}
+	if (exponent == this)
+	{
+		throw std::logic_error("exponent == this!");
 	}
 	if (exponent->isnull())
 	{

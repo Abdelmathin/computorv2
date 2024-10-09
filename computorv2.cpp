@@ -49,9 +49,30 @@ int main(void)
 	computorv2::IndependentVariable y("y");
 	computorv2::Polynomial          p(x);
 	computorv2::Complex             z(1.0, 1.0);
-	computorv2::UsualFunction       f("ln", x);
+
+	computorv2::UsualFunction       ln("ln"        , x);
+	computorv2::UsualFunction       exp("exp"      , x);
+	computorv2::UsualFunction       sin("sin"      , x);
+	computorv2::UsualFunction       cos("cos"      , x);
+	computorv2::UsualFunction       tan("tan"      , x);
+	computorv2::UsualFunction       arcsin("arcsin", sin);
+	computorv2::UsualFunction       arccos("arccos", cos);
+	computorv2::UsualFunction       arctan("arctan", tan);
+
 
 	/* -------------------------------------- */
+
+	std::cout << "d(" << ln.toString()     << ") / dx = " << computorv2::drv(ln, x)     << std::endl;
+	std::cout << "d(" << exp.toString()    << ") / dx = " << computorv2::drv(exp, x)    << std::endl;
+	std::cout << "d(" << sin.toString()    << ") / dx = " << computorv2::drv(sin, x)    << std::endl;
+	std::cout << "d(" << cos.toString()    << ") / dx = " << computorv2::drv(cos, x)    << std::endl;
+	std::cout << "d(" << tan.toString()    << ") / dx = " << computorv2::drv(tan, x)    << std::endl;
+	std::cout << "d(" << arcsin.toString() << ") / dx = " << computorv2::drv(arcsin, x) << std::endl;
+	std::cout << "d(" << arccos.toString() << ") / dx = " << computorv2::drv(arccos, x) << std::endl;
+	std::cout << "d(" << arctan.toString() << ") / dx = " << computorv2::drv(arctan, x) << std::endl;
+
+
+	/*
 
 	computorv2::Polynomial w(f);
 
@@ -146,6 +167,8 @@ int main(void)
 	std::cout << "computorv2::div(f, z) = " << computorv2::div(f, z) << std::endl;
 	std::cout << "computorv2::div(f, f) = " << computorv2::div(f, f) << std::endl;
 
+	
+
 	return (0);
 
 	// exit(0);
@@ -166,5 +189,6 @@ int main(void)
 	std::cout << "e6 = " << e6 << std::endl;
 	std::cout << "e7 = " << e7 << std::endl;
 	std::cout << "e8 = " << e8 << std::endl;
+	*/
 	return (0);
 }

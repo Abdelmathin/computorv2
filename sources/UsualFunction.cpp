@@ -161,6 +161,13 @@ computorv2::UsualFunction::UsualFunction(const std::string& name, const computor
     this->setBody(&body);
 }
 
+computorv2::UsualFunction::UsualFunction(const std::string& name, const computorv2::UsualFunction& body)
+{
+    this->init();
+    this->setName(name);
+    this->setBody(&body);
+}
+
 computorv2::UsualFunction::UsualFunction(const std::string& name, const computorv2::Object* body)
 {
     this->init();

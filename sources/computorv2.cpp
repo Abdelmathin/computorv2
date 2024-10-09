@@ -79,10 +79,22 @@ bool computorv2::isname(const std::string& name)
 
 bool computorv2::isUsualFunction(const std::string& name)
 {
-	if (name == "ln")
-	{
-		return (true);
-	}
+    if (name == "ln")
+        return (true);
+    else if(name == "exp")
+        return (true);
+    else if (name == "sin")
+        return (true);
+    else if (name == "cos")
+        return (true);
+    else if (name == "tan")
+        return (true);
+    else if (name == "arcsin")
+        return (true);
+    else if (name == "arccos")
+        return (true);
+    else if (name == "arctan")
+        return (true);
 	return (false);
 }
 
@@ -145,10 +157,6 @@ bool computorv2::isfreeterm(const computorv2::Polynomial& left)
     if (left.getCoefficient()->isnull() || left.getBase()->isnull())
     {
         return (computorv2::isfreeterm(left.getFreeTerm()));
-    }
-    else if (left.getFreeTerm()->isnull())
-    {
-        return (computorv2::isfreeterm(left.getCoefficient()));
     }
     return (false);
 }
@@ -764,7 +772,16 @@ computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const
     poly2.setFreeTerm(0.0);
     delete (r1);
 
-    return (computorv2::add(computorv2::add(poly1, poly2), poly3));
+    computorv2::Polynomial res = computorv2::add(computorv2::add(poly1, poly2), poly3);
+    if (computorv2::eql(res.getCoefficient(), res.getBase()))
+    {
+        const computorv2::Complex one(1.0, 0.0);
+        const computorv2::Object* n = computorv2::add(res.getExponent(), AS_OBJECT(&one));
+        res.setCoefficient(1.0);
+        res.setExponent(n);
+        delete (n);
+    }
+    return (res);
 }
 
 computorv2::Polynomial computorv2::mul(const computorv2::Polynomial& left, const computorv2::UsualFunction& right)
@@ -2287,6 +2304,7 @@ computorv2::Polynomial computorv2::drv(const computorv2::Polynomial& left, const
 
 computorv2::Polynomial computorv2::drv(const computorv2::UsualFunction& left, const computorv2::IndependentVariable& right)
 {
+    const computorv2::Object* f = left.getBody();
     if (left.getName() == "ln")
     {
         const computorv2::Polynomial df = computorv2::drv(left.getBody(), right);
@@ -2294,6 +2312,60 @@ computorv2::Polynomial computorv2::drv(const computorv2::UsualFunction& left, co
         computorv2::Polynomial res(*AS_POLYNOMIAL(df_f));
         delete (df_f);
         return (res);
+    }
+    else if (left.getName() == "exp")
+    {
+        return (computorv2::mul(computorv2::drv(f, right), left));
+    }
+    else if (left.getName() == "sin")
+    {
+        return (computorv2::mul(computorv2::drv(f, right), computorv2::UsualFunction("cos", f)));
+    }
+    else if (left.getName() == "cos")
+    {
+        return (computorv2::neg(computorv2::mul(computorv2::drv(f, right), computorv2::UsualFunction("sin", f))));
+    }
+    else if (left.getName() == "tan")
+    {
+        const computorv2::Polynomial t = computorv2::div(computorv2::UsualFunction("sin", f), computorv2::UsualFunction("cos", f));
+        return (computorv2::drv(t, right));
+    }
+    else if (left.getName() == "arcsin")
+    {
+        computorv2::Polynomial tmp(computorv2::IndependentVariable::null());
+        tmp.setCoefficient(-1.0);
+        tmp.setBase(f);
+        tmp.setExponent(2.0);
+        tmp.setFreeTerm(1.0);
+        computorv2::Polynomial df(computorv2::IndependentVariable::null());
+        df.setCoefficient(1.0);
+        df.setBase(AS_OBJECT(&tmp));
+        df.setExponent(0.5);
+        df.setFreeTerm(0.0);
+        return (computorv2::div(computorv2::drv(f, right), df));
+    }
+    else if (left.getName() == "arccos")
+    {
+        computorv2::Polynomial tmp(computorv2::IndependentVariable::null());
+        tmp.setCoefficient(-1.0);
+        tmp.setBase(f);
+        tmp.setExponent(2.0);
+        tmp.setFreeTerm(1.0);
+        computorv2::Polynomial df(computorv2::IndependentVariable::null());
+        df.setCoefficient(-1.0);
+        df.setBase(AS_OBJECT(&tmp));
+        df.setExponent(0.5);
+        df.setFreeTerm(0.0);
+        return (computorv2::div(computorv2::drv(f, right), df));
+    }
+    else if (left.getName() == "arctan")
+    {
+        computorv2::Polynomial tmp(computorv2::IndependentVariable::null());
+        tmp.setCoefficient(1.0);
+        tmp.setBase(f);
+        tmp.setExponent(2.0);
+        tmp.setFreeTerm(1.0);
+        return (computorv2::div(computorv2::drv(f, right), tmp));
     }
     throw std::logic_error("Operation 'drv' not supported for: '" + left.getName() + "(" + left.getBody()->toString() + ")'");
     return (computorv2::Polynomial::null());
