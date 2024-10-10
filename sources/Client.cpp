@@ -145,13 +145,18 @@ int computorv2::Client::read(void)
 	}
 	char buffer[1024];
 	const int rd = ::read(this->getFdIn(), buffer, 1024);
-	const std::string s(buffer, rd);
-	this->addBuffer(s);
-	if (rd < 1)
+	if (rd > 0)
 	{
-		this->_connected = false;
+		std::string tmp(buffer, rd);
+		if (rd < 1024)
+		{
+			tmp += "\n";
+		}
+		this->addBuffer(tmp);
+		return (rd);
 	}
-	return (rd);
+	this->_connected = false;
+	return (-1);
 }
 
 int computorv2::Client::error(const computorv2::statment *st, const std::string prompt, std::string message)
@@ -175,7 +180,16 @@ int computorv2::Client::error(const computorv2::statment *st, const std::string 
 
 int computorv2::Client::parse_line(std::string line)
 {
-	line = computorv2::ltrim(line);
+	line = computorv2::tolower(computorv2::ltrim(line));
+	if (!this->connected())
+	{
+		return (0);
+	}
+	if (line == "quit")
+	{
+		this->_connected = false;
+		return (0);
+	}
 	if (line != "")
 	{
 		computorv2::statment st;

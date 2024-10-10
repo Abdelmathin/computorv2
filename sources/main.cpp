@@ -58,13 +58,14 @@ int main(int argc, const char **argv)
 		computorv2::Client client = computorv2::Client();
 		client.setFdIn(STDIN_FILENO);
 		client.setFdOut(STDOUT_FILENO);
-		client.setFdErr(STDOUT_FILENO);
+		client.setFdErr(STDERR_FILENO);
 		while ((client.connected()) && (client.read() > 0))
 		{
 			continue ;
 		}
+		return (0);
 	}
-	for (int i = 0; i < argc; i++)
+	for (int i = 1; i < argc; i++)
 	{
 		const int fd = open(argv[i], O_RDONLY);
 		if (fd < 0)
