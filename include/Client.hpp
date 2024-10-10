@@ -39,6 +39,7 @@
 #pragma once
 
 #include "computorv2.hpp"
+#include "statment.hpp"
 #include "VirtualMachine.hpp"
 #include <iostream>
 
@@ -72,6 +73,7 @@ namespace computorv2
             bool connected(void) const;
             int  read(void);
 
+            int  error(const computorv2::statment *st, const std::string prompt, std::string message);
             int  parse_line(std::string line);
             int  check_line(void);
             void addBuffer(const std::string& buffer);

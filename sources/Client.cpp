@@ -154,6 +154,25 @@ int computorv2::Client::read(void)
 	return (rd);
 }
 
+int computorv2::Client::error(const computorv2::statment *st, const std::string prompt, std::string message)
+{
+	if (st)
+	{
+		message = computorv2::ltrim(message);
+		std::cout << "Error: " << prompt << std::endl << "       ";
+		for (std::string::size_type i = st->_eri; i <= st->_pos; i++)
+		{
+			std::cout << "^";
+		}
+		std::cout << std::endl;
+		if (message != "")
+		{
+			std::cout << message << std::endl;
+		}
+	}
+	return (0);
+}
+
 int computorv2::Client::parse_line(std::string line)
 {
 	line = computorv2::ltrim(line);
@@ -167,13 +186,23 @@ int computorv2::Client::parse_line(std::string line)
 		st._vm  = &(this->_vm);
 		try
 		{
-			computorv2::statment_parse(&st);			
+			computorv2::statment_parse(&st);
+			if ((st._err != 0) || (st._pos < st._len))
+			{
+				this->error(&st, line, "");
+				st._err = COMPUTORV2_ERROR;
+			}
 		}
 		catch (const std::exception& e)
 		{
-			// write(fderr, ...)
-			std::cout << e.what() << std::endl;
+			this->error(&st, line, e.what());
+			st._err = COMPUTORV2_ERROR;
 		}
+		if ((st._err == 0) && (st._result))
+		{
+			std::cout << st._result->toString() << std::endl;
+		}
+		computorv2::statment_fini(&st);
 	}
 	return (0);
 }

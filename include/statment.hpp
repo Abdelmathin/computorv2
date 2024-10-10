@@ -45,6 +45,7 @@ namespace computorv2
 {
 	typedef struct statment
 	{
+		std::string::size_type      _eri       ;
 		std::string::size_type      _pos       ;
 		std::string                 _str       ;
 		std::string::size_type      _len       ;
@@ -64,6 +65,8 @@ namespace computorv2
 	int         statment_operation_code(computorv2::statment *st);
 
 	t_error     statment_init(computorv2::statment *st);
+	t_error     statment_fini(computorv2::statment *st);
+	t_error     statment_syntaxerror(computorv2::statment *st);
 	t_error     statment_skip_spaces(computorv2::statment *st);
 	t_error     statment_skip(computorv2::statment *st, const std::string charset);
 	t_error     statment_precedence(computorv2::statment *st, t_error (*perv)(computorv2::statment *st), int operations);

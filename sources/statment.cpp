@@ -51,6 +51,7 @@ t_error computorv2::statment_init(computorv2::statment *st)
 {
 	if (st)
 	{
+		st->_eri       = 0     ;
 		st->_pos       = 0     ;
 		st->_str       = ""    ;
 		st->_len       = 0     ;
@@ -61,6 +62,28 @@ t_error computorv2::statment_init(computorv2::statment *st)
 		st->_result    = NULL  ;
 		st->_vm        = NULL  ;
 		return (COMPUTORV2_SUCCESS);
+	}
+	return (COMPUTORV2_ERROR);
+}
+
+t_error computorv2::statment_fini(computorv2::statment *st)
+{
+	if (st)
+	{
+		if (st->_result)
+		{
+			delete (st->_result);
+		}
+		return (computorv2::statment_init(st));
+	}
+	return (COMPUTORV2_ERROR);
+}
+
+t_error computorv2::statment_syntaxerror(computorv2::statment *st)
+{
+	if (st)
+	{
+		st->_err = COMPUTORV2_ERROR;
 	}
 	return (COMPUTORV2_ERROR);
 }
@@ -497,10 +520,6 @@ t_error computorv2::statment_assign_variable(computorv2::statment *st)
 			}
 			st->_vm->setVariableByName(varname, st->_result);
 		}
-		if (st->_result)
-		{
-			std::cout << st->_result->toString() << std::endl;
-		}
 		return (err);
 	}
 	return (COMPUTORV2_ERROR);
@@ -533,7 +552,7 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 
 t_error computorv2::statment_parse(computorv2::statment *st)
 {
-	while (1)
+	while (st)
 	{
 		computorv2::statment_skip(st, "\r\n\t\v\f ");
 		computorv2::statment_type(st);
@@ -552,8 +571,7 @@ t_error computorv2::statment_parse(computorv2::statment *st)
 		}
 		else
 		{
-			std::cout << "unknown type: " << st->_type << std::endl;
-			exit(0);
+			return (computorv2::statment_syntaxerror(st));
 		}
 		if (computorv2::statment_getc(st) == '\r')
 		{
