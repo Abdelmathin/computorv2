@@ -54,10 +54,6 @@ namespace computorv2
 			virtual bool                isnull(void)      const = 0;
 			virtual bool                isunity(void)     const = 0;
 			virtual bool                isnegative(void)  const = 0;
-
-			Object(void){};
-			Object(const Object& other){};
-			Object& operator=(const Object& other){return (*this);};
 			virtual ~Object(void){};
 	};
 }

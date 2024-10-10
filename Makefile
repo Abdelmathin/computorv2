@@ -40,7 +40,7 @@
 
 CPP=c++
 NAME=computorv2
-CPPFLAGS=
+CPPFLAGS=-Wall -Wextra -Wshadow -Werror
 CREATE_DIRECTORY=mkdir -p
 REMOVE_FILE=rm -rf
 HEADERS_DIR=include

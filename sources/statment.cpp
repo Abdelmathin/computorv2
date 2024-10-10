@@ -42,6 +42,7 @@
 # include "../include/computorv2.hpp"
 # include "../include/Object.hpp"
 # include "../include/VirtualMachine.hpp"
+# include "../include/Matrix.hpp"
 # include "../include/Complex.hpp"
 # include "../include/Polynomial.hpp"
 # include "../include/statment.hpp"
@@ -70,11 +71,22 @@ t_error computorv2::statment_fini(computorv2::statment *st)
 {
 	if (st)
 	{
+		computorv2::statment_delresult(st);
+		return (computorv2::statment_init(st));
+	}
+	return (COMPUTORV2_ERROR);
+}
+
+t_error computorv2::statment_delresult(computorv2::statment *st)
+{
+	if (st)
+	{
 		if (st->_result)
 		{
 			delete (st->_result);
 		}
-		return (computorv2::statment_init(st));
+		st->_result = NULL;
+		return (COMPUTORV2_SUCCESS);
 	}
 	return (COMPUTORV2_ERROR);
 }
@@ -248,12 +260,12 @@ std::string computorv2::statment_parsename(computorv2::statment *st)
 
 t_error computorv2::statment_parse_number(computorv2::statment *st)
 {
+	st->_result = NULL;
 	char c = computorv2::statment_getc(st);
 	if (IS_DIGIT(c) == 0)
 	{
 		return (COMPUTORV2_ERROR);
 	}
-	st->_result = NULL;
 	double r = 0.0;
 	while (IS_DIGIT(c))
 	{
@@ -274,7 +286,7 @@ t_error computorv2::statment_parse_number(computorv2::statment *st)
 		f = f / 10.0;		
 	}
 	st->_result = new computorv2::Complex(r);
-	return (0);
+	return (COMPUTORV2_SUCCESS);
 }
 
 t_error computorv2::statment_parse_variable(computorv2::statment *st)
@@ -285,10 +297,10 @@ t_error computorv2::statment_parse_variable(computorv2::statment *st)
 		std::string name = computorv2::statment_parsename(st);
 		if (st->_vm)
 		{
-			st->_result = st->_vm->getIndependentByName(name);
+			st->_result = st->_vm->getLocalVariableByName(name);
 			if (!st->_result)
 			{
-				st->_result = st->_vm->getConstantByName(name);				
+				st->_result = st->_vm->getConstantByName(name);
 			}
 			if (!st->_result)
 			{
@@ -303,12 +315,8 @@ t_error computorv2::statment_parse_variable(computorv2::statment *st)
 		}
 		else
 		{
-			st->_result = new computorv2::Polynomial(name);
+			st->_result = new computorv2::IndependentVariable(name);
 		}
-		std::cout << "name: " << name << std::endl;
-		std::cout << "st->_result->getType(): " << st->_result->getType() << std::endl;
-		std::cout << "st->_result: " << st->_result->toString() << std::endl;
-		exit(0);
 		return (st->_err);		
 	}
 	return (COMPUTORV2_ERROR);
@@ -343,7 +351,7 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 		if (IS_VARSTART(computorv2::statment_getc(st)))
 		{
 			/* caseOf(2i) */
-			st->_operation = COMPUTORV2_OPERATION_MULT;			
+			st->_operation = COMPUTORV2_OPERATION_MULT;
 		}
 	}
 	return (st->_err);
@@ -352,6 +360,48 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 t_error computorv2::statment_operation(computorv2::statment *st, const computorv2::Object* left, const computorv2::Object* right, const int operation_code)
 {
 	st->_result = NULL;
+	if ((operation_code & COMPUTORV2_OPERATION_ADD) != 0)
+	{
+		st->_result = computorv2::add(left, right);
+		return (st->_err);
+	}
+	if ((operation_code & COMPUTORV2_OPERATION_SUB) != 0)
+	{
+		st->_result = computorv2::sub(left, right);
+		return (st->_err);
+	}
+	if ((operation_code & COMPUTORV2_OPERATION_MULT) != 0)
+	{
+		st->_result = computorv2::mul(left, right);
+		return (st->_err);
+	}
+	if ((operation_code & COMPUTORV2_OPERATION_DIV) != 0)
+	{
+		st->_result = computorv2::div(left, right);
+		return (st->_err);
+	}
+	if ((operation_code & COMPUTORV2_OPERATION_EXP) != 0)
+	{
+		st->_result = computorv2::pow(left, right);
+		return (st->_err);
+	}
+	if ((operation_code & COMPUTORV2_OPERATION_MATRIX_MULT) != 0)
+	{
+		if (!IS_MATRIX(left) || !IS_MATRIX(right))
+		{
+			throw std::runtime_error("** Only used for term-to-term multiplication!");
+		}
+		st->_result = computorv2::mul(left, right);
+		return (st->_err);
+	}
+	if ((operation_code & COMPUTORV2_OPERATION_MOD) != 0)
+	{
+		st->_result = computorv2::mod(left, right);
+		return (st->_err);
+	}
+	std::cout << "left: " << left->toString() << std::endl;
+	std::cout << "right: " << right->toString() << std::endl;
+	std::cout << "operation_code: " << operation_code << std::endl;
 	throw "Unknown operation!";
 	return (COMPUTORV2_SUCCESS);
 }
@@ -365,13 +415,13 @@ t_error computorv2::statment_precedence(computorv2::statment *st, t_error (*perv
 	perv(st);
 	while ((st->_err == 0) && ((operations & st->_operation) != 0))
 	{
-		const int old_operation   = st->_operation;
-		const computorv2::Object* left  = st->_result;
-		st->_result               = NULL;
+		const int old_operation = st->_operation;
+		const computorv2::Object* left = st->_result;
+		st->_result = NULL;
 		perv(st);
 		const computorv2::Object* right = st->_result;
-		st->_result               = NULL;
-		st->_err                  =  computorv2::statment_operation(st, left, right, old_operation);
+		st->_result = NULL;
+		st->_err = computorv2::statment_operation(st, left, right, old_operation);
 		if (left)
 		{
 			delete (left);
@@ -511,13 +561,12 @@ t_error computorv2::statment_assign_variable(computorv2::statment *st)
 	{
 		const std::string varname = st->_varname;
 		t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
+		if (!st->_result)
+		{
+			return (COMPUTORV2_ERROR);
+		}
 		if (st->_vm)
 		{
-			computorv2::Object* old = st->_vm->getVariableByName(varname);
-			if (old)
-			{
-				delete (old);
-			}
 			st->_vm->setVariableByName(varname, st->_result);
 		}
 		return (err);
@@ -531,28 +580,32 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 	{
 		const std::string  funcname = st->_funcname;
 		const std::string  varname  = st->_varname;
-		computorv2::Polynomial p = computorv2::Polynomial(varname);
+		const computorv2::IndependentVariable var(varname);
 		if (st->_vm)
 		{
-			st->_vm->setIndependentByName(varname, &p);
+			st->_vm->setLocalVariableByName(varname, &var);
 		}
 		t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
 		if (st->_vm)
-		{		
-			st->_vm->setVariableByName(funcname, st->_result);
+		{
+			st->_vm->delLocalVariableByName(varname);
+		}
+		if (!st->_result)
+		{
+			return (COMPUTORV2_ERROR);
 		}
 		if (st->_vm)
-		{
-			st->_vm->delIndependentByName(varname);
+		{		
+			st->_vm->setVariableByName(funcname, st->_result);
 		}
 		return (err);
 	}
 	return (COMPUTORV2_ERROR);
 }
 
-t_error computorv2::statment_parse(computorv2::statment *st)
+t_error computorv2::statment_parseline(computorv2::statment *st)
 {
-	while (st)
+	if (st)
 	{
 		computorv2::statment_skip(st, "\r\n\t\v\f ");
 		computorv2::statment_type(st);

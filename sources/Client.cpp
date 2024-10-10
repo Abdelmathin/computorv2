@@ -186,7 +186,7 @@ int computorv2::Client::parse_line(std::string line)
 		st._vm  = &(this->_vm);
 		try
 		{
-			computorv2::statment_parse(&st);
+			computorv2::statment_parseline(&st);
 			if ((st._err != 0) || (st._pos < st._len))
 			{
 				this->error(&st, line, "");

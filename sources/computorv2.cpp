@@ -81,32 +81,34 @@ bool computorv2::isUsualFunction(const std::string& name)
 {
     if (name == "ln")
         return (true);
-    if (name == "exp")
+    else if (name == "exp")
         return (true);
-    if (name == "sin")
+    else if (name == "sin")
         return (true);
-    if (name == "cos")
+    else if (name == "cos")
         return (true);
-    if (name == "tan")
+    else if (name == "tan")
         return (true);
-    if (name == "arcsin")
+    else if (name == "arcsin")
         return (true);
-    if (name == "arccos")
+    else if (name == "arccos")
         return (true);
-    if (name == "arctan")
+    else if (name == "arctan")
         return (true);
-    if (name == "sinh")
+    else if (name == "sinh")
         return (true);
-    if (name == "cosh")
+    else if (name == "cosh")
         return (true);
-    if (name == "tanh")
+    else if (name == "tanh")
         return (true);
-    if (name == "arcsinh")
+    else if (name == "arcsinh")
         return (true);
-    if (name == "arccosh")
+    else if (name == "arccosh")
         return (true);
-    if (name == "arctanh")
+    else if (name == "arctanh")
+    {
         return (true);
+    }
 	return (false);
 }
 
@@ -3033,7 +3035,7 @@ computorv2::Polynomial computorv2::drv(const computorv2::Object* left, const com
 
 computorv2::Polynomial computorv2::drv(const computorv2::Matrix& left, const computorv2::IndependentVariable& right)
 {
-    (void)left;
+    (void)left;  (void)right;
     throw std::logic_error("Operation 'drv' not supported for type: 'Matrix'");
     return (computorv2::Polynomial::null());
 }

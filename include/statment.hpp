@@ -38,8 +38,9 @@
 
 #pragma once
 
+#include "Object.hpp"
 #include "computorv2.hpp"
-# include <iostream>
+#include <iostream>
 
 namespace computorv2
 {
@@ -63,9 +64,9 @@ namespace computorv2
 	bool        statment_eos(const computorv2::statment *st);
 	std::string statment_parsename(computorv2::statment *st);
 	int         statment_operation_code(computorv2::statment *st);
-
 	t_error     statment_init(computorv2::statment *st);
 	t_error     statment_fini(computorv2::statment *st);
+	t_error     statment_delresult(computorv2::statment *st);
 	t_error     statment_syntaxerror(computorv2::statment *st);
 	t_error     statment_skip_spaces(computorv2::statment *st);
 	t_error     statment_skip(computorv2::statment *st, const std::string charset);
@@ -81,5 +82,5 @@ namespace computorv2
 	t_error     statment_assign_variable(computorv2::statment *st);
 	t_error     statment_assign_function(computorv2::statment *st);
 	t_error     statment_assign(computorv2::statment *st);
-	t_error     statment_parse(computorv2::statment *st);
+	t_error     statment_parseline(computorv2::statment *st);
 }

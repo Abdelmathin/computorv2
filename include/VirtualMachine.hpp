@@ -50,25 +50,28 @@ namespace computorv2
 		private:
 			std::map< std::string, computorv2::Object*> _variables;
 			std::map< std::string, computorv2::Object*> _constants;
-			std::map< std::string, computorv2::Object*> _independents;
+			std::map< std::string, computorv2::Object*> _localvariables;
 		public:
 			VirtualMachine(void);
 			~VirtualMachine(void);
 			VirtualMachine(const VirtualMachine& other);
 			VirtualMachine& operator=(const VirtualMachine& other);
 
-			computorv2::Object* getVariableByName(const std::string name) const;
-			computorv2::Object* getConstantByName(const std::string name) const;
-			computorv2::Object* getIndependentByName(const std::string name) const;
+			computorv2::Object* getVariableByName(const std::string&      name) const;
+			computorv2::Object* getConstantByName(const std::string&      name) const;
+			computorv2::Object* getLocalVariableByName(const std::string& name) const;
 
-			void                setVariableByName(const std::string name, computorv2::Object* var);
-			void                setConstantByName(const std::string name, computorv2::Object* var);
-			void                setIndependentByName(const std::string name, computorv2::Object* var);
+			void                setVariableByName(const std::string&      name, const computorv2::Object* var);
+			void                setConstantByName(const std::string&      name, const computorv2::Object* var);
+			void                setLocalVariableByName(const std::string& name, const computorv2::Object* var);
 
-			void                delVariableByName(const std::string name);
-			void                delConstantByName(const std::string name);
-			void                delIndependentByName(const std::string name);
-
+			void                delVariableByName(const std::string&      name);
+			void                delConstantByName(const std::string&      name);
+			void                delLocalVariableByName(const std::string& name);
+			void                init(void);
 			void                clear(void);
+			std::string         toString(void) const;
 	};
 }
+
+std::ostream& operator<<(const std::ostream& os, const computorv2::VirtualMachine& vm);

@@ -39,15 +39,16 @@
 #ifndef __COMPUTORV2_SOURCES_VIRTUAL_MACHINE
 # define __COMPUTORV2_SOURCES_VIRTUAL_MACHINE
 
-# include "../include/computorv2.hpp"
 # include "../include/VirtualMachine.hpp"
+# include "../include/computorv2.hpp"
 # include "../include/Object.hpp"
 # include <iostream>
+# include <sstream>
 # include <map>
 
 computorv2::VirtualMachine::VirtualMachine(void)
 {
-	this->clear();
+	this->init();
 }
 
 computorv2::VirtualMachine::~VirtualMachine(void)
@@ -55,8 +56,9 @@ computorv2::VirtualMachine::~VirtualMachine(void)
 	this->clear();
 }
 
-computorv2::VirtualMachine::VirtualMachine(const VirtualMachine& other)
+computorv2::VirtualMachine::VirtualMachine(const computorv2::VirtualMachine& other)
 {
+	this->init();
 	*this = other;
 }
 
@@ -64,14 +66,30 @@ computorv2::VirtualMachine& computorv2::VirtualMachine::operator=(const computor
 {
 	if (this != &other)
 	{
-		this->_variables    = other._variables   ;
-		this->_constants    = other._constants   ;
-		this->_independents = other._independents;
+		this->clear();
+		std::map< std::string, computorv2::Object* >::const_iterator it = other._variables.begin();
+		while (it != other._variables.end())
+		{
+			this->setVariableByName(it->first, it->second);
+			it++;
+		}
+		it = other._constants.begin();
+		while (it != other._constants.end())
+		{
+			this->setConstantByName(it->first, it->second);
+			it++;
+		}
+		it = other._localvariables.begin();
+		while (it != other._localvariables.end())
+		{
+			this->setLocalVariableByName(it->first, it->second);
+			it++;
+		}
 	}
 	return (*this);
 }
 
-computorv2::Object* computorv2::VirtualMachine::getVariableByName(const std::string name) const
+computorv2::Object* computorv2::VirtualMachine::getVariableByName(const std::string& name) const
 {
 	std::map< std::string, computorv2::Object* >::const_iterator it = this->_variables.find(name);
 	if (it == this->_variables.end())
@@ -81,7 +99,7 @@ computorv2::Object* computorv2::VirtualMachine::getVariableByName(const std::str
 	return (it->second);
 }
 
-computorv2::Object* computorv2::VirtualMachine::getConstantByName(const std::string name) const
+computorv2::Object* computorv2::VirtualMachine::getConstantByName(const std::string& name) const
 {
 	std::map< std::string, computorv2::Object* >::const_iterator it = this->_constants.find(name);
 	if (it == this->_constants.end())
@@ -91,54 +109,170 @@ computorv2::Object* computorv2::VirtualMachine::getConstantByName(const std::str
 	return (it->second);
 }
 
-computorv2::Object* computorv2::VirtualMachine::getIndependentByName(const std::string name) const
+computorv2::Object* computorv2::VirtualMachine::getLocalVariableByName(const std::string& name) const
 {
-	std::map< std::string, computorv2::Object* >::const_iterator it = this->_independents.find(name);
-	if (it == this->_independents.end())
+	std::map< std::string, computorv2::Object* >::const_iterator it = this->_localvariables.find(name);
+	if (it == this->_localvariables.end())
 	{
 		return (NULL);
 	}
 	return (it->second);
 }
 
-void computorv2::VirtualMachine::setVariableByName(const std::string name, computorv2::Object* var)
+void computorv2::VirtualMachine::setVariableByName(const std::string& name, const computorv2::Object* var)
 {
-	this->_variables[name] = var;
+	if (!var)
+	{
+		throw std::runtime_error("Can't set NULL Variable!");
+	}
+	this->delVariableByName(name);
+	this->_variables[name] = var->copy();
 }
 
-void computorv2::VirtualMachine::setConstantByName(const std::string name, computorv2::Object* var)
+void computorv2::VirtualMachine::setConstantByName(const std::string& name, const computorv2::Object* var)
 {
-	this->_constants[name] = var;
+	if (!var)
+	{
+		throw std::runtime_error("Can't set NULL Constant!");
+	}
+	this->delConstantByName(name);
+	this->_constants[name] = var->copy();
 }
 
-void computorv2::VirtualMachine::setIndependentByName(const std::string name, computorv2::Object* var)
+void computorv2::VirtualMachine::setLocalVariableByName(const std::string& name, const computorv2::Object* var)
 {
-	this->_independents[name] = var;
+	if (!var)
+	{
+		throw std::runtime_error("Can't set NULL LocalVariable!");
+	}
+	this->delLocalVariableByName(name);
+	this->_localvariables[name] = var->copy();
 }
 
-void computorv2::VirtualMachine::delVariableByName(const std::string name)
+void computorv2::VirtualMachine::delVariableByName(const std::string& name)
 {
+	std::map< std::string, computorv2::Object* >::iterator it = this->_variables.find(name);
+	if ((it != this->_variables.end()) && (it->second != NULL))
+	{
+		delete (it->second);
+	}
 	this->_variables[name] = NULL;
 	this->_variables.erase(name);
 }
 
-void computorv2::VirtualMachine::delConstantByName(const std::string name)
+void computorv2::VirtualMachine::delConstantByName(const std::string& name)
 {
+	std::map< std::string, computorv2::Object* >::iterator it = this->_constants.find(name);
+	if ((it != this->_constants.end()) && (it->second != NULL))
+	{
+		delete (it->second);
+	}
 	this->_constants[name] = NULL;
 	this->_constants.erase(name);
 }
 
-void computorv2::VirtualMachine::delIndependentByName(const std::string name)
+void computorv2::VirtualMachine::delLocalVariableByName(const std::string& name)
 {
-	this->_independents[name] = NULL;
-	this->_independents.erase(name);
+	std::map< std::string, computorv2::Object* >::iterator it = this->_localvariables.find(name);
+	if ((it != this->_localvariables.end()) && (it->second != NULL))
+	{
+		delete (it->second);
+	}
+	this->_localvariables[name] = NULL;
+	this->_localvariables.erase(name);
+}
+
+void computorv2::VirtualMachine::init(void)
+{
+	this->_variables.clear();
+	this->_constants.clear();
+	this->_localvariables.clear();
 }
 
 void computorv2::VirtualMachine::clear(void)
 {
-	this->_variables.clear();
-	this->_constants.clear();
-	this->_independents.clear();
+	std::map< std::string, computorv2::Object* >::const_iterator it = this->_variables.begin();
+	while (it != this->_variables.end())
+	{
+		if (it->second)
+		{
+			delete (it->second);
+		}
+		it++;
+	}
+	it = this->_constants.begin();
+	while (it != this->_constants.end())
+	{
+		if (it->second)
+		{
+			delete (it->second);
+		}
+		it++;
+	}
+	it = this->_localvariables.begin();
+	while (it != this->_localvariables.end())
+	{
+		if (it->second)
+		{
+			delete (it->second);
+		}
+		it++;
+	}
+	this->init();
+}
+
+std::string computorv2::VirtualMachine::toString(void) const
+{
+	std::stringstream ss("");
+	std::map< std::string, computorv2::Object* >::const_iterator it = this->_variables.begin();
+	while (it != this->_variables.end())
+	{
+		if (it != this->_variables.begin())
+		{
+			ss << std::endl;
+		}
+		const computorv2::Object* e = it->second;
+		if (e)
+		{
+			ss << e->getTypeName() << " " << it->first << " = '" << e->toString() << "';";
+		}
+		it++;
+	}
+	it = this->_constants.begin();
+	while (it != this->_constants.end())
+	{
+		if (it != this->_constants.begin())
+		{
+			ss << std::endl;
+		}
+		const computorv2::Object* e = it->second;
+		if (e)
+		{
+			ss << "const " << e->getTypeName() << " " << it->first << " = '" << e->toString() << "';";
+		}
+		it++;
+	}
+	it = this->_localvariables.begin();
+	while (it != this->_localvariables.end())
+	{
+		if (it != this->_localvariables.begin())
+		{
+			ss << std::endl;
+		}
+		const computorv2::Object* e = it->second;
+		if (e)
+		{
+			ss << "local " << e->getTypeName() << " " << it->first << " = '" << e->toString() << "';";
+		}
+		it++;
+	}
+	return (ss.str());
+}
+
+std::ostream& operator<<(std::ostream& os, const computorv2::VirtualMachine& vm)
+{
+	os << vm.toString();
+	return (os);
 }
 
 #endif//!__COMPUTORV2_SOURCES_VIRTUAL_MACHINE

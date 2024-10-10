@@ -11,13 +11,16 @@
 
 int main(void)
 {
+
 	computorv2::Client client = computorv2::Client();
 	client.setFdIn(STDIN_FILENO);
 	client.setFdOut(STDOUT_FILENO);
 	client.setFdErr(STDOUT_FILENO);
 
-	client.addBuffer("x = 2\n");
-	client.addBuffer("y = 5\n");
+	client.addBuffer("x = 7\n");
+	client.addBuffer("y = 13\n");
+	client.addBuffer("f(x) = 2 * x + x * x + 1\n");
+	// client.addBuffer("g(x) = f'(x)\n");
 
 	return (0);
 }
