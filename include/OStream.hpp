@@ -1,7 +1,7 @@
 /* **************************************************************************  */
 /*                                                                             */
 /*                                                         :::      ::::::::   */
-/*   IndependentVariable.hpp                            :+:      :+:    :+:    */
+/*   OStream.hpp                                        :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+      */
 /*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
 /*                                                +#+#+#+#+#+   +#+            */
@@ -39,36 +39,25 @@
 #pragma once
 
 #include "computorv2.hpp"
-#include "Object.hpp"
 #include <iostream>
+#include <sstream>
 
 namespace computorv2
 {
-	class IndependentVariable: public computorv2::Object
+	class OStream
 	{
-		public:
-            int                        getType(void)     const;
-            std::string                getTypeName(void) const;
-            std::string                toString(void)    const;
-            computorv2::Object*        copy(void)        const;
-            bool                       isnull(void)      const;
-            bool                       isunity(void)     const;
-            bool                       isnegative(void)  const;
-            static IndependentVariable null(void);
-
-			IndependentVariable(const std::string& name);
-			~IndependentVariable(void);
-			IndependentVariable(const IndependentVariable& other);
-			IndependentVariable& operator=(const IndependentVariable& other);
-			std::string          getName(void) const;
-			void                 setName(const std::string& name);
 		private:
-			IndependentVariable(void);
-			std::string _name;
+			int               _fdout;
+			std::stringstream _stream;
+		public:
+			OStream(void);
+			OStream(const OStream& other);
+			OStream& operator=(const OStream& other);
+			OStream& operator<<(int number);
+			OStream& operator<<(const std::string& message);
+			~OStream(void);
+
+			int  getFdOut(void) const;
+			void setFdOut(int fd);
 	};
 }
-
-#define IS_INDVAR(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_INDEPENDENT_VARIABLE) != 0)
-#define AS_INDVAR(o) static_cast< const computorv2::IndependentVariable* >(o)
-
-std::ostream& operator<<(std::ostream& left, const computorv2::IndependentVariable& right);

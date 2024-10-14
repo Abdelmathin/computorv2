@@ -42,8 +42,11 @@
 # include "../include/computorv2.hpp"
 # include "../include/Client.hpp"
 # include "../include/Complex.hpp"
+# include "../include/UsualFunction.hpp"
+# include "../include/IndependentVariable.hpp"
 # include "../include/statment.hpp"
 # include <iostream>
+# include <sstream>
 # include <unistd.h>
 
 computorv2::Client::Client(void)
@@ -65,11 +68,12 @@ computorv2::Client& computorv2::Client::operator=(const computorv2::Client& othe
 {
 	if (this != &other)
 	{
-		this->_fdin   = other._fdin;
-		this->_fdout  = other._fdout;
-		this->_fderr  = other._fderr;
-		this->_buffer = other._buffer;
-		this->_vm     = other._vm;
+		this->_fdin    = other._fdin;
+		this->_fdout   = other._fdout;
+		this->_fderr   = other._fderr;
+		this->_buffer  = other._buffer;
+		this->_vm      = other._vm;
+		this->_history = other._history;
 	}
 	return (*this);
 }
@@ -105,6 +109,7 @@ void computorv2::Client::setFdOut(int fd)
 		this->_connected = true;
 	}
 	this->_fdout = fd;
+	this->_outputstream.setFdOut(fd);
 }
 
 void computorv2::Client::setFdErr(int fd)
@@ -114,6 +119,7 @@ void computorv2::Client::setFdErr(int fd)
 		this->_connected = true;
 	}
 	this->_fderr = fd;
+	this->_errorstream.setFdOut(fd);
 }
 
 void computorv2::Client::init(void)
@@ -124,12 +130,58 @@ void computorv2::Client::init(void)
 	this->_fderr     = -1;
 	this->_buffer    = "";
 	this->_vm.clear();
-	this->_vm.setConstantByName("i", new computorv2::Complex(0.0, 1.0));
+
+	const computorv2::Complex       im_i      = computorv2::Complex(0.0, 1.0)                            ;
+	const computorv2::UsualFunction ln_x      = computorv2::ln(computorv2::IndependentVariable("x"))     ;
+	const computorv2::UsualFunction exp_x     = computorv2::exp(computorv2::IndependentVariable("x"))    ;
+	const computorv2::UsualFunction sin_x     = computorv2::sin(computorv2::IndependentVariable("x"))    ;
+	const computorv2::UsualFunction cos_x     = computorv2::cos(computorv2::IndependentVariable("x"))    ;
+	const computorv2::UsualFunction tan_x     = computorv2::tan(computorv2::IndependentVariable("x"))    ;
+	const computorv2::UsualFunction arcsin_x  = computorv2::arcsin(computorv2::IndependentVariable("x")) ;
+	const computorv2::UsualFunction arccos_x  = computorv2::arccos(computorv2::IndependentVariable("x")) ;
+	const computorv2::UsualFunction arctan_x  = computorv2::arctan(computorv2::IndependentVariable("x")) ;
+	const computorv2::UsualFunction sinh_x    = computorv2::sinh(computorv2::IndependentVariable("x"))   ;
+	const computorv2::UsualFunction cosh_x    = computorv2::cosh(computorv2::IndependentVariable("x"))   ;
+	const computorv2::UsualFunction tanh_x    = computorv2::tanh(computorv2::IndependentVariable("x"))   ;
+	const computorv2::UsualFunction arcsinh_x = computorv2::arcsinh(computorv2::IndependentVariable("x"));
+	const computorv2::UsualFunction arccosh_x = computorv2::arccosh(computorv2::IndependentVariable("x"));
+	const computorv2::UsualFunction arctanh_x = computorv2::arctanh(computorv2::IndependentVariable("x"));
+
+	this->_vm.setConstantByName("i"      , AS_OBJECT(&im_i      ));
+	this->_vm.setConstantByName("ln"     , AS_OBJECT(&ln_x      ));
+	this->_vm.setConstantByName("exp"    , AS_OBJECT(&exp_x     ));
+	this->_vm.setConstantByName("sin"    , AS_OBJECT(&sin_x     ));
+	this->_vm.setConstantByName("cos"    , AS_OBJECT(&cos_x     ));
+	this->_vm.setConstantByName("tan"    , AS_OBJECT(&tan_x     ));
+	this->_vm.setConstantByName("arcsin" , AS_OBJECT(&arcsin_x  ));
+	this->_vm.setConstantByName("arccos" , AS_OBJECT(&arccos_x  ));
+	this->_vm.setConstantByName("arctan" , AS_OBJECT(&arctan_x  ));
+	this->_vm.setConstantByName("sinh"   , AS_OBJECT(&sinh_x    ));
+	this->_vm.setConstantByName("cosh"   , AS_OBJECT(&cosh_x    ));
+	this->_vm.setConstantByName("tanh"   , AS_OBJECT(&tanh_x    ));
+	this->_vm.setConstantByName("arcsinh", AS_OBJECT(&arcsinh_x ));
+	this->_vm.setConstantByName("arccosh", AS_OBJECT(&arccosh_x ));
+	this->_vm.setConstantByName("arctanh", AS_OBJECT(&arctanh_x ));
+
+	this->_vm.addFunctionParameter("ln"     , "x");
+	this->_vm.addFunctionParameter("exp"    , "x");
+	this->_vm.addFunctionParameter("sin"    , "x");
+	this->_vm.addFunctionParameter("cos"    , "x");
+	this->_vm.addFunctionParameter("tan"    , "x");
+	this->_vm.addFunctionParameter("arcsin" , "x");
+	this->_vm.addFunctionParameter("arccos" , "x");
+	this->_vm.addFunctionParameter("arctan" , "x");
+	this->_vm.addFunctionParameter("sinh"   , "x");
+	this->_vm.addFunctionParameter("cosh"   , "x");
+	this->_vm.addFunctionParameter("tanh"   , "x");
+	this->_vm.addFunctionParameter("arcsinh", "x");
+	this->_vm.addFunctionParameter("arccosh", "x");
+	this->_vm.addFunctionParameter("arctanh", "x");
 }
 
 void computorv2::Client::clear(void)
 {
-	
+	this->_vm.clear();
 }
 
 bool computorv2::Client::connected(void) const
@@ -159,20 +211,33 @@ int computorv2::Client::read(void)
 	return (-1);
 }
 
-int computorv2::Client::error(const computorv2::statment *st, const std::string prompt, std::string message)
+int computorv2::Client::history(void)
+{
+	std::vector<std::string>::const_iterator it = this->_history.begin();
+	int i = 0;
+	while (it != this->_history.end())
+	{
+		this->_outputstream << "line[" << i << "]: " << (*it);
+		i++;
+		it++;
+	}
+	return (0);
+}
+
+int computorv2::Client::error(const computorv2::statment *st, const std::string prompt)
 {
 	if (st)
 	{
-		message = computorv2::ltrim(message);
-		std::cout << "Error: " << prompt << std::endl << "       ";
+		this->_errorstream << "Error: " << prompt << computorv2::crlf << "       ";
 		for (std::string::size_type i = st->_eri; i <= st->_pos; i++)
 		{
-			std::cout << "^";
+			this->_errorstream << "^";
 		}
-		std::cout << std::endl;
+		this->_errorstream << computorv2::crlf;
+		const std::string message = computorv2::ltrim(st->_errmsg);
 		if (message != "")
 		{
-			std::cout << message << std::endl;
+			this->_errorstream << message << computorv2::crlf;
 		}
 	}
 	return (0);
@@ -180,44 +245,45 @@ int computorv2::Client::error(const computorv2::statment *st, const std::string 
 
 int computorv2::Client::parse_line(std::string line)
 {
-	line = computorv2::tolower(computorv2::ltrim(line));
-	if (!this->connected())
+	line = computorv2::trim(line, "\r\n\t\v\f ");
+	#if COMPUTORV2_CASE_INSENSITIVE
+	line = computorv2::tolower(line);
+	#endif//COMPUTORV2_CASE_INSENSITIVE
+	if ((line == "") || (line[0] == '#') || (!this->connected()))
 	{
 		return (0);
 	}
-	if (line == "quit")
+	if (line == "history")
+	{
+		return (this->history());
+	}
+	else if (line == "variables")
+	{
+		this->_outputstream << this->_vm.toString() << computorv2::crlf;
+		return (0);
+	}
+	else if (line == "exit")
 	{
 		this->_connected = false;
 		return (0);
 	}
-	if (line != "")
+	this->_history.push_back(line);
+	computorv2::statment st;
+	computorv2::statment_init(&st);
+	st._pos = 0;
+	st._str = line;
+	st._len = st._str.size();
+	st._vm  = &(this->_vm);
+	computorv2::statment_parse(&st);
+	if ((st._err != 0) || (st._result == NULL) || (st._pos < st._len))
 	{
-		computorv2::statment st;
-		computorv2::statment_init(&st);
-		st._pos = 0;
-		st._str = line;
-		st._len = st._str.size();
-		st._vm  = &(this->_vm);
-		try
-		{
-			computorv2::statment_parseline(&st);
-			if ((st._err != 0) || (st._pos < st._len))
-			{
-				this->error(&st, line, "");
-				st._err = COMPUTORV2_ERROR;
-			}
-		}
-		catch (const std::exception& e)
-		{
-			this->error(&st, line, e.what());
-			st._err = COMPUTORV2_ERROR;
-		}
-		if ((st._err == 0) && (st._result))
-		{
-			std::cout << st._result->toString() << std::endl;
-		}
-		computorv2::statment_fini(&st);
+		this->error(&st, line);
 	}
+	else
+	{
+		this->_outputstream << st._result->toString() << computorv2::crlf;
+	}
+	computorv2::statment_fini(&st);
 	return (0);
 }
 

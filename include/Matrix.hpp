@@ -49,47 +49,32 @@ namespace computorv2
     class Matrix: public computorv2::Object
     {
         public:
-            int                 getType(void)     const;
-            std::string         getTypeName(void) const;
-            std::string         toString(void)    const;
-            computorv2::Object* copy(void)        const;
-            computorv2::Object* evaluate(void)    const;
-            bool                isnull(void)      const;
-            bool                isunity(void)     const;
-            bool                isnegative(void)  const;
-            static Matrix       null(void);
+            int                        getType(void)     const;
+            std::string                getTypeName(void) const;
+            std::string                toString(void)    const;
+            computorv2::Object*        copy(void)        const;
+            bool                       isnull(void)      const;
+            bool                       isunity(void)     const;
+            bool                       isnegative(void)  const;
 
             ~Matrix(void);
             Matrix(const Matrix& other);
             Matrix& operator=(const Matrix& other);
 
-            Matrix(unsigned int rows, unsigned int columns);
-            Matrix(
-                const computorv2::Complex& i00, const computorv2::Complex& i01,
-                const computorv2::Complex& i10, const computorv2::Complex& i11
-            );
-            Matrix(
-                const computorv2::Complex &i00, const computorv2::Complex &i01, const computorv2::Complex &i02,
-                const computorv2::Complex &i10, const computorv2::Complex &i11, const computorv2::Complex &i12,
-                const computorv2::Complex &i20, const computorv2::Complex &i21, const computorv2::Complex &i22
-            );
-            Matrix(
-                const computorv2::Complex &i00, const computorv2::Complex &i01, const computorv2::Complex &i02, const computorv2::Complex &i03,
-                const computorv2::Complex &i10, const computorv2::Complex &i11, const computorv2::Complex &i12, const computorv2::Complex &i13,
-                const computorv2::Complex &i20, const computorv2::Complex &i21, const computorv2::Complex &i22, const computorv2::Complex &i23,
-                const computorv2::Complex &i30, const computorv2::Complex &i31, const computorv2::Complex &i32, const computorv2::Complex &i33
-            );
-            void                setElementAt(unsigned int row, unsigned int column, const computorv2::Complex& element);
-            void                setElementAt(unsigned int row, unsigned int column, const computorv2::Object*  element);
+            void                setElementAt(unsigned int row, unsigned int column, const computorv2::Object* element);
             computorv2::Object* getElementAt(unsigned int row, unsigned int column) const;
             unsigned int        rows(void)    const;
             unsigned int        columns(void) const;
+
+            Matrix(unsigned int rows, unsigned int columns);
+            Matrix(const computorv2::Matrix& other, unsigned int excluded_row, unsigned int excluded_column);
+
         private:
-            void clear(void);
-            Matrix(void);
             unsigned int                       _rows;
             unsigned int                       _columns;
             std::vector< computorv2::Object* > _data;
+            void clear(void);
+            Matrix(void);
     };
 }
 

@@ -64,11 +64,6 @@ computorv2::Object* computorv2::IndependentVariable::copy(void) const
     return ( new computorv2::IndependentVariable(*this) );
 }
 
-computorv2::Object* computorv2::IndependentVariable::evaluate(void) const
-{
-    return (this->copy());
-}
-
 bool computorv2::IndependentVariable::isnull(void) const
 {
     return (false);

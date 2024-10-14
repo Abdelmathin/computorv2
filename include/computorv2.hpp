@@ -39,6 +39,7 @@
 #pragma once
 
 # include <iostream>
+# include <map>
 
 typedef int t_error;
 
@@ -46,12 +47,24 @@ typedef int t_error;
 #define ABS(x)                               ( (x) >= 0 ? (x) : -(x) )
 #define IS_ZERO(x)                           ( ABS(x) < COMPUTORV2_EPSILON )
 
+#define MAX_MATRIX_DET_SIZE                  4
+#define MAX_MATRIX_ROWS                      4
+#define MAX_MATRIX_COLUMNS                   4
+
+#define CHARACTER_SINGLE_QUOTE               0x27 /* ' */
+#define CHARACTER_PLUS                       '+'
+#define CHARACTER_MINUS                      '-'
+#define CHARACTER_ASTERISK                   '*'
+#define CHARACTER_SLASH                      '/'
+#define CHARACTER_CARET                      '^'
+#define CHARACTER_MODULUS                    '%'
+
 #define COMPUTORV2_CASE_INSENSITIVE          1
 #define COMPUTORV2_SUCCESS                   (0 << 0)
 #define COMPUTORV2_ERROR                     (1 << 0)
 
-#define ERROR_NOT_ENOUGH_MEMORY              (1 << 0)
-#define ERROR_NAN                            (1 << 1)
+// #define ERROR_NOT_ENOUGH_MEMORY              (1 << 0)
+// #define ERROR_NAN                            (1 << 1)
 
 #define STATMENT_TYPE_UNKNOWN                (0 << 0)
 #define STATMENT_TYPE_GET                    (1 << 0) /* x = ? */
@@ -64,7 +77,7 @@ typedef int t_error;
 #define COMPUTORV2_OPERATION_SUB             (1 << 1)
 #define COMPUTORV2_OPERATION_MULT            (1 << 2)
 #define COMPUTORV2_OPERATION_DIV             (1 << 3)
-#define COMPUTORV2_OPERATION_EXP             (1 << 4)
+#define COMPUTORV2_OPERATION_POW             (1 << 4)
 #define COMPUTORV2_OPERATION_MATRIX_MULT     (1 << 5)
 #define COMPUTORV2_OPERATION_MOD             (1 << 6)
 
@@ -91,18 +104,39 @@ namespace computorv2
 {
 	class Object;
 	class Matrix;
-	class Vector;
 	class Complex;
-	class History;
     class Polynomial;
 	class VirtualMachine;
     class UsualFunction;
     class IndependentVariable;
 
+    const std::string crlf = "\r\n";
+
 	std::string tolower(const std::string s);
 	bool        isname(const std::string& name);
 	bool        isUsualFunction(const std::string& name);
-	std::string ltrim(const std::string s);
+    std::string ltrim(const std::string str);
+    std::string rtrim(const std::string str);
+    std::string trim(const std::string str);
+    std::string ltrim(const std::string str, const std::string charset);
+    std::string rtrim(const std::string str, const std::string charset);
+    std::string trim(const std::string str, const std::string charset);
+
+    void variables(const computorv2::Object* left, std::map< std::string, const computorv2::Object*>& right);
+    computorv2::Object* replace(const computorv2::Object* left, std::map< std::string, const computorv2::Object*>& right);
+    computorv2::Object* evaluate(const computorv2::Object* left);
+
+    /* ----------------------- transpose ----------------------- */
+    computorv2::Matrix  transpose(const computorv2::Matrix& left);
+
+    /* ----------------------- cofactor ----------------------- */
+    computorv2::Matrix  cofactor(const computorv2::Matrix& left);
+
+    /* ----------------------- adjugate ----------------------- */
+    computorv2::Matrix  adjugate(const computorv2::Matrix& left);
+
+    /* ---------------------- det ---------------------- */
+    computorv2::Object* det(const computorv2::Matrix& left);
 
     /* -------------------------------- ln -------------------------------- */
     computorv2::UsualFunction ln(const computorv2::Object*              left);
@@ -437,6 +471,7 @@ namespace computorv2
     computorv2::Polynomial pow(const computorv2::IndependentVariable& left, const computorv2::IndependentVariable& right);
 
     /* ----------------------------------------------------- drv ----------------------------------------------------- */
+    computorv2::Polynomial drv(const computorv2::Object*              left);
     computorv2::Polynomial drv(const computorv2::Object*              left, const computorv2::IndependentVariable& right);
     computorv2::Polynomial drv(const computorv2::Matrix&              left, const computorv2::IndependentVariable& right);
     computorv2::Polynomial drv(const computorv2::Complex&             left, const computorv2::IndependentVariable& right);

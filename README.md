@@ -49,6 +49,12 @@ pip install computorv2
 $$ P(x) = a . x^n + b $$
 where a, x, n, b are all functions of x, we use the product rule, the chain rule, and the general power rule.
 
+
+```math
+\begin{bmatrix}X\\Y\end{bmatrix}
+```
+
+
 <!-- $$  P(x) = a . x^n + b $$
 
 $$  \frac{d P(x)}{d x} = \frac{d a}{d x} . x^n + a . \frac{d x^n}{d x} + \frac{d b}{d x} $$

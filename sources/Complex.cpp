@@ -97,11 +97,6 @@ computorv2::Object* computorv2::Complex::copy(void) const
 	return ( new computorv2::Complex(*this) );
 }
 
-computorv2::Object* computorv2::Complex::evaluate(void) const
-{
-	return (this->copy());
-}
-
 bool computorv2::Complex::isnull(void) const
 {
 	return ((IS_ZERO(this->getReal())) && (IS_ZERO(this->getImage())));

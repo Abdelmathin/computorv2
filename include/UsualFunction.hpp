@@ -47,14 +47,13 @@ namespace computorv2
     class UsualFunction: public computorv2::Object
     {
         public:
-            int                  getType(void)     const;
-            std::string          getTypeName(void) const;
-            std::string          toString(void)    const;
-            computorv2::Object*  copy(void)        const;
-            computorv2::Object*  evaluate(void)    const;
-            bool                 isnull(void)      const;
-            bool                 isunity(void)     const;
-            bool                 isnegative(void)  const;
+            int                        getType(void)     const;
+            std::string                getTypeName(void) const;
+            std::string                toString(void)    const;
+            computorv2::Object*        copy(void)        const;
+            bool                       isnull(void)      const;
+            bool                       isunity(void)     const;
+            bool                       isnegative(void)  const;
 
             std::string         getName(void)  const;
             computorv2::Object* getBody(void)  const;

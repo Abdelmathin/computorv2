@@ -40,20 +40,21 @@
 
 #include "computorv2.hpp"
 #include <iostream>
+#include <set>
 
 namespace computorv2
 {
+	class IndependentVariable;
 	class Object
 	{
 		public:
-			virtual int                 getType(void)     const = 0;
-			virtual std::string         getTypeName(void) const = 0;
-			virtual std::string         toString(void)    const = 0;
-			virtual computorv2::Object* copy(void)        const = 0;
-			virtual computorv2::Object* evaluate(void)    const = 0;
-			virtual bool                isnull(void)      const = 0;
-			virtual bool                isunity(void)     const = 0;
-			virtual bool                isnegative(void)  const = 0;
+			virtual int                        getType(void)     const = 0;
+			virtual std::string                getTypeName(void) const = 0;
+			virtual std::string                toString(void)    const = 0;
+			virtual computorv2::Object*        copy(void)        const = 0;
+			virtual bool                       isnull(void)      const = 0;
+			virtual bool                       isunity(void)     const = 0;
+			virtual bool                       isnegative(void)  const = 0;
 			virtual ~Object(void){};
 	};
 }

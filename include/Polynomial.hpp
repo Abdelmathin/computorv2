@@ -48,16 +48,15 @@ namespace computorv2
 	class Polynomial: public computorv2::Object
 	{
 		public:
-            int                 getType(void)     const;
-            std::string         getTypeName(void) const;
-            std::string         toString(void)    const;
-            computorv2::Object* copy(void)        const;
-            computorv2::Object* evaluate(void)    const;
-            bool                isnull(void)      const;
-            bool                isunity(void)     const;
-            bool                isnegative(void)  const;
-            static Polynomial   null(void);
-            static Polynomial   unity(void);
+            int                        getType(void)     const;
+            std::string                getTypeName(void) const;
+            std::string                toString(void)    const;
+            computorv2::Object*        copy(void)        const;
+            bool                       isnull(void)      const;
+            bool                       isunity(void)     const;
+            bool                       isnegative(void)  const;
+            static Polynomial          null(void);
+            static Polynomial          unity(void);
 
 			Polynomial(const std::string& basename);
 			Polynomial(const Polynomial& other);

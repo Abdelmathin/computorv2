@@ -51,6 +51,7 @@ namespace computorv2
 		std::string                 _str       ;
 		std::string::size_type      _len       ;
 		t_error                     _err       ;
+		std::string                 _errmsg    ;
 		int                         _type      ;
 		int                         _operation ;
 		std::string                 _varname   ;
@@ -66,15 +67,18 @@ namespace computorv2
 	int         statment_operation_code(computorv2::statment *st);
 	t_error     statment_init(computorv2::statment *st);
 	t_error     statment_fini(computorv2::statment *st);
-	t_error     statment_delresult(computorv2::statment *st);
-	t_error     statment_syntaxerror(computorv2::statment *st);
+	t_error     statment_error(computorv2::statment *st);
 	t_error     statment_skip_spaces(computorv2::statment *st);
 	t_error     statment_skip(computorv2::statment *st, const std::string charset);
 	t_error     statment_precedence(computorv2::statment *st, t_error (*perv)(computorv2::statment *st), int operations);
 	t_error     statment_operation(computorv2::statment *st, const computorv2::Object* left, const computorv2::Object* right, const int operation_code);
 	t_error     statment_parse_number(computorv2::statment *st);
 	t_error     statment_parse_variable(computorv2::statment *st);
+	t_error     statment_parse_derivative(computorv2::statment *st);
+	t_error     statment_parse_matrix(computorv2::statment *st);	
+	t_error     statment_parse_function_call(computorv2::statment *st);
 	t_error     statment_parse_object(computorv2::statment *st);
+	t_error     statment_parse_negation(computorv2::statment *st);
 	t_error     statment_parse_exponentiation(computorv2::statment *st);
 	t_error     statment_parse_multiplicatives(computorv2::statment *st);
 	t_error     statment_parse_additional(computorv2::statment *st);
@@ -82,5 +86,5 @@ namespace computorv2
 	t_error     statment_assign_variable(computorv2::statment *st);
 	t_error     statment_assign_function(computorv2::statment *st);
 	t_error     statment_assign(computorv2::statment *st);
-	t_error     statment_parseline(computorv2::statment *st);
+	t_error     statment_parse(computorv2::statment *st);
 }

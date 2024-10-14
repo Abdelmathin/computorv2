@@ -45,8 +45,10 @@
 # include "../include/Matrix.hpp"
 # include "../include/Complex.hpp"
 # include "../include/Polynomial.hpp"
+# include "../include/UsualFunction.hpp"
 # include "../include/statment.hpp"
 # include <iostream>
+# include <sstream>
 
 t_error computorv2::statment_init(computorv2::statment *st)
 {
@@ -57,6 +59,7 @@ t_error computorv2::statment_init(computorv2::statment *st)
 		st->_str       = ""    ;
 		st->_len       = 0     ;
 		st->_err       = 0     ;
+		st->_errmsg    = ""    ;
 		st->_type      = 0     ;
 		st->_operation = 0     ;
 		st->_varname   = ""    ;
@@ -71,200 +74,165 @@ t_error computorv2::statment_fini(computorv2::statment *st)
 {
 	if (st)
 	{
-		computorv2::statment_delresult(st);
-		return (computorv2::statment_init(st));
-	}
-	return (COMPUTORV2_ERROR);
-}
-
-t_error computorv2::statment_delresult(computorv2::statment *st)
-{
-	if (st)
-	{
 		if (st->_result)
 		{
 			delete (st->_result);
 		}
 		st->_result = NULL;
-		return (COMPUTORV2_SUCCESS);
+		return (computorv2::statment_init(st));
 	}
 	return (COMPUTORV2_ERROR);
 }
 
-t_error computorv2::statment_syntaxerror(computorv2::statment *st)
+t_error computorv2::statment_error(computorv2::statment *st)
 {
 	if (st)
 	{
-		st->_err = COMPUTORV2_ERROR;
+		if (st->_err == 0)
+		{
+			st->_err = COMPUTORV2_ERROR;
+		}
+		return (st->_err);
 	}
 	return (COMPUTORV2_ERROR);
 }
 
 int computorv2::statment_operation_code(computorv2::statment *st)
 {
-	if (!st)
+	if ((st == NULL) || (st->_err != 0))
 	{
 		return (COMPUTORV2_OPERATION_NONE);
 	}
 	computorv2::statment_skip_spaces(st);
 	char c = computorv2::statment_getc(st);
-	if (c == '+')
+	if (c == CHARACTER_PLUS)
 	{
 		computorv2::statment_next(st);
 		return (COMPUTORV2_OPERATION_ADD);
 	}
-	else if (c == '-')
+	else if (c == CHARACTER_MINUS)
 	{
 		computorv2::statment_next(st);
 		return (COMPUTORV2_OPERATION_SUB);		
 	}
-	else if (c == '*')
+	else if (c == CHARACTER_ASTERISK)
 	{
 		c = computorv2::statment_next(st);
-		if (c == '*')
+		if (c == CHARACTER_ASTERISK)
 		{
+			computorv2::statment_next(st);
 			return (COMPUTORV2_OPERATION_MATRIX_MULT);
 		}
 		return (COMPUTORV2_OPERATION_MULT);		
 	}
-	else if (c == '/')
+	else if (c == CHARACTER_SLASH)
 	{
 		computorv2::statment_next(st);
 		return (COMPUTORV2_OPERATION_DIV);		
 	}
-	else if (c == '%')
+	else if (c == CHARACTER_MODULUS)
 	{
 		computorv2::statment_next(st);
 		return (COMPUTORV2_OPERATION_MOD);		
 	}
-	else if (c == '^')
+	else if (c == CHARACTER_CARET)
 	{
 		computorv2::statment_next(st);
-		return (COMPUTORV2_OPERATION_EXP);		
+		return (COMPUTORV2_OPERATION_POW);		
 	}
 	return (COMPUTORV2_OPERATION_NONE);
 }
 
 t_error computorv2::statment_skip_spaces(computorv2::statment *st)
 {
-	if (st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		while (st->_pos < st->_len)
-		{
-			if (!IS_SPACE(st->_str[st->_pos]))
-			{
-				return (COMPUTORV2_SUCCESS);
-			}
-			st->_pos += 1;
-		}
-		return (COMPUTORV2_SUCCESS);
+		return (computorv2::statment_error(st));
 	}
-	return (COMPUTORV2_ERROR);
+	while (st->_pos < st->_len)
+	{
+		if (!IS_SPACE(st->_str[st->_pos]))
+		{
+			return (COMPUTORV2_SUCCESS);
+		}
+		st->_pos += 1;
+	}
+	return (st->_err);
 }
 
 t_error computorv2::statment_skip(computorv2::statment *st, const std::string charset)
 {
-	if (st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		while (st->_pos < st->_len)
+		return (computorv2::statment_error(st));
+	}
+	for (std::string::size_type k = 0; k < charset.size() && charset[k]; k++)
+	{
+		if (computorv2::statment_getc(st) == charset[k])
 		{
-			const char c = st->_str[st->_pos];
-			if (c == '\0')
-			{
-				return (COMPUTORV2_SUCCESS);
-			}
-			int found = 0;
-			for (std::string::size_type k = 0; k < charset.size(); k++)
-			{
-				if (charset[k] == c)
-				{
-					found = 1;
-					break ;
-				}
-			}
-			if (!found)
-			{
-				return (COMPUTORV2_SUCCESS);
-			}
+			k = 0;
 			st->_pos += 1;
 		}
-		return (COMPUTORV2_SUCCESS);
 	}
-	return (COMPUTORV2_ERROR);
+	return (st->_err);
+}
+
+bool computorv2::statment_eos(const computorv2::statment *st)
+{
+	const char c = statment_getc(st);
+	return ((c == '\r') || (c == '\n') || (c == '\0'));
 }
 
 char computorv2::statment_getc(const computorv2::statment *st)
 {
-	if (st)
+	if ((st != NULL) && (st->_err == 0) && (st->_pos < st->_len))
 	{
-		if (st->_pos < st->_len)
-		{
-			return (st->_str[st->_pos]);
-		}
+		return (st->_str[st->_pos]);
 	}
 	return (0);
 }
 
 char computorv2::statment_next(computorv2::statment *st)
 {
-	if (st)
+	if ((st != NULL) && (st->_err == 0) && (st->_pos < st->_len))
 	{
-		if (st->_pos < st->_len)
-		{
-			st->_pos += 1;
-		}		
-		if (st->_pos < st->_len)
-		{
-			return (st->_str[st->_pos]);
-		}
+		st->_pos += 1;
 	}
-	return (0);
-}
-
-bool computorv2::statment_eos(const computorv2::statment *st)
-{
-	if (st)
-	{
-		const char c = statment_getc(st);
-		if ((c == '\r') || (c == '\n') || (c == '\0'))
-		{
-			return (true);
-		}
-		return (false);
-	}
-	return (true);
+	return (computorv2::statment_getc(st));
 }
 
 std::string computorv2::statment_parsename(computorv2::statment *st)
 {
-	if (st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		computorv2::statment_skip_spaces(st);
-		char c = computorv2::statment_getc(st);
-		if (IS_VARSTART(c))
+		return ("");
+	}
+	computorv2::statment_skip_spaces(st);
+	char c = computorv2::statment_getc(st);
+	if (IS_VARSTART(c))
+	{
+		std::string name = "";
+		while (IS_VARCHAR(c))
 		{
-			std::string name = "";
-			while (IS_VARCHAR(c))
-			{
-				name += c;
-				c = computorv2::statment_next(st);
-			}
-			#if COMPUTORV2_CASE_INSENSITIVE
-				return (computorv2::tolower(name));
-			#endif//COMPUTORV2_CASE_INSENSITIVE
-			return (name);
+			name += c;
+			c = computorv2::statment_next(st);
 		}
+		return (name);
 	}
 	return ("");
 }
 
 t_error computorv2::statment_parse_number(computorv2::statment *st)
 {
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
 	st->_result = NULL;
 	char c = computorv2::statment_getc(st);
-	if (IS_DIGIT(c) == 0)
+	if (!IS_DIGIT(c))
 	{
-		return (COMPUTORV2_ERROR);
+		return (computorv2::statment_error(st));
 	}
 	double r = 0.0;
 	while (IS_DIGIT(c))
@@ -275,7 +243,7 @@ t_error computorv2::statment_parse_number(computorv2::statment *st)
 	if (c != '.')
 	{
 		st->_result = new computorv2::Complex(r);
-		return (COMPUTORV2_SUCCESS);
+		return (st->_err);
 	}
 	c = computorv2::statment_next(st);
 	double f = 0.1;
@@ -286,50 +254,236 @@ t_error computorv2::statment_parse_number(computorv2::statment *st)
 		f = f / 10.0;		
 	}
 	st->_result = new computorv2::Complex(r);
-	return (COMPUTORV2_SUCCESS);
+	return (st->_err);
+}
+
+t_error computorv2::statment_parse_matrix(computorv2::statment *st)
+{
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	st->_result = NULL;
+	if (computorv2::statment_getc(st) != '[')
+		return (computorv2::statment_error(st));
+	computorv2::statment_next(st);
+	std::vector< std::vector< computorv2::Object* > > elements;
+	while (st->_err == 0)
+	{
+		computorv2::statment_skip_spaces(st);
+		if (computorv2::statment_getc(st) != '[')
+		{
+			st->_err = computorv2::statment_error(st);
+			break ;
+		}
+		computorv2::statment_next(st);
+		computorv2::statment_skip_spaces(st);
+		if (computorv2::statment_getc(st) == ']')
+		{
+			st->_err = computorv2::statment_error(st);
+			break ;
+		}
+		std::vector< computorv2::Object* > row_elements;
+		while ((st->_err == 0) && (computorv2::statment_getc(st)))
+		{
+			st->_result = NULL;
+			st->_err = computorv2::statment_parse(st);
+			row_elements.push_back(st->_result);
+			if ((st->_result == NULL) || (st->_err != 0))
+			{
+				st->_err = computorv2::statment_error(st);
+				break ;
+			}
+			computorv2::statment_skip_spaces(st);
+			const char c = computorv2::statment_getc(st);
+			if (c == ',')
+			{
+				computorv2::statment_next(st);
+				continue ;
+			}
+			else if (c == ']')
+			{
+				break ;
+			}
+			st->_err = computorv2::statment_error(st);
+		}
+		if ((row_elements.size() < 1) || (st->_result == NULL) || (st->_err != 0) || (computorv2::statment_getc(st) != ']'))
+		{
+			st->_err = computorv2::statment_error(st);
+			break ;
+		}
+		elements.push_back(row_elements);
+		computorv2::statment_next(st);
+		computorv2::statment_skip_spaces(st);
+		if (computorv2::statment_getc(st) == ';')
+		{
+			computorv2::statment_next(st);
+			continue ;
+		}
+		else if (computorv2::statment_getc(st) == ']')
+		{
+			break ;
+		}
+		st->_err = computorv2::statment_error(st);
+	}
+	if (elements.size() < 1)
+	{
+		st->_err = computorv2::statment_error(st);
+		return (st->_err);
+	}
+	const unsigned int rows    = elements.size();
+	const unsigned int columns = elements[0].size();
+	computorv2::Matrix res(rows, columns);
+	for (unsigned int r = 0; r < elements.size(); r++)
+	{
+		if (elements[r].size() != columns)
+		{
+			st->_err = computorv2::statment_error(st);
+		}
+		for (unsigned int c = 0; c < elements[r].size(); c++)
+		{
+			const computorv2::Object* e = elements[r][c];
+			if (e)
+			{
+				res.setElementAt(r, c, e);
+				delete (e);
+				continue ;
+			}
+			st->_err = computorv2::statment_error(st);
+		}
+	}
+	if (computorv2::statment_getc(st) == ']')
+	{
+		computorv2::statment_next(st);
+	}
+	else
+	{
+		st->_err = computorv2::statment_error(st);
+	}
+	st->_result = NULL;
+	if (st->_err == 0)
+	{
+		st->_result = res.copy();
+	}
+	return (st->_err);
+}
+
+t_error computorv2::statment_parse_derivative(computorv2::statment *st)
+{
+	if ((st == NULL) || (st->_result == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	if (computorv2::statment_getc(st) != CHARACTER_SINGLE_QUOTE)
+		return (computorv2::statment_error(st));
+	const computorv2::Polynomial df = computorv2::drv(st->_result);
+	computorv2::statment_next(st);
+	computorv2::statment_skip_spaces(st);
+	delete (st->_result);
+	st->_result = df.copy();
+	return (st->_err);
+}
+
+t_error computorv2::statment_parse_function_call(computorv2::statment *st)
+{
+	if ((st == NULL) || (st->_result == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	if (computorv2::statment_getc(st) != '(')
+		return (computorv2::statment_error(st));
+	if (!IS_INDVAR(st->_result) && !IS_USFUNC(st->_result) && !IS_POLYNOMIAL(st->_result))
+	{
+		return (computorv2::statment_error(st));
+	}
+	computorv2::statment_next(st);
+	computorv2::statment_skip_spaces(st);
+	computorv2::Object* function = st->_result;
+	std::map< std::string, const computorv2::Object*> vars;
+	computorv2::variables(function, vars);
+	if (vars.size() == 1)
+	{
+		st->_result = NULL;
+		st->_err = computorv2::statment_parse(st);
+		computorv2::statment_skip_spaces(st);
+		if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != ')'))
+		{
+			delete (function);
+			return (computorv2::statment_error(st));
+		}
+		vars[vars.begin()->first] = st->_result;
+		computorv2::statment_next(st);
+		computorv2::Object* res = computorv2::replace(function, vars);
+		delete (function);
+		delete (st->_result);
+		st->_result = res;
+		return (st->_err);
+	}
+	st->_errmsg = "Too many arguments";
+	return (computorv2::statment_error(st));
 }
 
 t_error computorv2::statment_parse_variable(computorv2::statment *st)
 {
-	if (st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		st->_result      = NULL;
-		std::string name = computorv2::statment_parsename(st);
-		if (st->_vm)
-		{
-			st->_result = st->_vm->getLocalVariableByName(name);
-			if (!st->_result)
-			{
-				st->_result = st->_vm->getConstantByName(name);
-			}
-			if (!st->_result)
-			{
-				st->_result = st->_vm->getVariableByName(name);
-			}
-			if (!st->_result)
-			{
-				st->_err = COMPUTORV2_ERROR;
-				return (st->_err);
-			}
-			st->_result = st->_result->copy();
-		}
-		else
-		{
-			st->_result = new computorv2::IndependentVariable(name);
-		}
-		return (st->_err);		
+		return (computorv2::statment_error(st));
 	}
-	return (COMPUTORV2_ERROR);
+	st->_result      = NULL;
+	std::string name = computorv2::statment_parsename(st);
+	if (name == "")
+	{
+		return (computorv2::statment_error(st));
+	}
+	if (st->_vm)
+	{
+		st->_result = st->_vm->getLocalVariableByName(name);
+		if (st->_result == NULL)
+		{
+			st->_result = st->_vm->getConstantByName(name);
+		}
+		if (st->_result == NULL)
+		{
+			st->_result = st->_vm->getVariableByName(name);
+		}
+		if (st->_result == NULL)
+		{
+			std::stringstream ss(""); ss << "Undefined variable: '" << name << "'";
+			st->_err    = computorv2::statment_error(st);
+			st->_errmsg = ss.str();
+			return (st->_err);
+		}
+		st->_result = st->_result->copy();
+	}
+	else
+	{
+		st->_result = new computorv2::IndependentVariable(name);
+	}
+	computorv2::statment_skip_spaces(st);
+	if (computorv2::statment_getc(st) == CHARACTER_SINGLE_QUOTE)
+	{
+		st->_err = computorv2::statment_parse_derivative(st);
+	}
+	if (computorv2::statment_getc(st) == '(')
+	{
+		st->_err = computorv2::statment_parse_function_call(st);
+	}
+	computorv2::statment_skip_spaces(st);
+	if (IS_VARCHAR(computorv2::statment_getc(st)))
+	{
+		return (computorv2::statment_error(st));
+	}
+	return (st->_err);
 }
 
 t_error computorv2::statment_parse_object(computorv2::statment *st)
 {
-	if (!st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		return (COMPUTORV2_ERROR);
+		return (computorv2::statment_error(st));
 	}
 	st->_operation = 0;
-	st->_result    = 0;
+	st->_result    = NULL;
 	computorv2::statment_skip_spaces(st);
 	const char c = computorv2::statment_getc(st);
 	if (IS_DIGIT(c))
@@ -340,12 +494,30 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 	{
 		st->_err = computorv2::statment_parse_variable(st);
 	}
-	if (st->_err == 0)
+	else if (c == '(')
+	{
+		computorv2::statment_next(st);
+		computorv2::statment_skip_spaces(st);
+		st->_err = computorv2::statment_parse(st);
+		if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != ')'))
+		{
+			st->_err = computorv2::statment_error(st);
+		}
+		else
+		{
+			computorv2::statment_next(st);
+		}
+	}
+	else if (c == '[')
+	{
+		st->_err = computorv2::statment_parse_matrix(st);
+	}
+	if ((st->_err == 0) && (st->_result != NULL))
 	{
 		computorv2::statment_skip_spaces(st);
 		if (computorv2::statment_getc(st) == 0)
 		{
-			return (COMPUTORV2_SUCCESS);
+			return (st->_err);
 		}
 		st->_operation = computorv2::statment_operation_code(st);
 		if (IS_VARSTART(computorv2::statment_getc(st)))
@@ -353,110 +525,180 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 			/* caseOf(2i) */
 			st->_operation = COMPUTORV2_OPERATION_MULT;
 		}
+		return (st->_err);
 	}
-	return (st->_err);
+	return (computorv2::statment_error(st));
 }
 
 t_error computorv2::statment_operation(computorv2::statment *st, const computorv2::Object* left, const computorv2::Object* right, const int operation_code)
 {
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
 	st->_result = NULL;
-	if ((operation_code & COMPUTORV2_OPERATION_ADD) != 0)
+	if (operation_code & COMPUTORV2_OPERATION_ADD)
 	{
 		st->_result = computorv2::add(left, right);
-		return (st->_err);
 	}
-	if ((operation_code & COMPUTORV2_OPERATION_SUB) != 0)
+	else if (operation_code & COMPUTORV2_OPERATION_SUB)
 	{
 		st->_result = computorv2::sub(left, right);
-		return (st->_err);
 	}
-	if ((operation_code & COMPUTORV2_OPERATION_MULT) != 0)
+	else if (operation_code & COMPUTORV2_OPERATION_MULT)
 	{
 		st->_result = computorv2::mul(left, right);
-		return (st->_err);
 	}
-	if ((operation_code & COMPUTORV2_OPERATION_DIV) != 0)
+	else if (operation_code & COMPUTORV2_OPERATION_DIV)
 	{
 		st->_result = computorv2::div(left, right);
-		return (st->_err);
 	}
-	if ((operation_code & COMPUTORV2_OPERATION_EXP) != 0)
+	else if (operation_code & COMPUTORV2_OPERATION_POW)
 	{
 		st->_result = computorv2::pow(left, right);
-		return (st->_err);
 	}
-	if ((operation_code & COMPUTORV2_OPERATION_MATRIX_MULT) != 0)
+	else if (operation_code & COMPUTORV2_OPERATION_MATRIX_MULT)
 	{
 		if (!IS_MATRIX(left) || !IS_MATRIX(right))
 		{
 			throw std::runtime_error("** Only used for term-to-term multiplication!");
 		}
 		st->_result = computorv2::mul(left, right);
-		return (st->_err);
 	}
-	if ((operation_code & COMPUTORV2_OPERATION_MOD) != 0)
+	else if (operation_code & COMPUTORV2_OPERATION_MOD)
 	{
 		st->_result = computorv2::mod(left, right);
-		return (st->_err);
 	}
-	std::cout << "left: " << left->toString() << std::endl;
-	std::cout << "right: " << right->toString() << std::endl;
-	std::cout << "operation_code: " << operation_code << std::endl;
-	throw "Unknown operation!";
-	return (COMPUTORV2_SUCCESS);
-}
-
-t_error computorv2::statment_precedence(computorv2::statment *st, t_error (*perv)(computorv2::statment *st), int operations)
-{
-	if (!st || !perv)
+	else
 	{
-		return (COMPUTORV2_ERROR);
-	}
-	perv(st);
-	while ((st->_err == 0) && ((operations & st->_operation) != 0))
-	{
-		const int old_operation = st->_operation;
-		const computorv2::Object* left = st->_result;
-		st->_result = NULL;
-		perv(st);
-		const computorv2::Object* right = st->_result;
-		st->_result = NULL;
-		st->_err = computorv2::statment_operation(st, left, right, old_operation);
-		if (left)
-		{
-			delete (left);
-		}
-		if (right)
-		{
-			delete (right);
-		}
+		throw std::runtime_error("Unknown operation!");
 	}
 	return (st->_err);
 }
 
+t_error computorv2::statment_precedence(computorv2::statment *st, t_error (*perv)(computorv2::statment *st), int operations)
+{
+	if ((perv == NULL) || (st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	try
+	{
+		st->_err = perv(st);
+	}
+	catch (const std::exception& e)
+	{
+		st->_errmsg = e.what();
+		st->_err    = computorv2::statment_error(st);
+	}
+	while ( (st->_result != NULL) && (st->_err == 0) && (st->_operation & operations) )
+	{
+		const int old_operation = st->_operation;
+		const computorv2::Object* left = st->_result;
+		st->_result = NULL;
+		try
+		{
+			st->_err = perv(st);
+		}
+		catch (const std::exception& e)
+		{
+			delete (left);
+			st->_errmsg = e.what();
+			st->_err    = computorv2::statment_error(st);
+		}
+		if ((st->_result == NULL) || (st->_err != 0))
+		{
+			delete (left);
+			break ;
+		}
+		const computorv2::Object* right = st->_result;
+		st->_result = NULL;
+		try
+		{
+			st->_err = computorv2::statment_operation(st, left, right, old_operation);			
+		}
+		catch (const std::exception& e)
+		{
+			st->_errmsg = e.what();
+			st->_err    = computorv2::statment_error(st);
+		}
+		delete (left);
+		delete (right);
+	}
+	if ((st->_result == NULL) && (st->_err == 0))
+	{
+		st->_err = computorv2::statment_error(st);
+	}
+	return (st->_err);
+}
+
+t_error computorv2::statment_parse_negation(computorv2::statment *st)
+{
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	computorv2::statment_skip_spaces(st);
+	if (computorv2::statment_getc(st) == CHARACTER_MINUS)
+	{
+		computorv2::statment_next(st);
+		computorv2::statment_skip_spaces(st);
+		st->_err = computorv2::statment_parse_object(st);
+		if ((st->_err == 0) && (st->_result != NULL))
+		{
+			computorv2::Object* e = computorv2::neg(st->_result);
+			delete (st->_result);
+			st->_result = e;
+		}
+	}
+	else
+	{
+		st->_err = computorv2::statment_parse_object(st);
+	}
+    return (st->_err);
+}
+
 t_error computorv2::statment_parse_exponentiation(computorv2::statment *st)
 {
-	t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_object, COMPUTORV2_OPERATION_NONE);
-    return (err);
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	st->_err = computorv2::statment_precedence(st, computorv2::statment_parse_negation, COMPUTORV2_OPERATION_POW);
+    return (st->_err);
 }
 
 t_error computorv2::statment_parse_multiplicatives(computorv2::statment *st)
 {
-	t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_exponentiation, COMPUTORV2_OPERATION_EXP);
-    return (err);
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	st->_err = computorv2::statment_precedence(st,
+		computorv2::statment_parse_exponentiation,
+		COMPUTORV2_OPERATION_MULT | COMPUTORV2_OPERATION_DIV | COMPUTORV2_OPERATION_MOD | COMPUTORV2_OPERATION_MATRIX_MULT
+	);
+    return (st->_err);
 }
 
 t_error computorv2::statment_parse_additional(computorv2::statment *st)
 {
-	t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_multiplicatives, COMPUTORV2_OPERATION_MULT | COMPUTORV2_OPERATION_DIV | COMPUTORV2_OPERATION_MOD | COMPUTORV2_OPERATION_MATRIX_MULT);
-    return (err);
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	st->_err = computorv2::statment_precedence(st,
+		computorv2::statment_parse_multiplicatives,
+		COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB
+	);
+    return (st->_err);
 }
 
 t_error computorv2::statment_type(computorv2::statment *st)
 {
-	if (!st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		return (COMPUTORV2_ERROR);
+		return (computorv2::statment_error(st));
 	}
 	st->_type = STATMENT_TYPE_UNKNOWN;
 	const std::string::size_type old_pos = st->_pos;
@@ -557,85 +799,80 @@ t_error computorv2::statment_type(computorv2::statment *st)
 
 t_error computorv2::statment_assign_variable(computorv2::statment *st)
 {
-	if (st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		const std::string varname = st->_varname;
-		t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
-		if (!st->_result)
-		{
-			return (COMPUTORV2_ERROR);
-		}
-		if (st->_vm)
-		{
-			st->_vm->setVariableByName(varname, st->_result);
-		}
-		return (err);
+		return (computorv2::statment_error(st));
 	}
-	return (COMPUTORV2_ERROR);
+	const std::string varname = st->_varname;
+	st->_err = computorv2::statment_parse_additional(st);
+	if ((st->_result == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	if (st->_vm)
+	{
+		st->_vm->setVariableByName(varname, st->_result);
+	}
+	return (st->_err);
 }
 
 t_error computorv2::statment_assign_function(computorv2::statment *st)
 {
-	if (st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		const std::string  funcname = st->_funcname;
-		const std::string  varname  = st->_varname;
-		const computorv2::IndependentVariable var(varname);
-		if (st->_vm)
-		{
-			st->_vm->setLocalVariableByName(varname, &var);
-		}
-		t_error err = computorv2::statment_precedence(st, computorv2::statment_parse_additional, COMPUTORV2_OPERATION_ADD | COMPUTORV2_OPERATION_SUB);
-		if (st->_vm)
-		{
-			st->_vm->delLocalVariableByName(varname);
-		}
-		if (!st->_result)
-		{
-			return (COMPUTORV2_ERROR);
-		}
-		if (st->_vm)
-		{		
-			st->_vm->setVariableByName(funcname, st->_result);
-		}
-		return (err);
+		return (computorv2::statment_error(st));
 	}
-	return (COMPUTORV2_ERROR);
+	const std::string funcname = st->_funcname;
+	const std::string varname  = st->_varname;
+	const computorv2::IndependentVariable var(varname);
+	if (st->_vm)
+	{
+		st->_vm->setLocalVariableByName(varname, &var);
+	}
+	st->_err = computorv2::statment_parse_additional(st);
+	if (st->_vm)
+	{
+		st->_vm->delLocalVariableByName(varname);
+	}
+	if ((st->_result == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	if (st->_vm)
+	{		
+		st->_vm->setVariableByName(funcname, st->_result);
+		st->_vm->addFunctionParameter(funcname, varname);
+	}
+	return (st->_err);
 }
 
-t_error computorv2::statment_parseline(computorv2::statment *st)
+t_error computorv2::statment_parse(computorv2::statment *st)
 {
-	if (st)
+	if ((st == NULL) || (st->_err != 0))
 	{
-		computorv2::statment_skip(st, "\r\n\t\v\f ");
-		computorv2::statment_type(st);
-		if (st->_type == STATMENT_TYPE_GET)
-		{
-			st->_varname = "";
-			computorv2::statment_assign_variable(st);
-		}
-		else if (st->_type == STATMENT_TYPE_SET_VARIABLE)
-		{
-			computorv2::statment_assign_variable(st);
-		}
-		else if (st->_type == STATMENT_TYPE_SET_FUNCTION)
-		{
-			computorv2::statment_assign_function(st);
-		}
-		else
-		{
-			return (computorv2::statment_syntaxerror(st));
-		}
-		if (computorv2::statment_getc(st) == '\r')
-		{
-			computorv2::statment_next(st);
-		}
-		if (computorv2::statment_getc(st) != '\n')
-		{
-			return (st->_err);
-		}
+		return (computorv2::statment_error(st));
 	}
-	return (COMPUTORV2_ERROR);
+	computorv2::statment_skip(st, "\r\n\t\v\f ");
+	computorv2::statment_type(st);
+	if (st->_type == STATMENT_TYPE_GET)
+	{
+		st->_varname = "";
+		st->_err = computorv2::statment_assign_variable(st);
+	}
+	else if (st->_type == STATMENT_TYPE_SET_VARIABLE)
+	{
+		st->_err = computorv2::statment_assign_variable(st);
+	}
+	else if (st->_type == STATMENT_TYPE_SET_FUNCTION)
+	{
+		st->_err = computorv2::statment_assign_function(st);
+	}
+	else
+	{
+		return (computorv2::statment_error(st));
+	}
+	computorv2::statment_skip(st, "\r\n\t\v\f ");
+	return (st->_err);
 }
 
 #endif//!__COMPUTORV2_SOURCES_UTILS

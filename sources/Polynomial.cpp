@@ -60,136 +60,84 @@ std::string computorv2::Polynomial::getTypeName(void) const
 
 std::string computorv2::Polynomial::toString(void) const
 {
-	const computorv2::Object* p = this->evaluate();
-	if (!IS_POLYNOMIAL(p))
+	if ((this->getCoefficient()->isnull()) || (this->getBase()->isnull()))
 	{
-		const std::string s = p->toString();
-		delete (p);
-		return (s);
-	}
-	const computorv2::Polynomial* poly = AS_POLYNOMIAL(p);
-	if ((poly->getCoefficient()->isnull()) || (poly->getBase()->isnull()))
-	{
-		const std::string s = poly->_freeterm->toString();
-		delete (poly);
-		return (s);
-	}
-	if (poly->_exponent->isnull())
-	{
-		const computorv2::Object *v = computorv2::add(poly->getCoefficient(), poly->getFreeTerm());
-		const std::string s = v->toString();
-		delete (poly);
-		delete (v);
-		return (s);
+		return (this->getFreeTerm()->toString());
 	}
 	std::stringstream ss("");
 	{
-		const computorv2::Object* a = this->_coefficient->evaluate();
-		const computorv2::Object* x = this->_base->evaluate();
-		const computorv2::Object* n = this->_exponent->evaluate();
-		const std::string a_str     = a->toString();
-		if (a_str == "-1")
+		std::string a = this->getCoefficient()->toString();
+		if (this->getExponent()->isnull() || this->getBase()->isunity())
 		{
-			ss << "-";
+			ss << a;
 		}
-		else if (a_str != "1")
+		else
 		{
-			if (!computorv2::isfreeterm(a))
+			if ((a != "1") && (a != "-1"))
 			{
-				ss << "(";
-			}
-			ss << a_str;
-			if (!computorv2::isfreeterm(a))
-			{
-				ss << ")";
-			}
-			if (!n->isnull())
-			{
-				ss << " * ";				
-			}
-		}
-		if (!n->isnull())
-		{
-			if (!computorv2::isfreeterm(x))
-			{
-				ss << "(";
-			}
-			ss << x->toString();
-			if (!computorv2::isfreeterm(x))
-			{
-				ss << ")";
-			}
-			delete (a);
-			delete (x);
-			const std::string s = n->toString();
-			if (!n->isunity())
-			{
-				ss << "^";
-				if ((s[0] == '-') || (!computorv2::isfreeterm(n)))
+				if (!computorv2::isfreeterm(this->getCoefficient()))
 				{
 					ss << "(";
 				}
-				ss << s;
-				if ((s[0] == '-') || (!computorv2::isfreeterm(n)))
+				ss << a;
+				if (!computorv2::isfreeterm(this->getCoefficient()))
+				{
+					ss << ")";
+				}
+				ss << " * ";
+			}
+			else if (a == "-1")
+			{
+				ss << "-";
+			}
+			if (!computorv2::isfreeterm(this->getBase()))
+			{
+				ss << "(";
+			}
+			ss << this->getBase()->toString();
+			if (!computorv2::isfreeterm(this->getBase()))
+			{
+				ss << ")";
+			}
+			const std::string n = this->getExponent()->toString();
+			if ((n.size() > 0) && (!this->getExponent()->isunity()))
+			{
+				ss << "^";
+				if ((n[0] == '-') || (!computorv2::isfreeterm(this->getExponent())))
+				{
+					ss << "(";
+				}
+				ss << n;
+				if ((n[0] == '-') || (!computorv2::isfreeterm(this->getExponent())))
 				{
 					ss << ")";
 				}
 			}
 		}
-		delete (n);
 	}
-	if (!poly->getFreeTerm()->isnull())
+	if (!this->getFreeTerm()->isnull())
 	{
-		std::string b = poly->_freeterm->toString();
-		if (b[0] == '-')
+		std::string b = this->getFreeTerm()->toString();
+		if (b.size() > 0)
 		{
-			ss << " - ";
-			b = b.substr(1, b.size() - 1);
+			if (b[0] == '-')
+			{
+				ss << " - ";
+				b = b.substr(1, b.size() - 1);
+			}
+			else
+			{
+				ss << " + ";
+			}
+			ss << b;			
 		}
-		else
-		{
-			ss << " + ";
-		}
-		ss << b;
 	}
-	delete (poly);
     return (ss.str());
 }
 
 computorv2::Object* computorv2::Polynomial::copy(void) const
 {
     return ( new computorv2::Polynomial(*this) );
-}
-
-computorv2::Object* computorv2::Polynomial::evaluate(void) const
-{
-	return (this->copy());
-	std::cout << ">>>> evaluate(" << this->getTypeName() << ")" << std::endl;
-	const computorv2::Object* a = this->getCoefficient()->evaluate();
-	const computorv2::Object* x = this->getBase()->evaluate();
-	const computorv2::Object* n = this->getExponent()->evaluate();
-	const computorv2::Object* b = this->getFreeTerm()->evaluate();
-	const computorv2::Object* p = computorv2::pow(x, n);
-	const computorv2::Object* e = computorv2::mul(a, p);
-	computorv2::Object* f = computorv2::add(e, b);
-	delete (a);
-	delete (x);
-	delete (n);
-	delete (b);
-	delete (p);
-	delete (e);
-	if (!IS_POLYNOMIAL(f))
-	{
-		return (f);
-	}
-	computorv2::Object* evaluated = f;
-	const computorv2::Polynomial* res = AS_POLYNOMIAL(f);
-	if (res->getCoefficient()->isunity() && res->getBase()->isunity() && res->getFreeTerm()->isnull())
-	{
-		evaluated = res->getBase()->evaluate();
-		delete (res);
-	}
-	return (evaluated);
 }
 
 bool computorv2::Polynomial::isnull(void) const
@@ -203,14 +151,18 @@ bool computorv2::Polynomial::isnull(void) const
 
 bool computorv2::Polynomial::isunity(void) const
 {
-	bool result = false;
-	const computorv2::Object* e = this->evaluate();
-	if (!IS_POLYNOMIAL(e))
+	if ((this->getCoefficient()->isnull()) || (this->getBase()->isnull()))
 	{
-		result = e->isunity();
+		return (this->getFreeTerm()->isunity());
 	}
-	delete (e);
-	return (result);
+	if (this->getExponent()->isnull() || this->getBase()->isunity())
+	{
+		if (this->getCoefficient()->isunity() && this->getFreeTerm()->isnull())
+		{
+			return (true);
+		}
+	}
+	return (false);
 }
 
 bool computorv2::Polynomial::isnegative(void) const
@@ -378,7 +330,7 @@ void computorv2::Polynomial::setCoefficient(const computorv2::Object* coefficien
 	}
 	else
 	{
-		this->_coefficient = coefficient->evaluate();
+		this->_coefficient = coefficient->copy();
 	}
 }
 
@@ -401,7 +353,7 @@ void computorv2::Polynomial::setBase(const computorv2::Object* base)
 	}
 	else
 	{
-		this->_base = base->evaluate();
+		this->_base = base->copy();
 	}
 }
 
@@ -424,7 +376,7 @@ void computorv2::Polynomial::setExponent(const computorv2::Object* exponent)
 	}
 	else
 	{
-		this->_exponent = exponent->evaluate();
+		this->_exponent = exponent->copy();
 	}
 }
 
@@ -441,7 +393,7 @@ void computorv2::Polynomial::setFreeTerm(const computorv2::Object* freeterm)
 	}
 	else
 	{
-		this->_freeterm = freeterm->evaluate();
+		this->_freeterm = freeterm->copy();
 	}
 }
 

@@ -79,11 +79,6 @@ computorv2::Object* computorv2::Vector::copy(void) const
 	return ( new computorv2::Vector(*this) );
 }
 
-computorv2::Object* computorv2::Vector::evaluate(void) const
-{
-	return ( new computorv2::Vector(*this) );
-}
-
 bool computorv2::Vector::isnull(void) const
 {
 	for (
@@ -183,7 +178,7 @@ void computorv2::Vector::push(const computorv2::Object* element)
 	{
 		throw std::logic_error("Can't add NULL elements");
 	}
-	computorv2::Object* e = element->evaluate();
+	computorv2::Object* e = computorv2::evaluate(AS_OBJECT(element));
 	this->_data.push_back(e);
 }
 

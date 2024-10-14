@@ -67,25 +67,20 @@ computorv2::Object* computorv2::UsualFunction::copy(void) const
     return ( new computorv2::UsualFunction(*this) );
 }
 
-computorv2::Object* computorv2::UsualFunction::evaluate(void) const
-{
-    const computorv2::Object* body = this->_body->evaluate();
-    if (!IS_COMPLEX(body))
-    {
-        computorv2::Object* res = new computorv2::UsualFunction(this->getName(), body);
-        delete (body);
-        return (res);
-    }
-    delete (body);
-    throw std::logic_error("computorv2::UsualFunction::evaluate (Not implemented)!");
-    return (NULL);
-}
-
 bool computorv2::UsualFunction::isnull(void) const
 {
+    computorv2::Object* e = NULL;
+    try
+    {
+        e = computorv2::evaluate(this);
+    }
+    catch (const std::exception& e)
+    {
+        (void) e;
+        return (false);
+    }
     bool result = false;
-    computorv2::Object* e = this->evaluate();
-    if (IS_COMPLEX(e))
+    if (!IS_USFUNC(e))
     {
         result = e->isnull();
     }
@@ -95,9 +90,18 @@ bool computorv2::UsualFunction::isnull(void) const
 
 bool computorv2::UsualFunction::isunity(void) const
 {
+    computorv2::Object* e = NULL;
+    try
+    {
+        e = computorv2::evaluate(this);
+    }
+    catch (const std::exception& e)
+    {
+        (void) e;
+        return (false);
+    }
     bool result = false;
-    computorv2::Object* e = this->evaluate();
-    if (IS_COMPLEX(e))
+    if (!IS_USFUNC(e))
     {
         result = e->isunity();
     }

@@ -1,7 +1,7 @@
 /* **************************************************************************  */
 /*                                                                             */
 /*                                                         :::      ::::::::   */
-/*   IndependentVariable.hpp                            :+:      :+:    :+:    */
+/*   OStream.cpp                                        :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+      */
 /*   By: ahabachi <abdelmathinhabachi@gmail.com>    +#+  +:+       +#+         */
 /*                                                +#+#+#+#+#+   +#+            */
@@ -36,39 +36,71 @@
 /*                                                                             */
 /* **************************************************************************  */
 
-#pragma once
+#ifndef __COMPUTORV2_SOURCES_OSTREAM
+# define __COMPUTORV2_SOURCES_OSTREAM
 
-#include "computorv2.hpp"
-#include "Object.hpp"
-#include <iostream>
+#include "../include/OStream.hpp"
+#include <sstream>
+#include <unistd.h>
 
-namespace computorv2
+computorv2::OStream::OStream(void)
 {
-	class IndependentVariable: public computorv2::Object
-	{
-		public:
-            int                        getType(void)     const;
-            std::string                getTypeName(void) const;
-            std::string                toString(void)    const;
-            computorv2::Object*        copy(void)        const;
-            bool                       isnull(void)      const;
-            bool                       isunity(void)     const;
-            bool                       isnegative(void)  const;
-            static IndependentVariable null(void);
-
-			IndependentVariable(const std::string& name);
-			~IndependentVariable(void);
-			IndependentVariable(const IndependentVariable& other);
-			IndependentVariable& operator=(const IndependentVariable& other);
-			std::string          getName(void) const;
-			void                 setName(const std::string& name);
-		private:
-			IndependentVariable(void);
-			std::string _name;
-	};
+	this->_fdout = -1;
+	this->_stream.str("");
 }
 
-#define IS_INDVAR(o) ((OBJECT_TYPE(o) & COMPUTORV2_TYPE_INDEPENDENT_VARIABLE) != 0)
-#define AS_INDVAR(o) static_cast< const computorv2::IndependentVariable* >(o)
+computorv2::OStream::OStream(const computorv2::OStream& other)
+{
+	*this = other;
+}
 
-std::ostream& operator<<(std::ostream& left, const computorv2::IndependentVariable& right);
+computorv2::OStream& computorv2::OStream::operator=(const computorv2::OStream& other)
+{
+	if (this != &other)
+	{
+		this->_fdout = other._fdout;
+		this->_stream.str(other._stream.str());
+	}
+	return (*this);
+}
+
+computorv2::OStream& computorv2::OStream::operator<<(int number)
+{
+	this->_stream << number;
+	return (*this);
+}
+
+computorv2::OStream& computorv2::OStream::operator<<(const std::string& message)
+{
+	if (message == computorv2::crlf)
+	{
+		if (this->getFdOut() >= 0)
+		{
+			const std::string str = this->_stream.str();
+			write(this->getFdOut(), str.data(), str.size());
+			write(this->getFdOut(), computorv2::crlf.data(), computorv2::crlf.size());
+		}
+		this->_stream.str("");
+		return (*this);
+	}
+	this->_stream << message;
+	return (*this);
+}
+
+computorv2::OStream::~OStream(void)
+{
+	this->_fdout = -1;
+	this->_stream.str("");
+}
+
+int computorv2::OStream::getFdOut(void) const
+{
+	return (this->_fdout);
+}
+
+void computorv2::OStream::setFdOut(int fd)
+{
+	this->_fdout = fd;
+}
+
+#endif//!__COMPUTORV2_SOURCES_OSTREAM

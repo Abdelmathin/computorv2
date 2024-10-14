@@ -40,8 +40,10 @@
 
 #include "computorv2.hpp"
 #include "statment.hpp"
+#include "OStream.hpp"
 #include "VirtualMachine.hpp"
 #include <iostream>
+#include <vector>
 
 namespace computorv2
 {
@@ -49,11 +51,14 @@ namespace computorv2
     {
         private:
             bool                       _connected;
+            computorv2::OStream        _outputstream;
+            computorv2::OStream        _errorstream;
             int                        _fdin;
             int                        _fdout;
             int                        _fderr;
             std::string                _buffer;
             computorv2::VirtualMachine _vm;
+            std::vector< std::string > _history;
         public:
             Client(void);
             ~Client(void);
@@ -72,8 +77,8 @@ namespace computorv2
             void clear(void);
             bool connected(void) const;
             int  read(void);
-
-            int  error(const computorv2::statment *st, const std::string prompt, std::string message);
+            int  history(void);
+            int  error(const computorv2::statment *st, const std::string prompt);
             int  parse_line(std::string line);
             int  check_line(void);
             void addBuffer(const std::string& buffer);
