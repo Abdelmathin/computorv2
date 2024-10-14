@@ -50,7 +50,10 @@ $$ P(x) = a . x^n + b $$
 where a, x, n, b are all functions of x, we use the product rule, the chain rule, and the general power rule.
 
 $$
-\begin{bmatrix} 1 & 3 \\ 2 & 4 \end{bmatrix}
+\begin{bmatrix}
+1 & 3 \\
+2 & 4
+\end{bmatrix}
 $$
 
 <!-- $$  P(x) = a . x^n + b $$
