@@ -52,12 +52,12 @@ where a, x, n, b are all functions of x, we use the product rule, the chain rule
 
 
 $$
-\begin{matrix}
+\begin{bmatrix}
   1       & x^1_0   & x^2_0   & \cdots  & x^{degree}_0  \\
   1       & x^1_1   & x^2_1   & \cdots  & x^{degree}_1  \\
   \vdots  & \vdots  & \vdots  & \ddots  & \vdots \\
   1       & x^1_n   & x^2_n   & \cdots  & x^{degree}_n  \\
-\end{matrix}
+\end{bmatrix}
 $$
 
 <!-- $$  P(x) = a . x^n + b $$
