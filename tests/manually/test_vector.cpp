@@ -22,6 +22,7 @@ int main(void)
 	const computorv2::Complex a4(4.0, 0.0);
 
 	computorv2::Matrix X(2, 2);
+	computorv2::Matrix Y(4, 4);
 
 	X.setElementAt(0, 0, &a1);
 	X.setElementAt(0, 1, &a2);
@@ -30,6 +31,7 @@ int main(void)
 
 	std::cout << X << std::endl;
 	std::cout << "---------- cofactor ----------" << std::endl;
+	std::cout << computorv2::cofactor(Y).toMarkdown() << std::endl;
 	std::cout << computorv2::cofactor(X) << std::endl;
 	std::cout << "---------- transpose ----------" << std::endl;
 	std::cout << computorv2::transpose(X).toMarkdown() << std::endl;
