@@ -89,13 +89,9 @@ std::string computorv2::Matrix::toString(void) const
 std::string computorv2::Matrix::toMarkdown(void) const
 {
 	std::stringstream ss("");
-	ss << "\\begin{bmatrix}";
+	ss << "\\begin{bmatrix}" << std::endl;
 	for (unsigned int row = 0; row < this->rows(); row++)
 	{
-		if (row > 0)
-		{
-			ss << "\\\\";
-		}
 		for (unsigned int column = 0; column < this->columns(); column++)
 		{
 			if (column > 0)
@@ -112,6 +108,7 @@ std::string computorv2::Matrix::toMarkdown(void) const
 				ss << " 0 ";
 			}
 		}
+		ss << "\\\\" << std::endl;
 	}
 	ss << "\\end{bmatrix}";
 	return (ss.str());

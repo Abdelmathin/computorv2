@@ -53,10 +53,8 @@ where a, x, n, b are all functions of x, we use the product rule, the chain rule
 
 $$
 \begin{bmatrix}
-  1       & x^1_0   & x^2_0   & \cdots  & x^{degree}_0  \\
-  1       & x^1_1   & x^2_1   & \cdots  & x^{degree}_1  \\
-  \vdots  & \vdots  & \vdots  & \ddots  & \vdots \\
-  1       & x^1_n   & x^2_n   & \cdots  & x^{degree}_n  \\
+ 1 & 3 \\
+ 2 & 4 \\
 \end{bmatrix}
 $$
 
