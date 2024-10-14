@@ -51,7 +51,11 @@ where a, x, n, b are all functions of x, we use the product rule, the chain rule
 
 
 ```math
-\begin{bmatrix}X\\Y\end{bmatrix}
+\begin{bmatrix} 
+a & b & c \\
+c & e & f \\
+g & h & i \\
+\end{bmatrix}
 ```
 
 
