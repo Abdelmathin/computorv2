@@ -49,6 +49,7 @@ namespace computorv2
         public:
             int                        getType(void)     const;
             std::string                getTypeName(void) const;
+            std::string                toMarkdown(void)  const;
             std::string                toString(void)    const;
             computorv2::Object*        copy(void)        const;
             bool                       isnull(void)      const;

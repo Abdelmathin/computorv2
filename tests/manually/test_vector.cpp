@@ -32,7 +32,7 @@ int main(void)
 	std::cout << "---------- cofactor ----------" << std::endl;
 	std::cout << computorv2::cofactor(X) << std::endl;
 	std::cout << "---------- transpose ----------" << std::endl;
-	std::cout << computorv2::transpose(X) << std::endl;
+	std::cout << computorv2::transpose(X).toMarkdown() << std::endl;
 	std::cout << "----------" << std::endl;
 	// std::cout << computorv2::neg(X) << std::endl;
 	// std::cout << computorv2::det(X)->toString() << std::endl;

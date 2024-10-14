@@ -59,6 +59,12 @@ std::string computorv2::IndependentVariable::toString(void) const
     return (this->getName());
 }
 
+std::string computorv2::IndependentVariable::toMarkdown(void) const
+{
+    throw std::runtime_error("Not implemented: computorv2::IndependentVariable::toMarkdown");
+    return ("");
+}
+
 computorv2::Object* computorv2::IndependentVariable::copy(void) const
 {
     return ( new computorv2::IndependentVariable(*this) );

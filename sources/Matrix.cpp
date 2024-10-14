@@ -86,6 +86,37 @@ std::string computorv2::Matrix::toString(void) const
 	return (ss.str());
 }
 
+std::string computorv2::Matrix::toMarkdown(void) const
+{
+	std::stringstream ss("");
+	ss << "\\begin{bmatrix}";
+	for (unsigned int row = 0; row < this->rows(); row++)
+	{
+		if (row > 0)
+		{
+			ss << "\\\\";
+		}
+		for (unsigned int column = 0; column < this->columns(); column++)
+		{
+			if (column > 0)
+			{
+				ss << "&";
+			}
+			const computorv2::Object* e = this->getElementAt(row, column);
+			if (e)
+			{
+				ss << " " << e->toString() << " ";
+			}
+			else
+			{
+				ss << " 0 ";
+			}
+		}
+	}
+	ss << "\\end{bmatrix}";
+	return (ss.str());
+}
+
 computorv2::Object* computorv2::Matrix::copy(void) const
 {
 	return ( new computorv2::Matrix(*this) );

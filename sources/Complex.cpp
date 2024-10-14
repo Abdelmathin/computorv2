@@ -92,6 +92,12 @@ std::string computorv2::Complex::toString(void) const
 	return (ss.str());
 }
 
+std::string computorv2::Complex::toMarkdown(void) const
+{
+	throw std::runtime_error("Not implemented: computorv2::Complex::toMarkdown");
+	return ("");
+}
+
 computorv2::Object* computorv2::Complex::copy(void) const
 {
 	return ( new computorv2::Complex(*this) );
