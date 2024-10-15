@@ -54,7 +54,7 @@
 std::string computorv2::tolower(const std::string s)
 {
 	std::string u = "";
-	for (size_t i = 0; i < s.length(); i++)
+	for (std::string::size_type i = 0; i < s.length(); i++)
 	{
 		u += std::tolower(s[i]);
 	}
@@ -209,13 +209,33 @@ computorv2::Object* computorv2::replace(const computorv2::Object* left, std::map
     }
     else if (IS_POLYNOMIAL(left))
     {
-        computorv2::Object* a = computorv2::replace(AS_POLYNOMIAL(left)->getCoefficient(), right);
-        computorv2::Object* x = computorv2::replace(AS_POLYNOMIAL(left)->getBase()       , right);
-        computorv2::Object* n = computorv2::replace(AS_POLYNOMIAL(left)->getExponent()   , right);
-        computorv2::Object* b = computorv2::replace(AS_POLYNOMIAL(left)->getFreeTerm()   , right);
-        computorv2::Object* m = computorv2::pow(x, n);
-        computorv2::Object* q = computorv2::mul(a, m);
-        computorv2::Object* r = computorv2::add(q, b);
+        computorv2::Object* a = NULL;
+        computorv2::Object* x = NULL;
+        computorv2::Object* n = NULL;
+        computorv2::Object* b = NULL;
+        computorv2::Object* m = NULL;
+        computorv2::Object* q = NULL;
+        computorv2::Object* r = NULL;
+        try
+        {
+            a = computorv2::replace(AS_POLYNOMIAL(left)->getCoefficient(), right);
+            x = computorv2::replace(AS_POLYNOMIAL(left)->getBase()       , right);
+            n = computorv2::replace(AS_POLYNOMIAL(left)->getExponent()   , right);
+            b = computorv2::replace(AS_POLYNOMIAL(left)->getFreeTerm()   , right);
+            m = computorv2::pow(x, n);
+            q = computorv2::mul(a, m);
+            r = computorv2::add(q, b);
+        }
+        catch (const std::exception& e)
+        {
+            delete (a);
+            delete (x);
+            delete (n);
+            delete (b);
+            delete (m);
+            delete (q);
+            throw (e);
+        }
         delete (a);
         delete (x);
         delete (n);
@@ -224,11 +244,26 @@ computorv2::Object* computorv2::replace(const computorv2::Object* left, std::map
         delete (q);
         return (r);
     }
-    if (IS_USFUNC(left))
+    else if (IS_USFUNC(left))
     {
         const computorv2::Object* body = computorv2::replace(AS_USFUNC(left)->getBody(), right);
         computorv2::UsualFunction res(AS_USFUNC(left)->getName(), body);
         delete (body);
+        return (res.copy());
+    }
+    else if (IS_MATRIX(left))
+    {
+        const computorv2::Matrix* e = AS_MATRIX(left);
+        computorv2::Matrix res(e->rows(), e->columns());
+        for (unsigned int row = 0; row < e->rows(); row++)
+        {
+            for (unsigned int column = 0; column < e->columns(); column++)
+            {
+                const computorv2::Object* u = computorv2::replace(AS_USFUNC(left)->getBody(), right);
+                res.setElementAt(row, column, u);
+                delete (u);
+            }
+        }
         return (res.copy());
     }
     return (left->copy());
@@ -239,6 +274,7 @@ computorv2::Object* computorv2::evaluate(const computorv2::Object* left)
     std::map< std::string, const computorv2::Object*> right; right.clear();
     return (computorv2::replace(left, right));
 }
+
 
 /* --------------------------- transpose --------------------------- */
 
@@ -1492,14 +1528,14 @@ computorv2::Polynomial computorv2::neg(const computorv2::Polynomial& left)
 computorv2::Polynomial computorv2::neg(const computorv2::UsualFunction& left)
 {
     computorv2::Polynomial res(left);
-    res.setCoefficient(-1.0);
+    res.setCoefficient(0.0 - 1.0);
     return (res);
 }
 
 computorv2::Polynomial computorv2::neg(const computorv2::IndependentVariable& left)
 {
     computorv2::Polynomial res(left);
-    res.setCoefficient(-1.0);
+    res.setCoefficient(0.0 - 1.0);
     return (res);
 }
 

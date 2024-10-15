@@ -54,7 +54,7 @@ namespace computorv2
 			OStream(const OStream& other);
 			OStream& operator=(const OStream& other);
 			OStream& operator<<(int number);
-			OStream& operator<<(const std::string& message);
+			OStream& operator<<(const std::string& msg);
 			~OStream(void);
 
 			int  getFdOut(void) const;

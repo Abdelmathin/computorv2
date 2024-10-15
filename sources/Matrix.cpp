@@ -86,34 +86,6 @@ std::string computorv2::Matrix::toString(void) const
 	return (ss.str());
 }
 
-std::string computorv2::Matrix::toMarkdown(void) const
-{
-	std::stringstream ss("");
-	ss << "\\begin{bmatrix}" << std::endl;
-	for (unsigned int row = 0; row < this->rows(); row++)
-	{
-		for (unsigned int column = 0; column < this->columns(); column++)
-		{
-			if (column > 0)
-			{
-				ss << "&";
-			}
-			const computorv2::Object* e = this->getElementAt(row, column);
-			if (e)
-			{
-				ss << " " << e->toString() << " ";
-			}
-			else
-			{
-				ss << " 0 ";
-			}
-		}
-		ss << "\\\\" << std::endl;
-	}
-	ss << "\\end{bmatrix}";
-	return (ss.str());
-}
-
 computorv2::Object* computorv2::Matrix::copy(void) const
 {
 	return ( new computorv2::Matrix(*this) );
@@ -125,8 +97,10 @@ bool computorv2::Matrix::isnull(void) const
 	while (it != this->_data.end())
 	{
 		const computorv2::Object* e = (*it);
-		if (!e || (e->isnull() == false))
+		if ((e == NULL) || (e->isnull() == false))
+		{
 			return (false);
+		}
 		it++;
 	}
 	return (true);
@@ -135,16 +109,22 @@ bool computorv2::Matrix::isnull(void) const
 bool computorv2::Matrix::isunity(void) const
 {
 	if (this->rows() != this->columns())
+	{
 		return (false);
+	}
 	for (unsigned int r = 0; r < this->rows(); r++)
 	{
 		for (unsigned int c = 0; c < this->columns(); c++)
 		{
 			const computorv2::Object* e = this->getElementAt(r, c);
-			if ((r == c) && (!e || e->isnull()))
+			if ((r == c) && ((e == NULL) || e->isnull()))
+			{
 				return (false);
-			if ((r != c) && e && (!e->isnull()))
+			}
+			if ((r != c) && (e != NULL) && (!e->isnull()))
+			{
 				return (false);
+			}
 		}
 	}
 	return (true);
@@ -172,7 +152,6 @@ computorv2::Matrix& computorv2::Matrix::operator=(const computorv2::Matrix& othe
 		this->clear();
 		this->_rows    = other.rows();
 		this->_columns = other.columns();
-		const computorv2::Complex zero(0.0, 0.0);
 		for (unsigned int i = 0; i < other._data.size(); i++)
 		{
 			const computorv2::Object* e = other._data[i];
@@ -182,7 +161,7 @@ computorv2::Matrix& computorv2::Matrix::operator=(const computorv2::Matrix& othe
 			}
 			else
 			{
-				this->_data.push_back(zero.copy());
+				this->_data.push_back(computorv2::Complex::null().copy());
 			}
 		}
 	}
@@ -238,12 +217,10 @@ computorv2::Matrix::Matrix(unsigned int rows, unsigned int columns)
 	}
 	this->_rows    = rows;
 	this->_columns = columns;
-	const computorv2::Complex zero(0.0, 0.0);
 	this->_data.clear();
 	for (unsigned int i = 0; i < rows * columns; i++)
 	{
-		computorv2::Object* e = zero.copy();
-		this->_data.push_back(e);
+		this->_data.push_back(computorv2::Complex::null().copy());
 	}
 }
 

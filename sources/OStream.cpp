@@ -70,20 +70,20 @@ computorv2::OStream& computorv2::OStream::operator<<(int number)
 	return (*this);
 }
 
-computorv2::OStream& computorv2::OStream::operator<<(const std::string& message)
+computorv2::OStream& computorv2::OStream::operator<<(const std::string& msg)
 {
-	if (message == computorv2::crlf)
+	if (msg == computorv2::crlf)
 	{
 		if (this->getFdOut() >= 0)
 		{
 			const std::string str = this->_stream.str();
 			write(this->getFdOut(), str.data(), str.size());
-			write(this->getFdOut(), computorv2::crlf.data(), computorv2::crlf.size());
+			write(this->getFdOut(), msg.data(), msg.size());
 		}
 		this->_stream.str("");
 		return (*this);
 	}
-	this->_stream << message;
+	this->_stream << msg;
 	return (*this);
 }
 

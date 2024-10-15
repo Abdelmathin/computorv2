@@ -295,7 +295,7 @@ t_error computorv2::statment_parse_matrix(computorv2::statment *st)
 		while ((st->_err == 0) && (computorv2::statment_getc(st)))
 		{
 			st->_result = NULL;
-			st->_err = computorv2::statment_parse(st);
+			st->_err = computorv2::statment_parse_expression(st);
 			row_elements.push_back(st->_result);
 			if ((st->_result == NULL) || (st->_err != 0))
 			{
@@ -423,7 +423,7 @@ t_error statment_map_arguments(computorv2::statment *st, const computorv2::args_
 			return (computorv2::statment_error(st));
 		}
 		st->_pos = old_pos;
-		st->_err = computorv2::statment_parse(st);
+		st->_err = computorv2::statment_parse_expression(st);
 		if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != CHARACTER_RIGHT_PARENTHESIS))
 		{
 			return (computorv2::statment_error(st));
@@ -441,7 +441,7 @@ t_error statment_map_arguments(computorv2::statment *st, const computorv2::args_
 		}
 		st->_result = NULL;
 		computorv2::statment_next(st);
-		st->_err = computorv2::statment_parse(st);
+		st->_err = computorv2::statment_parse_expression(st);
 		if ((st->_err != 0) || (st->_result == NULL))
 		{
 			return (computorv2::statment_error(st));
@@ -590,7 +590,7 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 	{
 		computorv2::statment_next(st);
 		computorv2::statment_skip_spaces(st);
-		st->_err = computorv2::statment_parse(st);
+		st->_err = computorv2::statment_parse_expression(st);
 		if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != CHARACTER_RIGHT_PARENTHESIS))
 		{
 			st->_err = computorv2::statment_error(st);

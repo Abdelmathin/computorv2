@@ -135,12 +135,6 @@ std::string computorv2::Polynomial::toString(void) const
     return (ss.str());
 }
 
-std::string computorv2::Polynomial::toMarkdown(void) const
-{
-    throw std::runtime_error("Not implemented: computorv2::Polynomial::toMarkdown");
-    return ("");
-}
-
 computorv2::Object* computorv2::Polynomial::copy(void) const
 {
     return ( new computorv2::Polynomial(*this) );
@@ -148,9 +142,9 @@ computorv2::Object* computorv2::Polynomial::copy(void) const
 
 bool computorv2::Polynomial::isnull(void) const
 {
-	if ((this->_coefficient->isnull()) || (this->_base->isnull()))
+	if ((this->getCoefficient()->isnull()) || (this->getBase()->isnull()))
 	{
-		return (this->_freeterm->isnull());
+		return (this->getFreeTerm()->isnull());
 	}
 	return (false);
 }

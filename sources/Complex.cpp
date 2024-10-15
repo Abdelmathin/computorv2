@@ -92,12 +92,6 @@ std::string computorv2::Complex::toString(void) const
 	return (ss.str());
 }
 
-std::string computorv2::Complex::toMarkdown(void) const
-{
-	throw std::runtime_error("Not implemented: computorv2::Complex::toMarkdown");
-	return ("");
-}
-
 computorv2::Object* computorv2::Complex::copy(void) const
 {
 	return ( new computorv2::Complex(*this) );
@@ -128,14 +122,12 @@ bool computorv2::Complex::isnegative(void) const
 
 computorv2::Complex computorv2::Complex::null(void)
 {
-	computorv2::Complex res(0.0, 0.0);
-	return (res);
+	return (computorv2::Complex(0.0, 0.0));
 }
 
 computorv2::Complex computorv2::Complex::unity(void)
 {
-	computorv2::Complex res(1.0, 0.0);
-	return (res);
+	return (computorv2::Complex(1.0, 0.0));
 }
 
 computorv2::Complex::Complex(void)

@@ -62,12 +62,6 @@ std::string computorv2::UsualFunction::toString(void) const
     return (ss.str());
 }
 
-std::string computorv2::UsualFunction::toMarkdown(void) const
-{
-    throw std::runtime_error("Not implemented: computorv2::UsualFunction::toMarkdown");
-    return ("");
-}
-
 computorv2::Object* computorv2::UsualFunction::copy(void) const
 {
     return ( new computorv2::UsualFunction(*this) );
