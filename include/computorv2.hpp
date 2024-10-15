@@ -51,6 +51,8 @@ typedef int t_error;
 #define MAX_MATRIX_ROWS                      4
 #define MAX_MATRIX_COLUMNS                   4
 
+#define CONSTANT_PI_NAME                     "PI"
+
 #define CHARACTER_SINGLE_QUOTE               0x27 /* ' */
 #define CHARACTER_PLUS                       '+'
 #define CHARACTER_MINUS                      '-'
@@ -121,7 +123,8 @@ namespace computorv2
     const std::string crlf = "\r\n";
 
 	std::string tolower(const std::string s);
-	bool        isname(const std::string& name);
+    bool        isname(const std::string& name);
+    std::string toname(const std::string& name);
 	bool        isUsualFunction(const std::string& name);
     std::string ltrim(const std::string str);
     std::string rtrim(const std::string str);
@@ -145,6 +148,9 @@ namespace computorv2
 
     /* ---------------------- det ---------------------- */
     computorv2::Object* det(const computorv2::Matrix& left);
+
+    /* ----------------------- sqrt ----------------------- */
+    computorv2::Complex sqrt(const computorv2::Complex& left);
 
     /* -------------------------------- ln -------------------------------- */
     computorv2::UsualFunction ln(const computorv2::Object*              left);

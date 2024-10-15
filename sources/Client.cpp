@@ -42,6 +42,7 @@
 # include "../include/computorv2.hpp"
 # include "../include/Client.hpp"
 # include "../include/Complex.hpp"
+# include "../include/Polynomial.hpp"
 # include "../include/UsualFunction.hpp"
 # include "../include/IndependentVariable.hpp"
 # include "../include/statment.hpp"
@@ -131,37 +132,41 @@ void computorv2::Client::init(void)
 	this->_buffer    = "";
 	this->_vm.clear();
 
-	const computorv2::Complex       im_i      = computorv2::Complex(0.0, 1.0)                            ;
-	const computorv2::UsualFunction ln_x      = computorv2::ln(computorv2::IndependentVariable("x"))     ;
-	const computorv2::UsualFunction exp_x     = computorv2::exp(computorv2::IndependentVariable("x"))    ;
-	const computorv2::UsualFunction sin_x     = computorv2::sin(computorv2::IndependentVariable("x"))    ;
-	const computorv2::UsualFunction cos_x     = computorv2::cos(computorv2::IndependentVariable("x"))    ;
-	const computorv2::UsualFunction tan_x     = computorv2::tan(computorv2::IndependentVariable("x"))    ;
-	const computorv2::UsualFunction arcsin_x  = computorv2::arcsin(computorv2::IndependentVariable("x")) ;
-	const computorv2::UsualFunction arccos_x  = computorv2::arccos(computorv2::IndependentVariable("x")) ;
-	const computorv2::UsualFunction arctan_x  = computorv2::arctan(computorv2::IndependentVariable("x")) ;
-	const computorv2::UsualFunction sinh_x    = computorv2::sinh(computorv2::IndependentVariable("x"))   ;
-	const computorv2::UsualFunction cosh_x    = computorv2::cosh(computorv2::IndependentVariable("x"))   ;
-	const computorv2::UsualFunction tanh_x    = computorv2::tanh(computorv2::IndependentVariable("x"))   ;
-	const computorv2::UsualFunction arcsinh_x = computorv2::arcsinh(computorv2::IndependentVariable("x"));
-	const computorv2::UsualFunction arccosh_x = computorv2::arccosh(computorv2::IndependentVariable("x"));
-	const computorv2::UsualFunction arctanh_x = computorv2::arctanh(computorv2::IndependentVariable("x"));
+	const computorv2::Complex             i         = computorv2::Complex(0.0, 1.0)        ;
+	const computorv2::IndependentVariable x         = computorv2::IndependentVariable("x") ;
+	const computorv2::IndependentVariable pi        = computorv2::IndependentVariable(CONSTANT_PI_NAME);
+	const computorv2::UsualFunction       ln_x      = computorv2::ln(x)                    ;
+	const computorv2::UsualFunction       exp_x     = computorv2::exp(x)                   ;
+	const computorv2::UsualFunction       sin_x     = computorv2::sin(x)                   ;
+	const computorv2::UsualFunction       cos_x     = computorv2::cos(x)                   ;
+	const computorv2::UsualFunction       tan_x     = computorv2::tan(x)                   ;
+	const computorv2::UsualFunction       arcsin_x  = computorv2::arcsin(x)                ;
+	const computorv2::UsualFunction       arccos_x  = computorv2::arccos(x)                ;
+	const computorv2::UsualFunction       arctan_x  = computorv2::arctan(x)                ;
+	const computorv2::UsualFunction       sinh_x    = computorv2::sinh(x)                  ;
+	const computorv2::UsualFunction       cosh_x    = computorv2::cosh(x)                  ;
+	const computorv2::UsualFunction       tanh_x    = computorv2::tanh(x)                  ;
+	const computorv2::UsualFunction       arcsinh_x = computorv2::arcsinh(x)               ;
+	const computorv2::UsualFunction       arccosh_x = computorv2::arccosh(x)               ;
+	const computorv2::UsualFunction       arctanh_x = computorv2::arctanh(x)               ;
 
-	this->_vm.setConstantByName("i"      , AS_OBJECT(&im_i      ));
-	this->_vm.setConstantByName("ln"     , AS_OBJECT(&ln_x      ));
-	this->_vm.setConstantByName("exp"    , AS_OBJECT(&exp_x     ));
-	this->_vm.setConstantByName("sin"    , AS_OBJECT(&sin_x     ));
-	this->_vm.setConstantByName("cos"    , AS_OBJECT(&cos_x     ));
-	this->_vm.setConstantByName("tan"    , AS_OBJECT(&tan_x     ));
-	this->_vm.setConstantByName("arcsin" , AS_OBJECT(&arcsin_x  ));
-	this->_vm.setConstantByName("arccos" , AS_OBJECT(&arccos_x  ));
-	this->_vm.setConstantByName("arctan" , AS_OBJECT(&arctan_x  ));
-	this->_vm.setConstantByName("sinh"   , AS_OBJECT(&sinh_x    ));
-	this->_vm.setConstantByName("cosh"   , AS_OBJECT(&cosh_x    ));
-	this->_vm.setConstantByName("tanh"   , AS_OBJECT(&tanh_x    ));
-	this->_vm.setConstantByName("arcsinh", AS_OBJECT(&arcsinh_x ));
-	this->_vm.setConstantByName("arccosh", AS_OBJECT(&arccosh_x ));
-	this->_vm.setConstantByName("arctanh", AS_OBJECT(&arctanh_x ));
+	this->_vm.setConstantByName("i"              , AS_OBJECT(&i         ));
+	this->_vm.setConstantByName("x"              , AS_OBJECT(&x         ));
+	this->_vm.setConstantByName(CONSTANT_PI_NAME , AS_OBJECT(&pi        ));
+	this->_vm.setConstantByName("ln"             , AS_OBJECT(&ln_x      ));
+	this->_vm.setConstantByName("exp"            , AS_OBJECT(&exp_x     ));
+	this->_vm.setConstantByName("sin"            , AS_OBJECT(&sin_x     ));
+	this->_vm.setConstantByName("cos"            , AS_OBJECT(&cos_x     ));
+	this->_vm.setConstantByName("tan"            , AS_OBJECT(&tan_x     ));
+	this->_vm.setConstantByName("arcsin"         , AS_OBJECT(&arcsin_x  ));
+	this->_vm.setConstantByName("arccos"         , AS_OBJECT(&arccos_x  ));
+	this->_vm.setConstantByName("arctan"         , AS_OBJECT(&arctan_x  ));
+	this->_vm.setConstantByName("sinh"           , AS_OBJECT(&sinh_x    ));
+	this->_vm.setConstantByName("cosh"           , AS_OBJECT(&cosh_x    ));
+	this->_vm.setConstantByName("tanh"           , AS_OBJECT(&tanh_x    ));
+	this->_vm.setConstantByName("arcsinh"        , AS_OBJECT(&arcsinh_x ));
+	this->_vm.setConstantByName("arccosh"        , AS_OBJECT(&arccosh_x ));
+	this->_vm.setConstantByName("arctanh"        , AS_OBJECT(&arctanh_x ));
 
 }
 
@@ -229,12 +234,105 @@ int computorv2::Client::error(const computorv2::statment *st, const std::string 
 	return (0);
 }
 
+int computorv2::Client::solve_equation(const computorv2::Object* equation)
+{
+	if (!equation)
+	{
+		return (COMPUTORV2_ERROR);
+	}
+	const computorv2::Complex zro(0.0, 0.0);
+	const computorv2::Complex one(1.0, 0.0);
+	const computorv2::Complex two(2.0, 0.0);
+	computorv2::Object* e = computorv2::evaluate(equation);
+	computorv2::Object* p = e;
+	computorv2::Complex a = 0.0;
+	computorv2::Complex b = 0.0;
+	computorv2::Complex c = 0.0;
+	while (IS_POLYNOMIAL(p))
+	{
+		const computorv2::Polynomial* poly    = AS_POLYNOMIAL(p);
+		const computorv2::Object* coefficient = poly->getCoefficient();
+		const computorv2::Object* exponent    = poly->getExponent();
+		if (!IS_COMPLEX(coefficient))
+		{
+			break ;
+		}
+		if (computorv2::eql(exponent, AS_OBJECT(&two)))
+		{
+			a = computorv2::add(a, *AS_COMPLEX(coefficient));
+		}
+		else if (computorv2::eql(exponent, AS_OBJECT(&one)))
+		{
+			b = computorv2::add(b, *AS_COMPLEX(coefficient));
+		}
+		else if (computorv2::eql(exponent, AS_OBJECT(&zro)))
+		{
+			c = computorv2::add(c, *AS_COMPLEX(coefficient));
+		}
+		else
+		{
+			break ;
+		}
+		p = poly->getFreeTerm();
+	}
+	if (!IS_COMPLEX(p))
+	{
+		this->_outputstream << "I can't solve." << computorv2::crlf;
+		delete (e);
+		return (COMPUTORV2_ERROR);
+	}
+	c = computorv2::add(c, *AS_COMPLEX(p));
+	delete (e);
+	if (a.isnull() && b.isnull())
+	{
+		this->_outputstream << "Polynomial degree: 0" << computorv2::crlf;
+		if (c.isnull())
+		{
+			this->_outputstream << "The equation admits infinite possibilities of solutions." << computorv2::crlf;
+		}
+		else
+		{
+			this->_outputstream << "There is no solution!" << computorv2::crlf;
+		}
+	}
+	else if (a.isnull())
+	{
+		this->_outputstream << "Polynomial degree: 1" << computorv2::crlf;
+		const computorv2::Complex s = computorv2::div(computorv2::neg(c), b);
+		this->_outputstream << "The solution is: " << s.toString() << computorv2::crlf;
+	}
+	else
+	{
+		this->_outputstream << "Polynomial degree: 2"   << computorv2::crlf;
+		this->_outputstream << "Identify coefficients:" << computorv2::crlf;
+		this->_outputstream << "a: " << a.toString()   << computorv2::crlf;
+		this->_outputstream << "b: " << b.toString()   << computorv2::crlf;
+		this->_outputstream << "c: " << c.toString()   << computorv2::crlf;
+		this->_outputstream << "Calculate the discriminant: (Δ = b^2 - 4ac)" << computorv2::crlf;
+		this->_outputstream << "Δ = (" << b.toString() << ") ";
+		this->_outputstream << "* (" << b.toString() << ")";
+		this->_outputstream << " - 4 * (" << a.toString() << ")";
+		this->_outputstream << " * (" << c.toString() << ")" << computorv2::crlf;
+		const computorv2::Complex discriminant = b * b - 4.0 * a * c;
+		this->_outputstream << "Δ = " << discriminant.toString() << computorv2::crlf;
+		if (discriminant.isnull())
+		{
+			this->_outputstream << "The equation has one solution." << computorv2::crlf;
+			this->_outputstream << ((0.0 - b) / (2.0 * a)).toString() << computorv2::crlf;
+		}
+		else
+		{
+			this->_outputstream << "The equation has two solution." << computorv2::crlf;
+			this->_outputstream << ((0.0 - b + computorv2::sqrt(discriminant)) / (2.0 * a)).toString() << computorv2::crlf;
+			this->_outputstream << ((0.0 - b - computorv2::sqrt(discriminant)) / (2.0 * a)).toString() << computorv2::crlf;
+		}
+	}
+	return (COMPUTORV2_SUCCESS);
+}
+
 int computorv2::Client::parse_line(std::string line)
 {
 	line = computorv2::trim(line, "\r\n\t\v\f ");
-	#if COMPUTORV2_CASE_INSENSITIVE
-	line = computorv2::tolower(line);
-	#endif//COMPUTORV2_CASE_INSENSITIVE
 	if ((line == "") || (line[0] == '#') || (!this->connected()))
 	{
 		return (0);
@@ -267,7 +365,14 @@ int computorv2::Client::parse_line(std::string line)
 	}
 	else
 	{
-		this->_outputstream << st._result->toString() << computorv2::crlf;
+		if (st._type == STATMENT_TYPE_SOLVE)
+		{
+			this->solve_equation(st._result);
+		}
+		else
+		{
+			this->_outputstream << st._result->toString() << computorv2::crlf;
+		}
 	}
 	computorv2::statment_fini(&st);
 	return (0);

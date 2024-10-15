@@ -58,17 +58,17 @@ namespace computorv2
 			VirtualMachine(const VirtualMachine& other);
 			VirtualMachine& operator=(const VirtualMachine& other);
 
-			computorv2::Object*         getVariableByName(const std::string&      name) const;
-			computorv2::Object*         getConstantByName(const std::string&      name) const;
-			computorv2::Object*         getLocalVariableByName(const std::string& name) const;
+			computorv2::Object*         getVariableByName(std::string      name) const;
+			computorv2::Object*         getConstantByName(std::string      name) const;
+			computorv2::Object*         getLocalVariableByName(std::string name) const;
 
-			void                        setVariableByName(const std::string&      name, const computorv2::Object* var);
-			void                        setConstantByName(const std::string&      name, const computorv2::Object* var);
-			void                        setLocalVariableByName(const std::string& name, const computorv2::Object* var);
+			void                        setVariableByName(std::string      name, const computorv2::Object* var);
+			void                        setConstantByName(std::string      name, const computorv2::Object* var);
+			void                        setLocalVariableByName(std::string name, const computorv2::Object* var);
 
-			void                        delVariableByName(const std::string&      name);
-			void                        delConstantByName(const std::string&      name);
-			void                        delLocalVariableByName(const std::string& name);
+			void                        delVariableByName(std::string      name);
+			void                        delConstantByName(std::string      name);
+			void                        delLocalVariableByName(std::string name);
 			void                        init(void);
 			void                        clear(void);
 			std::string                 toString(void) const;

@@ -78,6 +78,14 @@ bool computorv2::isname(const std::string& name)
 	return (true);
 }
 
+std::string computorv2::toname(const std::string& name)
+{
+    #if COMPUTORV2_CASE_INSENSITIVE
+    return (computorv2::tolower(name));
+    #endif//COMPUTORV2_CASE_INSENSITIVE
+    return (name);
+}
+
 bool computorv2::isUsualFunction(const std::string& name)
 {
     if (name == "ln")
@@ -318,6 +326,22 @@ computorv2::Object* computorv2::det(const computorv2::Matrix& left)
         res = q;
     }
     return (res);
+}
+
+
+/* ----------------------------- sqrt ----------------------------- */
+
+computorv2::Complex computorv2::sqrt(const computorv2::Complex& left)
+{
+    const double a = left.getReal();
+    const double b = left.getImage();
+    const double t = ::atan(b / a);
+    const double r = ::abs(a / ::cos(t));
+
+    return (computorv2::Complex(
+        ::sqrt(r) * ::cos(0.5 * t),
+        ::sqrt(r) * ::sin(0.5 * t)
+    ));
 }
 
 /* -------------------------------- ln -------------------------------- */
@@ -2950,7 +2974,7 @@ computorv2::Complex computorv2::pow(const computorv2::Complex& left, const compu
     const double c = right.getReal();
     const double d = right.getImage();
     const double t = ::atan(b / a);
-    const double r = a / ::cos(t);
+    const double r = ::abs(a / ::cos(t));
 
     const computorv2::Complex A = computorv2::Complex(::pow(r, c) * ::cos(c * t), ::pow(r, c) * ::sin(c * t));
     if (IS_ZERO(d))
@@ -3034,6 +3058,17 @@ computorv2::Polynomial computorv2::pow(const computorv2::Polynomial& left, const
         if (right.isnegative())
             throw std::logic_error("Division by zero!");
         return (computorv2::Polynomial::null());
+    }
+    if (IS_ZERO(right.getImage()) && IS_ZERO(2.0 - right.getReal()))
+    {
+        double i = 1;
+        computorv2::Polynomial res = left;
+        while (!IS_ZERO(right.getReal() - i))
+        {
+            res = computorv2::mul(res, left);
+            i = i + 1;
+        }
+        return (res);
     }
     if (left.isunity() || right.isnull())
     {

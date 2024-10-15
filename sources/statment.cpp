@@ -786,6 +786,16 @@ t_error computorv2::statment_parse_additional(computorv2::statment *st)
     return (st->_err);
 }
 
+t_error computorv2::statment_parse_expression(computorv2::statment *st)
+{
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	st->_err = computorv2::statment_parse_additional(st);
+	return (st->_err);
+}
+
 t_error computorv2::statment_type(computorv2::statment *st)
 {
 	if ((st == NULL) || (st->_err != 0))
@@ -875,6 +885,9 @@ t_error computorv2::statment_type(computorv2::statment *st)
 				}
 			}
 		}
+		st->_pos  = old_pos;
+		st->_type = STATMENT_TYPE_SOLVE;
+		return (COMPUTORV2_SUCCESS);
 	}
 	else if ((eq == 1) && (ex == 1))
 	{
@@ -901,7 +914,19 @@ t_error computorv2::statment_assign_variable(computorv2::statment *st)
 		st->_errmsg = "Cannot redefine constant.";
 		return (computorv2::statment_error(st));
 	}
-	st->_err = computorv2::statment_parse_additional(st);
+	st->_err = computorv2::statment_parse_expression(st);
+	computorv2::statment_skip_spaces(st);
+	if (computorv2::statment_getc(st) == '=')
+	{
+		computorv2::statment_next(st);
+		computorv2::statment_skip_spaces(st);
+		if (computorv2::statment_getc(st) != '?')
+		{
+			return (computorv2::statment_error(st));
+		}
+		computorv2::statment_next(st);
+		computorv2::statment_skip_spaces(st);
+	}
 	if ((st->_result == NULL) || (st->_err != 0))
 	{
 		return (computorv2::statment_error(st));
@@ -931,7 +956,7 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 	{
 		st->_vm->setLocalVariableByName(varname, &var);
 	}
-	st->_err = computorv2::statment_parse_additional(st);
+	st->_err = computorv2::statment_parse_expression(st);
 	if (st->_vm)
 	{
 		st->_vm->delLocalVariableByName(varname);
@@ -965,13 +990,21 @@ t_error computorv2::statment_solve_equation(computorv2::statment *st)
 	st->_result = NULL;
 	st->_err = computorv2::statment_parse_additional(st);
 	computorv2::statment_skip_spaces(st);
-	if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != '?'))
+	if ((st->_err != 0) || (st->_result == NULL))
 	{
 		delete (left);
 		return (computorv2::statment_error(st));
 	}
-	computorv2::statment_next(st);
+	if (computorv2::statment_getc(st) == '?')
+	{
+		computorv2::statment_next(st);
+	}
 	computorv2::statment_skip_spaces(st);
+	if ((st->_err != 0) || (st->_result == NULL) || !computorv2::statment_eos(st))
+	{
+		delete (left);
+		return (computorv2::statment_error(st));
+	}
 	const computorv2::Object* right = st->_result;
 	st->_result = NULL;
 	try

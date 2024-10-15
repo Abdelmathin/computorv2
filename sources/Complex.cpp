@@ -220,4 +220,24 @@ std::ostream& operator<<(std::ostream& left, const computorv2::Complex& right)
 	return (left);
 }
 
+computorv2::Complex operator*(const computorv2::Complex& left, const computorv2::Complex& right)
+{
+	return (computorv2::mul(left, right));
+}
+
+computorv2::Complex operator/(const computorv2::Complex& left, const computorv2::Complex& right)
+{
+	return (computorv2::div(left, right));
+}
+
+computorv2::Complex operator+(const computorv2::Complex& left, const computorv2::Complex& right)
+{
+	return (computorv2::add(left, right));
+}
+
+computorv2::Complex operator-(const computorv2::Complex& left, const computorv2::Complex& right)
+{
+	return (computorv2::sub(left, right));
+}
+
 #endif//!__COMPUTORV2_SOURCES_COMPLEX

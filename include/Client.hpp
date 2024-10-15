@@ -79,6 +79,7 @@ namespace computorv2
             int  read(void);
             int  history(void);
             int  error(const computorv2::statment *st, const std::string prompt);
+            int  solve_equation(const computorv2::Object* equation);
             int  parse_line(std::string line);
             int  check_line(void);
             void addBuffer(const std::string& buffer);
