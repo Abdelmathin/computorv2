@@ -151,6 +151,14 @@ t_error computorv2::statment_skip_spaces(computorv2::statment *st)
 	}
 	while (st->_pos < st->_len)
 	{
+		if (st->_str[st->_pos] == '#')
+		{
+			while (st->_pos < st->_len)
+			{
+				st->_pos += 1;
+			}
+			return (st->_err);
+		}
 		if (!IS_SPACE(st->_str[st->_pos]))
 		{
 			return (COMPUTORV2_SUCCESS);
@@ -166,7 +174,7 @@ t_error computorv2::statment_skip(computorv2::statment *st, const std::string ch
 	{
 		return (computorv2::statment_error(st));
 	}
-	for (std::string::size_type k = 0; k < charset.size() && charset[k]; k++)
+	for (std::string::size_type k = 0; (k < charset.size()) && (charset[k] != '\0'); k++)
 	{
 		if (computorv2::statment_getc(st) == charset[k])
 		{
@@ -264,21 +272,21 @@ t_error computorv2::statment_parse_matrix(computorv2::statment *st)
 		return (computorv2::statment_error(st));
 	}
 	st->_result = NULL;
-	if (computorv2::statment_getc(st) != '[')
+	if (computorv2::statment_getc(st) != CHARACTER_LEFT_BRACKET)
 		return (computorv2::statment_error(st));
 	computorv2::statment_next(st);
 	std::vector< std::vector< computorv2::Object* > > elements;
 	while (st->_err == 0)
 	{
 		computorv2::statment_skip_spaces(st);
-		if (computorv2::statment_getc(st) != '[')
+		if (computorv2::statment_getc(st) != CHARACTER_LEFT_BRACKET)
 		{
 			st->_err = computorv2::statment_error(st);
 			break ;
 		}
 		computorv2::statment_next(st);
 		computorv2::statment_skip_spaces(st);
-		if (computorv2::statment_getc(st) == ']')
+		if (computorv2::statment_getc(st) == CHARACTER_RIGHT_BRACKET)
 		{
 			st->_err = computorv2::statment_error(st);
 			break ;
@@ -301,13 +309,13 @@ t_error computorv2::statment_parse_matrix(computorv2::statment *st)
 				computorv2::statment_next(st);
 				continue ;
 			}
-			else if (c == ']')
+			else if (c == CHARACTER_RIGHT_BRACKET)
 			{
 				break ;
 			}
 			st->_err = computorv2::statment_error(st);
 		}
-		if ((row_elements.size() < 1) || (st->_result == NULL) || (st->_err != 0) || (computorv2::statment_getc(st) != ']'))
+		if ((row_elements.size() < 1) || (st->_result == NULL) || (st->_err != 0) || (computorv2::statment_getc(st) != CHARACTER_RIGHT_BRACKET))
 		{
 			st->_err = computorv2::statment_error(st);
 			break ;
@@ -320,7 +328,7 @@ t_error computorv2::statment_parse_matrix(computorv2::statment *st)
 			computorv2::statment_next(st);
 			continue ;
 		}
-		else if (computorv2::statment_getc(st) == ']')
+		else if (computorv2::statment_getc(st) == CHARACTER_RIGHT_BRACKET)
 		{
 			break ;
 		}
@@ -352,7 +360,7 @@ t_error computorv2::statment_parse_matrix(computorv2::statment *st)
 			st->_err = computorv2::statment_error(st);
 		}
 	}
-	if (computorv2::statment_getc(st) == ']')
+	if (computorv2::statment_getc(st) == CHARACTER_RIGHT_BRACKET)
 	{
 		computorv2::statment_next(st);
 	}
@@ -375,7 +383,9 @@ t_error computorv2::statment_parse_derivative(computorv2::statment *st)
 		return (computorv2::statment_error(st));
 	}
 	if (computorv2::statment_getc(st) != CHARACTER_SINGLE_QUOTE)
+	{
 		return (computorv2::statment_error(st));
+	}
 	const computorv2::Polynomial df = computorv2::drv(st->_result);
 	computorv2::statment_next(st);
 	computorv2::statment_skip_spaces(st);
@@ -384,43 +394,125 @@ t_error computorv2::statment_parse_derivative(computorv2::statment *st)
 	return (st->_err);
 }
 
+t_error statment_map_arguments(computorv2::statment *st, const computorv2::args_t& arguments, computorv2::args_t& values)
+{
+	st->_result = NULL;
+	if (computorv2::statment_getc(st) != CHARACTER_LEFT_PARENTHESIS)
+	{
+		return (computorv2::statment_error(st));
+	}
+	computorv2::statment_next(st);
+	const unsigned int old_pos = st->_pos;
+	computorv2::statment_skip_spaces(st);
+	if (computorv2::statment_getc(st) == CHARACTER_RIGHT_PARENTHESIS)
+	{
+		return (computorv2::statment_error(st));
+	}
+	std::string argname = statment_parsename(st);
+	computorv2::statment_skip_spaces(st);
+	if (computorv2::statment_getc(st) != CHARACTER_COLON)
+	{
+		if (arguments.size() != 1)
+		{
+			std::stringstream ss(""); ss << "arguments: ";
+			for(computorv2::args_t::const_iterator it = arguments.begin(); it != arguments.end(); it++)
+			{
+				ss << it->first << " ";
+			}
+			st->_errmsg = ss.str();
+			return (computorv2::statment_error(st));
+		}
+		st->_pos = old_pos;
+		st->_err = computorv2::statment_parse(st);
+		if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != CHARACTER_RIGHT_PARENTHESIS))
+		{
+			return (computorv2::statment_error(st));
+		}
+		computorv2::statment_next(st);
+		values[arguments.begin()->first] = AS_OBJECT(st->_result);
+		st->_result = NULL;
+		return (st->_err);
+	}
+	while (1)
+	{
+		if ((argname == "") || (values.find(argname) != values.end()) || (computorv2::statment_getc(st) != CHARACTER_COLON))
+		{
+			return (computorv2::statment_error(st));
+		}
+		st->_result = NULL;
+		computorv2::statment_next(st);
+		st->_err = computorv2::statment_parse(st);
+		if ((st->_err != 0) || (st->_result == NULL))
+		{
+			return (computorv2::statment_error(st));
+		}
+		computorv2::statment_skip_spaces(st);
+		if (computorv2::statment_getc(st) == CHARACTER_COMMA)
+		{
+			computorv2::statment_next(st);
+			computorv2::statment_skip_spaces(st);
+			if (computorv2::statment_getc(st) == CHARACTER_RIGHT_PARENTHESIS)
+			{
+				return (computorv2::statment_error(st));
+			}
+		}
+		values[argname] = st->_result;
+		st->_result = NULL;
+		if (computorv2::statment_getc(st) == CHARACTER_RIGHT_PARENTHESIS)
+		{
+			computorv2::statment_next(st);
+			return (st->_err);
+		}
+		computorv2::statment_skip_spaces(st);
+		argname = statment_parsename(st);
+		computorv2::statment_skip_spaces(st);
+	}
+	return (computorv2::statment_error(st));
+}
+
 t_error computorv2::statment_parse_function_call(computorv2::statment *st)
 {
 	if ((st == NULL) || (st->_result == NULL) || (st->_err != 0))
 	{
 		return (computorv2::statment_error(st));
 	}
-	if (computorv2::statment_getc(st) != '(')
-		return (computorv2::statment_error(st));
-	if (!IS_INDVAR(st->_result) && !IS_USFUNC(st->_result) && !IS_POLYNOMIAL(st->_result))
+	if (computorv2::statment_getc(st) != CHARACTER_LEFT_PARENTHESIS)
 	{
 		return (computorv2::statment_error(st));
 	}
-	computorv2::statment_next(st);
-	computorv2::statment_skip_spaces(st);
-	computorv2::Object* function = st->_result;
-	std::map< std::string, const computorv2::Object*> vars;
-	computorv2::variables(function, vars);
-	if (vars.size() == 1)
+	computorv2::args_t values;
+	computorv2::args_t arguments;
+	computorv2::variables(st->_result, arguments);
+	if (arguments.size() < 1)
 	{
-		st->_result = NULL;
-		st->_err = computorv2::statment_parse(st);
-		computorv2::statment_skip_spaces(st);
-		if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != ')'))
-		{
-			delete (function);
-			return (computorv2::statment_error(st));
-		}
-		vars[vars.begin()->first] = st->_result;
-		computorv2::statment_next(st);
-		computorv2::Object* res = computorv2::replace(function, vars);
-		delete (function);
+		st->_errmsg = "'" + st->_result->toString() + "' is not callable.";
+		return (computorv2::statment_error(st));
+	}
+	const computorv2::Object* function = AS_OBJECT(st->_result);
+	st->_result = NULL;
+	st->_err = statment_map_arguments(st, arguments, values);
+	if (st->_result)
+	{
 		delete (st->_result);
-		st->_result = res;
-		return (st->_err);
+		st->_result = NULL;
 	}
-	st->_errmsg = "Too many arguments";
-	return (computorv2::statment_error(st));
+	if ((st->_err == 0) && (values.size() > 0))
+	{
+		st->_result = computorv2::replace(function, values);
+	}
+	delete (function);
+	for(computorv2::args_it it = values.begin(); it != values.end(); it++)
+	{
+		if (it->second)
+		{
+			delete (it->second);
+		}
+	}
+	if ((st->_err != 0) || (st->_result == NULL))
+	{
+		return (computorv2::statment_error(st));
+	}
+	return (st->_err);
 }
 
 t_error computorv2::statment_parse_variable(computorv2::statment *st)
@@ -460,11 +552,11 @@ t_error computorv2::statment_parse_variable(computorv2::statment *st)
 		st->_result = new computorv2::IndependentVariable(name);
 	}
 	computorv2::statment_skip_spaces(st);
-	if (computorv2::statment_getc(st) == CHARACTER_SINGLE_QUOTE)
+	while (computorv2::statment_getc(st) == CHARACTER_SINGLE_QUOTE)
 	{
 		st->_err = computorv2::statment_parse_derivative(st);
 	}
-	if (computorv2::statment_getc(st) == '(')
+	if (computorv2::statment_getc(st) == CHARACTER_LEFT_PARENTHESIS)
 	{
 		st->_err = computorv2::statment_parse_function_call(st);
 	}
@@ -494,12 +586,12 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 	{
 		st->_err = computorv2::statment_parse_variable(st);
 	}
-	else if (c == '(')
+	else if (c == CHARACTER_LEFT_PARENTHESIS)
 	{
 		computorv2::statment_next(st);
 		computorv2::statment_skip_spaces(st);
 		st->_err = computorv2::statment_parse(st);
-		if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != ')'))
+		if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != CHARACTER_RIGHT_PARENTHESIS))
 		{
 			st->_err = computorv2::statment_error(st);
 		}
@@ -508,7 +600,7 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 			computorv2::statment_next(st);
 		}
 	}
-	else if (c == '[')
+	else if (c == CHARACTER_LEFT_BRACKET)
 	{
 		st->_err = computorv2::statment_parse_matrix(st);
 	}
@@ -704,7 +796,7 @@ t_error computorv2::statment_type(computorv2::statment *st)
 	const std::string::size_type old_pos = st->_pos;
 	computorv2::statment_skip_spaces(st);
 	char c = statment_getc(st);
-	if ((c == '=') || (c == '?'))
+	if ((c == CHARACTER_EQUALS) || (c == CHARACTER_QUESTION_MARK))
 	{
 		return (COMPUTORV2_ERROR);
 	}
@@ -715,7 +807,7 @@ t_error computorv2::statment_type(computorv2::statment *st)
 	{
 		computorv2::statment_next(st);
 		computorv2::statment_skip_spaces(st);
-		if (c == '?')
+		if (c == CHARACTER_QUESTION_MARK)
 		{
 			ex++;
 			if (!computorv2::statment_eos(st))
@@ -724,7 +816,7 @@ t_error computorv2::statment_type(computorv2::statment *st)
 			}
 			break ;
 		}
-		else if (c == '=')
+		else if (c == CHARACTER_EQUALS)
 		{
 			eq++;
 			c = computorv2::statment_getc(st);
@@ -732,7 +824,7 @@ t_error computorv2::statment_type(computorv2::statment *st)
 			{
 				return (COMPUTORV2_ERROR);
 			}
-			if ((c != '?') && (c != '='))
+			if ((c != CHARACTER_QUESTION_MARK) && (c != CHARACTER_EQUALS))
 			{
 				in_between = 1;
 			}
@@ -755,7 +847,7 @@ t_error computorv2::statment_type(computorv2::statment *st)
 		st->_funcname = computorv2::statment_parsename(st);
 		computorv2::statment_skip_spaces(st);
 		c = statment_getc(st);
-		if (c == '=')
+		if (c == CHARACTER_EQUALS)
 		{
 			computorv2::statment_next(st);
 			computorv2::statment_skip_spaces(st);
@@ -763,18 +855,18 @@ t_error computorv2::statment_type(computorv2::statment *st)
 			st->_varname  = st->_funcname;
 			return (COMPUTORV2_SUCCESS);
 		}
-		else if (c == '(')
+		else if (c == CHARACTER_LEFT_PARENTHESIS)
 		{
 			computorv2::statment_next(st);
 			st->_varname = computorv2::statment_parsename(st);
 			computorv2::statment_skip_spaces(st);
 			c = statment_getc(st);
-			if ((st->_varname != "") && (c == ')'))
+			if ((st->_varname != "") && (c == CHARACTER_RIGHT_PARENTHESIS))
 			{
 				computorv2::statment_next(st);
 				computorv2::statment_skip_spaces(st);
 				c = statment_getc(st);
-				if (c == '=')
+				if (c == CHARACTER_EQUALS)
 				{
 					computorv2::statment_next(st);
 					computorv2::statment_skip_spaces(st);
@@ -804,6 +896,11 @@ t_error computorv2::statment_assign_variable(computorv2::statment *st)
 		return (computorv2::statment_error(st));
 	}
 	const std::string varname = st->_varname;
+	if ((st->_vm != NULL) && (st->_vm->getConstantByName(varname) != NULL))
+	{
+		st->_errmsg = "Cannot redefine constant.";
+		return (computorv2::statment_error(st));
+	}
 	st->_err = computorv2::statment_parse_additional(st);
 	if ((st->_result == NULL) || (st->_err != 0))
 	{
@@ -824,6 +921,11 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 	}
 	const std::string funcname = st->_funcname;
 	const std::string varname  = st->_varname;
+	if ((st->_vm != NULL) && (st->_vm->getConstantByName(funcname) != NULL))
+	{
+		st->_errmsg = "Cannot redefine constant.";
+		return (computorv2::statment_error(st));
+	}
 	const computorv2::IndependentVariable var(varname);
 	if (st->_vm)
 	{
@@ -841,8 +943,49 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 	if (st->_vm)
 	{		
 		st->_vm->setVariableByName(funcname, st->_result);
-		st->_vm->addFunctionParameter(funcname, varname);
 	}
+	return (st->_err);
+}
+
+t_error computorv2::statment_solve_equation(computorv2::statment *st)
+{
+	if ((st == NULL) || (st->_err != 0))
+	{
+		return (computorv2::statment_error(st));
+	}
+	st->_err = computorv2::statment_parse_additional(st);
+	computorv2::statment_skip_spaces(st);
+	if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != '='))
+	{
+		return (computorv2::statment_error(st));
+	}
+	computorv2::statment_next(st);
+	computorv2::statment_skip_spaces(st);
+	const computorv2::Object* left = st->_result;
+	st->_result = NULL;
+	st->_err = computorv2::statment_parse_additional(st);
+	computorv2::statment_skip_spaces(st);
+	if ((st->_err != 0) || (st->_result == NULL) || (computorv2::statment_getc(st) != '?'))
+	{
+		delete (left);
+		return (computorv2::statment_error(st));
+	}
+	computorv2::statment_next(st);
+	computorv2::statment_skip_spaces(st);
+	const computorv2::Object* right = st->_result;
+	st->_result = NULL;
+	try
+	{
+		st->_result = computorv2::sub(left, right);
+	}
+	catch (const std::exception& e)
+	{
+		st->_errmsg = e.what();
+		st->_err = computorv2::statment_error(st);
+	}
+	delete (left);
+	delete (right);
+	st->_type = STATMENT_TYPE_SOLVE;
 	return (st->_err);
 }
 
@@ -866,6 +1009,10 @@ t_error computorv2::statment_parse(computorv2::statment *st)
 	else if (st->_type == STATMENT_TYPE_SET_FUNCTION)
 	{
 		st->_err = computorv2::statment_assign_function(st);
+	}
+	else if (st->_type == STATMENT_TYPE_SOLVE)
+	{
+		st->_err = computorv2::statment_solve_equation(st);
 	}
 	else
 	{

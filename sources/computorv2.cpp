@@ -153,8 +153,11 @@ void computorv2::variables(const computorv2::Object* left, std::map< std::string
 {
     if (IS_INDVAR(left))
     {
-        const computorv2::IndependentVariable* o = AS_INDVAR(left);
-        right[o->getName()] = left;
+        const computorv2::IndependentVariable& o = *AS_INDVAR(left);
+        if (!computorv2::eql(o, computorv2::IndependentVariable::null()))
+        {
+            right[o.getName()] = left;
+        }
     }
     else if (IS_USFUNC(left))
     {

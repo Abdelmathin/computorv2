@@ -86,7 +86,6 @@ computorv2::VirtualMachine& computorv2::VirtualMachine::operator=(const computor
 			this->setLocalVariableByName(it->first, it->second);
 			it++;
 		}
-		this->_params = other._params;
 	}
 	return (*this);
 }
@@ -151,43 +150,8 @@ void computorv2::VirtualMachine::setLocalVariableByName(const std::string& name,
 	this->_localvariables[name] = var->copy();
 }
 
-void computorv2::VirtualMachine::addFunctionParameter(std::string funcname, std::string varname)
-{
-	std::map< std::string, std::vector< std::string > >::iterator it = this->_params.find(funcname);
-	if (it == this->_params.end())
-	{
-		std::vector< std::string > args; args.push_back(varname);
-		this->_params[funcname] = args;
-	}
-	else
-	{
-		if (std::find(it->second.begin(), it->second.end(), varname) != it->second.end())
-		{
-			throw std::logic_error("duplicate argument!");
-		}
-		it->second.push_back(varname);
-	}
-}
-
-std::vector< std::string > computorv2::VirtualMachine::getFunctionParametersByName(std::string funcname)
-{
-	std::map< std::string, std::vector< std::string > >::iterator prm = this->_params.find(funcname);
-	if (prm != this->_params.end())
-	{
-		return (prm->second);
-	}
-	std::vector< std::string > res;
-	res.clear();
-	return (res);
-}
-
 void computorv2::VirtualMachine::delVariableByName(const std::string& name)
 {
-	std::map< std::string, std::vector< std::string > >::iterator prm = this->_params.find(name);
-	if (prm != this->_params.end())
-	{
-		this->_params.erase(name);
-	}
 	std::map< std::string, computorv2::Object* >::iterator it = this->_variables.find(name);
 	if ((it != this->_variables.end()) && (it->second != NULL))
 	{
@@ -199,11 +163,6 @@ void computorv2::VirtualMachine::delVariableByName(const std::string& name)
 
 void computorv2::VirtualMachine::delConstantByName(const std::string& name)
 {
-	std::map< std::string, std::vector< std::string > >::iterator prm = this->_params.find(name);
-	if (prm != this->_params.end())
-	{
-		this->_params.erase(name);
-	}
 	std::map< std::string, computorv2::Object* >::iterator it = this->_constants.find(name);
 	if ((it != this->_constants.end()) && (it->second != NULL))
 	{
@@ -215,11 +174,6 @@ void computorv2::VirtualMachine::delConstantByName(const std::string& name)
 
 void computorv2::VirtualMachine::delLocalVariableByName(const std::string& name)
 {
-	std::map< std::string, std::vector< std::string > >::iterator prm = this->_params.find(name);
-	if (prm != this->_params.end())
-	{
-		this->_params.erase(name);
-	}
 	std::map< std::string, computorv2::Object* >::iterator it = this->_localvariables.find(name);
 	if ((it != this->_localvariables.end()) && (it->second != NULL))
 	{
@@ -234,7 +188,6 @@ void computorv2::VirtualMachine::init(void)
 	this->_variables.clear();
 	this->_constants.clear();
 	this->_localvariables.clear();
-	this->_params.clear();
 }
 
 void computorv2::VirtualMachine::clear(void)
@@ -276,7 +229,7 @@ std::string computorv2::VirtualMachine::toString(void) const
 	while (it != this->_variables.end())
 	{
 		const computorv2::Object* e = it->second;
-		if (e)
+		if ((e != NULL) && (it->first.size() > 0))
 		{
 			ss << e->getTypeName() << " " << it->first << " = '" << e->toString() << "';" << std::endl;
 		}
@@ -286,7 +239,7 @@ std::string computorv2::VirtualMachine::toString(void) const
 	while (it != this->_constants.end())
 	{
 		const computorv2::Object* e = it->second;
-		if (e)
+		if ((e != NULL) && (it->first.size() > 0))
 		{
 			ss << "const " << e->getTypeName() << " " << it->first << " = '" << e->toString() << "';" << std::endl;
 		}
@@ -296,7 +249,7 @@ std::string computorv2::VirtualMachine::toString(void) const
 	while (it != this->_localvariables.end())
 	{
 		const computorv2::Object* e = it->second;
-		if (e)
+		if ((e != NULL) && (it->first.size() > 0))
 		{
 			ss << "local " << e->getTypeName() << " " << it->first << " = '" << e->toString() << "';" << std::endl;
 		}

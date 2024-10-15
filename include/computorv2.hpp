@@ -58,13 +58,18 @@ typedef int t_error;
 #define CHARACTER_SLASH                      '/'
 #define CHARACTER_CARET                      '^'
 #define CHARACTER_MODULUS                    '%'
+#define CHARACTER_LEFT_PARENTHESIS           '('
+#define CHARACTER_RIGHT_PARENTHESIS          ')'
+#define CHARACTER_COLON                      ':'
+#define CHARACTER_COMMA                      ','
+#define CHARACTER_EQUALS                     '='
+#define CHARACTER_QUESTION_MARK              '?'
+#define CHARACTER_LEFT_BRACKET               '['
+#define CHARACTER_RIGHT_BRACKET              ']'
 
 #define COMPUTORV2_CASE_INSENSITIVE          1
 #define COMPUTORV2_SUCCESS                   (0 << 0)
 #define COMPUTORV2_ERROR                     (1 << 0)
-
-// #define ERROR_NOT_ENOUGH_MEMORY              (1 << 0)
-// #define ERROR_NAN                            (1 << 1)
 
 #define STATMENT_TYPE_UNKNOWN                (0 << 0)
 #define STATMENT_TYPE_GET                    (1 << 0) /* x = ? */
@@ -109,6 +114,9 @@ namespace computorv2
 	class VirtualMachine;
     class UsualFunction;
     class IndependentVariable;
+
+    typedef std::map< std::string, const computorv2::Object*> args_t;
+    typedef args_t::iterator args_it;
 
     const std::string crlf = "\r\n";
 

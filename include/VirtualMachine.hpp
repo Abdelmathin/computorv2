@@ -49,10 +49,9 @@ namespace computorv2
 	class VirtualMachine
 	{
 		private:
-			std::map< std::string, computorv2::Object*>         _variables;
-			std::map< std::string, computorv2::Object*>         _constants;
-			std::map< std::string, computorv2::Object*>         _localvariables;
-			std::map< std::string, std::vector< std::string > > _params;
+			std::map< std::string, computorv2::Object*> _variables;
+			std::map< std::string, computorv2::Object*> _constants;
+			std::map< std::string, computorv2::Object*> _localvariables;
 		public:
 			VirtualMachine(void);
 			~VirtualMachine(void);
@@ -66,8 +65,6 @@ namespace computorv2
 			void                        setVariableByName(const std::string&      name, const computorv2::Object* var);
 			void                        setConstantByName(const std::string&      name, const computorv2::Object* var);
 			void                        setLocalVariableByName(const std::string& name, const computorv2::Object* var);
-			void                        addFunctionParameter(std::string funcname, std::string varname);
-			std::vector< std::string >  getFunctionParametersByName(std::string funcname);
 
 			void                        delVariableByName(const std::string&      name);
 			void                        delConstantByName(const std::string&      name);

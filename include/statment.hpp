@@ -85,6 +85,7 @@ namespace computorv2
 	t_error     statment_type(computorv2::statment *st);
 	t_error     statment_assign_variable(computorv2::statment *st);
 	t_error     statment_assign_function(computorv2::statment *st);
+	t_error     statment_solve_equation(computorv2::statment *st);
 	t_error     statment_assign(computorv2::statment *st);
 	t_error     statment_parse(computorv2::statment *st);
 }

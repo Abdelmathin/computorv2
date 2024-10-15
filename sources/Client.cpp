@@ -163,20 +163,6 @@ void computorv2::Client::init(void)
 	this->_vm.setConstantByName("arccosh", AS_OBJECT(&arccosh_x ));
 	this->_vm.setConstantByName("arctanh", AS_OBJECT(&arctanh_x ));
 
-	this->_vm.addFunctionParameter("ln"     , "x");
-	this->_vm.addFunctionParameter("exp"    , "x");
-	this->_vm.addFunctionParameter("sin"    , "x");
-	this->_vm.addFunctionParameter("cos"    , "x");
-	this->_vm.addFunctionParameter("tan"    , "x");
-	this->_vm.addFunctionParameter("arcsin" , "x");
-	this->_vm.addFunctionParameter("arccos" , "x");
-	this->_vm.addFunctionParameter("arctan" , "x");
-	this->_vm.addFunctionParameter("sinh"   , "x");
-	this->_vm.addFunctionParameter("cosh"   , "x");
-	this->_vm.addFunctionParameter("tanh"   , "x");
-	this->_vm.addFunctionParameter("arcsinh", "x");
-	this->_vm.addFunctionParameter("arccosh", "x");
-	this->_vm.addFunctionParameter("arctanh", "x");
 }
 
 void computorv2::Client::clear(void)

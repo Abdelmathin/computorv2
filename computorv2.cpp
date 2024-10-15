@@ -9,19 +9,18 @@
 #include "include/Complex.hpp"
 #include "include/Matrix.hpp"
 #include "include/Polynomial.hpp"
-#include "include/Vector.hpp"
 #include "include/computorv2.hpp"
 
 #include "sources/Client.cpp"
 #include "sources/IndependentVariable.cpp"
 #include "sources/Polynomial.cpp"
-#include "sources/Vector.cpp"
 #include "sources/computorv2.cpp"
 #include "sources/Complex.cpp"
 #include "sources/Matrix.cpp"
 #include "sources/UsualFunction.cpp"
 #include "sources/VirtualMachine.cpp"
 #include "sources/statment.cpp"
+#include "sources/OStream.cpp"
 
 /*
 	computorv2::IndependentVariable x("x");
@@ -43,6 +42,26 @@ computorv2::Polynomial computorv2::add(const computorv2::Polynomial& left, const
 
 int main(void)
 {
+	computorv2::Client client = computorv2::Client();
+	client.setFdIn(STDIN_FILENO);
+	client.setFdOut(STDOUT_FILENO);
+	client.setFdErr(STDERR_FILENO);
+
+	client.addBuffer("f(x) = 2x + 1\n");
+	client.addBuffer("g(y) = y^2 \n");
+	client.addBuffer("h = f + g\n");
+	// client.addBuffer("f(x56)\n");
+	client.addBuffer("h(x: 5)\n");
+
+
+
+
+
+
+	/*
+
+
+
 	computorv2::IndependentVariable x("x");
 	computorv2::IndependentVariable y("y");
 	computorv2::Polynomial          p(x);
@@ -57,7 +76,6 @@ int main(void)
 	computorv2::UsualFunction       arccos("arccos", x);
 	computorv2::UsualFunction       arctan("arctan", x);
 
-	/* -------------------------------------- */
 
 	std::cout << "d(" << computorv2::ln(x)      << ") / dx = " <<  computorv2::drv(computorv2::ln(x)     , x) << std::endl;
 	std::cout << "d(" << computorv2::exp(x)     << ") / dx = " <<  computorv2::drv(computorv2::exp(x)    , x) << std::endl;
@@ -75,7 +93,6 @@ int main(void)
 	std::cout << "d(" << computorv2::arctanh(x) << ") / dx = " <<  computorv2::drv(computorv2::arctanh(x), x) << std::endl;
 
 
-	/*
 
 	computorv2::Polynomial w(f);
 
