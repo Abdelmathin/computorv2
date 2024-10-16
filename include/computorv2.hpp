@@ -51,8 +51,6 @@ typedef int t_error;
 #define MAX_MATRIX_ROWS                      4
 #define MAX_MATRIX_COLUMNS                   4
 
-#define CONSTANT_PI_NAME                     "PI"
-
 #define CHARACTER_SINGLE_QUOTE               0x27 /* ' */
 #define CHARACTER_PLUS                       '+'
 #define CHARACTER_MINUS                      '-'

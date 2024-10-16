@@ -134,7 +134,6 @@ void computorv2::Client::init(void)
 
 	const computorv2::Complex             i         = computorv2::Complex(0.0, 1.0)        ;
 	const computorv2::IndependentVariable x         = computorv2::IndependentVariable("x") ;
-	const computorv2::IndependentVariable pi        = computorv2::IndependentVariable(CONSTANT_PI_NAME);
 	const computorv2::UsualFunction       ln_x      = computorv2::ln(x)                    ;
 	const computorv2::UsualFunction       exp_x     = computorv2::exp(x)                   ;
 	const computorv2::UsualFunction       sin_x     = computorv2::sin(x)                   ;
@@ -152,7 +151,6 @@ void computorv2::Client::init(void)
 
 	this->_vm.setConstantByName("i"              , AS_OBJECT(&i         ));
 	this->_vm.setConstantByName("x"              , AS_OBJECT(&x         ));
-	this->_vm.setConstantByName(CONSTANT_PI_NAME , AS_OBJECT(&pi        ));
 	this->_vm.setConstantByName("ln"             , AS_OBJECT(&ln_x      ));
 	this->_vm.setConstantByName("exp"            , AS_OBJECT(&exp_x     ));
 	this->_vm.setConstantByName("sin"            , AS_OBJECT(&sin_x     ));
