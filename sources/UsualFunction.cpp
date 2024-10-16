@@ -75,9 +75,9 @@ bool computorv2::UsualFunction::isnull(void) const
     {
         e = computorv2::evaluate(this);
     }
-    catch (const std::exception& e)
+    catch (const std::exception& xcp)
     {
-        (void) e;
+        (void) xcp;
         return (false);
     }
     bool result = false;
@@ -96,9 +96,9 @@ bool computorv2::UsualFunction::isunity(void) const
     {
         e = computorv2::evaluate(this);
     }
-    catch (const std::exception& e)
+    catch (const std::exception& xcp)
     {
-        (void) e;
+        (void) xcp;
         return (false);
     }
     bool result = false;

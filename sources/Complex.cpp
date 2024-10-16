@@ -58,8 +58,16 @@ std::string computorv2::Complex::getTypeName(void) const
 std::string computorv2::Complex::toString(void) const
 {
 	std::stringstream ss("");
-	const double r = this->_real;
-	const double m = this->_imag;
+	double r = this->_real;
+	double m = this->_imag;
+	if (IS_ZERO(r))
+	{
+		r = 0.0;
+	}
+	if (IS_ZERO(m))
+	{
+		m = 0.0;
+	}
 	if (!IS_ZERO(r) || IS_ZERO(m))
 	{
 		ss << r;

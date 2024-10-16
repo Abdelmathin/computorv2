@@ -83,9 +83,9 @@ int main(int argc, const char **argv)
 				continue ;
 			}
 		}
-		catch (const std::exception& e)
+		catch (const std::exception& xcp)
 		{
-			std::cerr << e.what() << std::endl;
+			std::cerr << xcp.what() << std::endl;
 		}
 		close(fd);
 	}

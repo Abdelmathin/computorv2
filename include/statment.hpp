@@ -67,6 +67,7 @@ namespace computorv2
 	int         statment_operation_code(computorv2::statment *st);
 	t_error     statment_init(computorv2::statment *st);
 	t_error     statment_fini(computorv2::statment *st);
+	void        statment_error_message(computorv2::statment *st, const std::string msg);
 	t_error     statment_error(computorv2::statment *st);
 	t_error     statment_skip_spaces(computorv2::statment *st);
 	t_error     statment_skip(computorv2::statment *st, const std::string charset);

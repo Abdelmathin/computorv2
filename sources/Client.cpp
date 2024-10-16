@@ -224,7 +224,7 @@ int computorv2::Client::error(const computorv2::statment *st, const std::string 
 		}
 		this->_errorstream << computorv2::crlf;
 		const std::string message = computorv2::ltrim(st->_errmsg);
-		if (message != "")
+		if ((message != "") && (message != "std::exception"))
 		{
 			this->_errorstream << message << computorv2::crlf;
 		}

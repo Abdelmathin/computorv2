@@ -81,6 +81,17 @@ t_error computorv2::statment_fini(computorv2::statment *st)
 	return (COMPUTORV2_ERROR);
 }
 
+void computorv2::statment_error_message(computorv2::statment *st, const std::string msg)
+{
+	if (st)
+	{
+		if (st->_errmsg == "")
+		{
+			st->_errmsg = msg;
+		}
+	}
+}
+
 t_error computorv2::statment_error(computorv2::statment *st)
 {
 	if (st)
@@ -421,7 +432,7 @@ t_error statment_map_arguments(computorv2::statment *st, const computorv2::args_
 			{
 				ss << it->first << " ";
 			}
-			st->_errmsg = ss.str();
+			computorv2::statment_error_message(st, ss.str());
 			return (computorv2::statment_error(st));
 		}
 		st->_pos = old_pos;
@@ -487,7 +498,7 @@ t_error computorv2::statment_parse_function_call(computorv2::statment *st)
 	computorv2::variables(st->_result, arguments);
 	if (arguments.size() < 1)
 	{
-		st->_errmsg = "'" + st->_result->toString() + "' is not callable.";
+		computorv2::statment_error_message(st, "'" + st->_result->toString() + "' is not callable.");
 		return (computorv2::statment_error(st));
 	}
 	const computorv2::Object* function = AS_OBJECT(st->_result);
@@ -504,7 +515,7 @@ t_error computorv2::statment_parse_function_call(computorv2::statment *st)
 	}
 	catch (const std::exception& xcp)
 	{
-		st->_errmsg = xcp.what();
+		computorv2::statment_error_message(st, xcp.what());
 		st->_err = computorv2::statment_error(st);
 	}
 	delete (function);
@@ -546,7 +557,7 @@ t_error computorv2::statment_parse_variable(computorv2::statment *st)
 		{
 			std::stringstream ss(""); ss << "Undefined variable: '" << name << "'";
 			st->_err    = computorv2::statment_error(st);
-			st->_errmsg = ss.str();
+			computorv2::statment_error_message(st, ss.str());
 			return (st->_err);
 		}
 		st->_result = st->_result->clone();
@@ -660,7 +671,7 @@ t_error computorv2::statment_operation(computorv2::statment *st, const computorv
 	{
 		if (!IS_MATRIX(left) || !IS_MATRIX(right))
 		{
-			st->_errmsg = "** Only used for term-to-term multiplication!";
+			computorv2::statment_error_message(st, "** Only used for term-to-term multiplication!");
 			return (computorv2::statment_error(st));
 		}
 		st->_result = computorv2::mul(left, right);
@@ -671,7 +682,7 @@ t_error computorv2::statment_operation(computorv2::statment *st, const computorv
 	}
 	else
 	{
-		st->_errmsg = "Unknown operation!";
+		computorv2::statment_error_message(st, "Unknown operation!");
 		return (computorv2::statment_error(st));
 	}
 	return (st->_err);
@@ -687,9 +698,9 @@ t_error computorv2::statment_precedence(computorv2::statment *st, t_error (*perv
 	{
 		st->_err = perv(st);
 	}
-	catch (const std::exception& e)
+	catch (const std::exception& xcp)
 	{
-		st->_errmsg = e.what();
+		computorv2::statment_error_message(st, xcp.what());
 		st->_err    = computorv2::statment_error(st);
 	}
 	while ( (st->_result != NULL) && (st->_err == 0) && (st->_operation & operations) )
@@ -701,10 +712,10 @@ t_error computorv2::statment_precedence(computorv2::statment *st, t_error (*perv
 		{
 			st->_err = perv(st);
 		}
-		catch (const std::exception& e)
+		catch (const std::exception& xcp)
 		{
 			delete (left);
-			st->_errmsg = e.what();
+			computorv2::statment_error_message(st, xcp.what());
 			st->_err    = computorv2::statment_error(st);
 		}
 		if ((st->_result == NULL) || (st->_err != 0))
@@ -718,9 +729,9 @@ t_error computorv2::statment_precedence(computorv2::statment *st, t_error (*perv
 		{
 			st->_err = computorv2::statment_operation(st, left, right, old_operation);
 		}
-		catch (const std::exception& e)
+		catch (const std::exception& xcp)
 		{
-			st->_errmsg = e.what();
+			computorv2::statment_error_message(st, xcp.what());
 			st->_err    = computorv2::statment_error(st);
 		}
 		delete (left);
@@ -920,7 +931,7 @@ t_error computorv2::statment_assign_variable(computorv2::statment *st)
 	const std::string varname = st->_varname;
 	if ((st->_vm != NULL) && (st->_vm->getConstantByName(varname) != NULL))
 	{
-		st->_errmsg = "Cannot redefine constant.";
+		computorv2::statment_error_message(st, "Cannot redefine constant.");
 		return (computorv2::statment_error(st));
 	}
 	st->_err = computorv2::statment_parse_expression(st);
@@ -957,7 +968,7 @@ t_error computorv2::statment_assign_function(computorv2::statment *st)
 	const std::string varname  = st->_varname;
 	if ((st->_vm != NULL) && (st->_vm->getConstantByName(funcname) != NULL))
 	{
-		st->_errmsg = "Cannot redefine constant.";
+		computorv2::statment_error_message(st, "Cannot redefine constant.");
 		return (computorv2::statment_error(st));
 	}
 	const computorv2::IndependentVariable var(varname);
@@ -1020,9 +1031,9 @@ t_error computorv2::statment_solve_equation(computorv2::statment *st)
 	{
 		st->_result = computorv2::sub(left, right);
 	}
-	catch (const std::exception& e)
+	catch (const std::exception& xcp)
 	{
-		st->_errmsg = e.what();
+		computorv2::statment_error_message(st, xcp.what());
 		st->_err = computorv2::statment_error(st);
 	}
 	delete (left);

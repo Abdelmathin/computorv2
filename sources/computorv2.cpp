@@ -226,7 +226,7 @@ computorv2::Object* computorv2::replace(const computorv2::Object* left, std::map
             q = computorv2::mul(a, m);
             r = computorv2::add(q, b);
         }
-        catch (const std::exception& e)
+        catch (const std::exception& xcp)
         {
             delete(a);
             delete(x);
@@ -234,7 +234,7 @@ computorv2::Object* computorv2::replace(const computorv2::Object* left, std::map
             delete(b);
             delete(m);
             delete(q);
-            throw (e);
+            throw (xcp);
         }
         delete(a);
         delete(x);
@@ -3049,6 +3049,14 @@ computorv2::Matrix computorv2::pow(const computorv2::Complex& left, const comput
 
 computorv2::Complex computorv2::pow(const computorv2::Complex& left, const computorv2::Complex& right)
 {
+    if (left.isnull())
+    {
+        if (right.isnull())
+            throw std::logic_error("Zero to the power of zero!");
+        if (right.isnegative())
+            throw std::logic_error("Division by zero!");
+        return (computorv2::Complex::null());
+    }
     const double a = left.getReal();
     const double b = left.getImage();
     const double c = right.getReal();
