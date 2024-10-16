@@ -615,11 +615,14 @@ t_error computorv2::statment_parse_object(computorv2::statment *st)
 		{
 			return (st->_err);
 		}
-		st->_operation = computorv2::statment_operation_code(st);
 		if (IS_VARSTART(computorv2::statment_getc(st)))
 		{
 			/* caseOf(2i) */
 			st->_operation = COMPUTORV2_OPERATION_MULT;
+		}
+		else
+		{
+			st->_operation = computorv2::statment_operation_code(st);
 		}
 		return (st->_err);
 	}
