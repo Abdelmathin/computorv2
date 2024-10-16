@@ -1163,15 +1163,15 @@ computorv2::Object* computorv2::neg(const computorv2::Object* left)
     if (!left)
         throw std::logic_error("Operation 'neg' not supported for null types.");
     else if (IS_MATRIX(left))
-        return (computorv2::neg(*AS_MATRIX(left)).copy());
+        return (computorv2::neg(*AS_MATRIX(left)).clone());
     else if (IS_COMPLEX(left))
-        return (computorv2::neg(*AS_COMPLEX(left)).copy());
+        return (computorv2::neg(*AS_COMPLEX(left)).clone());
     else if (IS_POLYNOMIAL(left))
-        return (computorv2::neg(*AS_POLYNOMIAL(left)).copy());
+        return (computorv2::neg(*AS_POLYNOMIAL(left)).clone());
     else if (IS_USFUNC(left))
-        return (computorv2::neg(*AS_USFUNC(left)).copy());
+        return (computorv2::neg(*AS_USFUNC(left)).clone());
     else if (IS_INDVAR(left))
-        return (computorv2::neg(*AS_INDVAR(left)).copy());
+        return (computorv2::neg(*AS_INDVAR(left)).clone());
     throw std::logic_error("Operation 'neg' not supported for type '" + left->getTypeName() + "'.");
     return (0);
 }
@@ -1218,15 +1218,15 @@ computorv2::Object* computorv2::inv(const computorv2::Object* left)
     if (!left)
         throw std::logic_error("Operation 'inv' not supported for null types.");
     else if (IS_MATRIX(left))
-        return (computorv2::inv(*AS_MATRIX(left)).copy());
+        return (computorv2::inv(*AS_MATRIX(left)).clone());
     else if (IS_COMPLEX(left))
-        return (computorv2::inv(*AS_COMPLEX(left)).copy());
+        return (computorv2::inv(*AS_COMPLEX(left)).clone());
     else if (IS_POLYNOMIAL(left))
-        return (computorv2::inv(*AS_POLYNOMIAL(left)).copy());
+        return (computorv2::inv(*AS_POLYNOMIAL(left)).clone());
     else if (IS_USFUNC(left))
-        return (computorv2::inv(*AS_USFUNC(left)).copy());
+        return (computorv2::inv(*AS_USFUNC(left)).clone());
     else if (IS_INDVAR(left))
-        return (computorv2::inv(*AS_INDVAR(left)).copy());
+        return (computorv2::inv(*AS_INDVAR(left)).clone());
     throw std::logic_error("Operation 'inv' not supported for type '" + left->getTypeName() + "'.");
     return (0);
 }
@@ -1273,55 +1273,55 @@ computorv2::Object* computorv2::mul(const computorv2::Object* left, const comput
     if (!left || !right)
         throw std::logic_error("Operation 'mul' not supported between null types.");
     else if (IS_MATRIX(left) && IS_MATRIX(right))
-        return (computorv2::mul(*AS_MATRIX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mul(*AS_MATRIX(left), *AS_MATRIX(right)).clone());
     else if (IS_MATRIX(left) && IS_COMPLEX(right))
-        return (computorv2::mul(*AS_MATRIX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mul(*AS_MATRIX(left), *AS_COMPLEX(right)).clone());
     else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mul(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mul(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_MATRIX(left) && IS_USFUNC(right))
-        return (computorv2::mul(*AS_MATRIX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mul(*AS_MATRIX(left), *AS_USFUNC(right)).clone());
     else if (IS_MATRIX(left) && IS_INDVAR(right))
-        return (computorv2::mul(*AS_MATRIX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mul(*AS_MATRIX(left), *AS_INDVAR(right)).clone());
     else if (IS_COMPLEX(left) && IS_MATRIX(right))
-        return (computorv2::mul(*AS_COMPLEX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mul(*AS_COMPLEX(left), *AS_MATRIX(right)).clone());
     else if (IS_COMPLEX(left) && IS_COMPLEX(right))
-        return (computorv2::mul(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mul(*AS_COMPLEX(left), *AS_COMPLEX(right)).clone());
     else if (IS_COMPLEX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mul(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mul(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_COMPLEX(left) && IS_USFUNC(right))
-        return (computorv2::mul(*AS_COMPLEX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mul(*AS_COMPLEX(left), *AS_USFUNC(right)).clone());
     else if (IS_COMPLEX(left) && IS_INDVAR(right))
-        return (computorv2::mul(*AS_COMPLEX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mul(*AS_COMPLEX(left), *AS_INDVAR(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
-        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_COMPLEX(right))
-        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_USFUNC(right))
-        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_INDVAR(right))
-        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).clone());
     else if (IS_USFUNC(left) && IS_MATRIX(right))
-        return (computorv2::mul(*AS_USFUNC(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mul(*AS_USFUNC(left), *AS_MATRIX(right)).clone());
     else if (IS_USFUNC(left) && IS_COMPLEX(right))
-        return (computorv2::mul(*AS_USFUNC(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mul(*AS_USFUNC(left), *AS_COMPLEX(right)).clone());
     else if (IS_USFUNC(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mul(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mul(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_USFUNC(left) && IS_USFUNC(right))
-        return (computorv2::mul(*AS_USFUNC(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mul(*AS_USFUNC(left), *AS_USFUNC(right)).clone());
     else if (IS_USFUNC(left) && IS_INDVAR(right))
-        return (computorv2::mul(*AS_USFUNC(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mul(*AS_USFUNC(left), *AS_INDVAR(right)).clone());
     else if (IS_INDVAR(left) && IS_MATRIX(right))
-        return (computorv2::mul(*AS_INDVAR(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mul(*AS_INDVAR(left), *AS_MATRIX(right)).clone());
     else if (IS_INDVAR(left) && IS_COMPLEX(right))
-        return (computorv2::mul(*AS_INDVAR(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mul(*AS_INDVAR(left), *AS_COMPLEX(right)).clone());
     else if (IS_INDVAR(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mul(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mul(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_INDVAR(left) && IS_USFUNC(right))
-        return (computorv2::mul(*AS_INDVAR(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mul(*AS_INDVAR(left), *AS_USFUNC(right)).clone());
     else if (IS_INDVAR(left) && IS_INDVAR(right))
-        return (computorv2::mul(*AS_INDVAR(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mul(*AS_INDVAR(left), *AS_INDVAR(right)).clone());
     throw std::logic_error("Operation 'mul' not supported between types '" + left->getTypeName() + "' and '" + right->getTypeName() + "'.");
     return (0);
 }
@@ -1583,55 +1583,55 @@ computorv2::Object* computorv2::div(const computorv2::Object* left, const comput
     if (!left || !right)
         throw std::logic_error("Operation 'div' not supported between null types.");
     else if (IS_MATRIX(left) && IS_MATRIX(right))
-        return (computorv2::div(*AS_MATRIX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::div(*AS_MATRIX(left), *AS_MATRIX(right)).clone());
     else if (IS_MATRIX(left) && IS_COMPLEX(right))
-        return (computorv2::div(*AS_MATRIX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::div(*AS_MATRIX(left), *AS_COMPLEX(right)).clone());
     else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::div(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::div(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_MATRIX(left) && IS_USFUNC(right))
-        return (computorv2::div(*AS_MATRIX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::div(*AS_MATRIX(left), *AS_USFUNC(right)).clone());
     else if (IS_MATRIX(left) && IS_INDVAR(right))
-        return (computorv2::div(*AS_MATRIX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::div(*AS_MATRIX(left), *AS_INDVAR(right)).clone());
     else if (IS_COMPLEX(left) && IS_MATRIX(right))
-        return (computorv2::div(*AS_COMPLEX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::div(*AS_COMPLEX(left), *AS_MATRIX(right)).clone());
     else if (IS_COMPLEX(left) && IS_COMPLEX(right))
-        return (computorv2::div(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::div(*AS_COMPLEX(left), *AS_COMPLEX(right)).clone());
     else if (IS_COMPLEX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::div(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::div(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_COMPLEX(left) && IS_USFUNC(right))
-        return (computorv2::div(*AS_COMPLEX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::div(*AS_COMPLEX(left), *AS_USFUNC(right)).clone());
     else if (IS_COMPLEX(left) && IS_INDVAR(right))
-        return (computorv2::div(*AS_COMPLEX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::div(*AS_COMPLEX(left), *AS_INDVAR(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
-        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).copy());
+        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_COMPLEX(right))
-        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_POLYNOMIAL(right))
-        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_USFUNC(right))
-        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).copy());
+        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_INDVAR(right))
-        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).copy());
+        return (computorv2::div(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).clone());
     else if (IS_USFUNC(left) && IS_MATRIX(right))
-        return (computorv2::div(*AS_USFUNC(left), *AS_MATRIX(right)).copy());
+        return (computorv2::div(*AS_USFUNC(left), *AS_MATRIX(right)).clone());
     else if (IS_USFUNC(left) && IS_COMPLEX(right))
-        return (computorv2::div(*AS_USFUNC(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::div(*AS_USFUNC(left), *AS_COMPLEX(right)).clone());
     else if (IS_USFUNC(left) && IS_POLYNOMIAL(right))
-        return (computorv2::div(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::div(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_USFUNC(left) && IS_USFUNC(right))
-        return (computorv2::div(*AS_USFUNC(left), *AS_USFUNC(right)).copy());
+        return (computorv2::div(*AS_USFUNC(left), *AS_USFUNC(right)).clone());
     else if (IS_USFUNC(left) && IS_INDVAR(right))
-        return (computorv2::div(*AS_USFUNC(left), *AS_INDVAR(right)).copy());
+        return (computorv2::div(*AS_USFUNC(left), *AS_INDVAR(right)).clone());
     else if (IS_INDVAR(left) && IS_MATRIX(right))
-        return (computorv2::div(*AS_INDVAR(left), *AS_MATRIX(right)).copy());
+        return (computorv2::div(*AS_INDVAR(left), *AS_MATRIX(right)).clone());
     else if (IS_INDVAR(left) && IS_COMPLEX(right))
-        return (computorv2::div(*AS_INDVAR(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::div(*AS_INDVAR(left), *AS_COMPLEX(right)).clone());
     else if (IS_INDVAR(left) && IS_POLYNOMIAL(right))
-        return (computorv2::div(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::div(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_INDVAR(left) && IS_USFUNC(right))
-        return (computorv2::div(*AS_INDVAR(left), *AS_USFUNC(right)).copy());
+        return (computorv2::div(*AS_INDVAR(left), *AS_USFUNC(right)).clone());
     else if (IS_INDVAR(left) && IS_INDVAR(right))
-        return (computorv2::div(*AS_INDVAR(left), *AS_INDVAR(right)).copy());
+        return (computorv2::div(*AS_INDVAR(left), *AS_INDVAR(right)).clone());
     throw std::logic_error("Operation 'div' not supported between types '" + left->getTypeName() + "' and '" + right->getTypeName() + "'.");
     return (0);
 }
@@ -1768,55 +1768,55 @@ computorv2::Object* computorv2::add(const computorv2::Object* left, const comput
     if (!left || !right)
         throw std::logic_error("Operation 'add' not supported between null types.");
     else if (IS_MATRIX(left) && IS_MATRIX(right))
-        return (computorv2::add(*AS_MATRIX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::add(*AS_MATRIX(left), *AS_MATRIX(right)).clone());
     else if (IS_MATRIX(left) && IS_COMPLEX(right))
-        return (computorv2::add(*AS_MATRIX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::add(*AS_MATRIX(left), *AS_COMPLEX(right)).clone());
     else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::add(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::add(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_MATRIX(left) && IS_USFUNC(right))
-        return (computorv2::add(*AS_MATRIX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::add(*AS_MATRIX(left), *AS_USFUNC(right)).clone());
     else if (IS_MATRIX(left) && IS_INDVAR(right))
-        return (computorv2::add(*AS_MATRIX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::add(*AS_MATRIX(left), *AS_INDVAR(right)).clone());
     else if (IS_COMPLEX(left) && IS_MATRIX(right))
-        return (computorv2::add(*AS_COMPLEX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::add(*AS_COMPLEX(left), *AS_MATRIX(right)).clone());
     else if (IS_COMPLEX(left) && IS_COMPLEX(right))
-        return (computorv2::add(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::add(*AS_COMPLEX(left), *AS_COMPLEX(right)).clone());
     else if (IS_COMPLEX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::add(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::add(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_COMPLEX(left) && IS_USFUNC(right))
-        return (computorv2::add(*AS_COMPLEX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::add(*AS_COMPLEX(left), *AS_USFUNC(right)).clone());
     else if (IS_COMPLEX(left) && IS_INDVAR(right))
-        return (computorv2::add(*AS_COMPLEX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::add(*AS_COMPLEX(left), *AS_INDVAR(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
-        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).copy());
+        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_COMPLEX(right))
-        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_POLYNOMIAL(right))
-        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_USFUNC(right))
-        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).copy());
+        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_INDVAR(right))
-        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).copy());
+        return (computorv2::add(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).clone());
     else if (IS_USFUNC(left) && IS_MATRIX(right))
-        return (computorv2::add(*AS_USFUNC(left), *AS_MATRIX(right)).copy());
+        return (computorv2::add(*AS_USFUNC(left), *AS_MATRIX(right)).clone());
     else if (IS_USFUNC(left) && IS_COMPLEX(right))
-        return (computorv2::add(*AS_USFUNC(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::add(*AS_USFUNC(left), *AS_COMPLEX(right)).clone());
     else if (IS_USFUNC(left) && IS_POLYNOMIAL(right))
-        return (computorv2::add(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::add(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_USFUNC(left) && IS_USFUNC(right))
-        return (computorv2::add(*AS_USFUNC(left), *AS_USFUNC(right)).copy());
+        return (computorv2::add(*AS_USFUNC(left), *AS_USFUNC(right)).clone());
     else if (IS_USFUNC(left) && IS_INDVAR(right))
-        return (computorv2::add(*AS_USFUNC(left), *AS_INDVAR(right)).copy());
+        return (computorv2::add(*AS_USFUNC(left), *AS_INDVAR(right)).clone());
     else if (IS_INDVAR(left) && IS_MATRIX(right))
-        return (computorv2::add(*AS_INDVAR(left), *AS_MATRIX(right)).copy());
+        return (computorv2::add(*AS_INDVAR(left), *AS_MATRIX(right)).clone());
     else if (IS_INDVAR(left) && IS_COMPLEX(right))
-        return (computorv2::add(*AS_INDVAR(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::add(*AS_INDVAR(left), *AS_COMPLEX(right)).clone());
     else if (IS_INDVAR(left) && IS_POLYNOMIAL(right))
-        return (computorv2::add(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::add(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_INDVAR(left) && IS_USFUNC(right))
-        return (computorv2::add(*AS_INDVAR(left), *AS_USFUNC(right)).copy());
+        return (computorv2::add(*AS_INDVAR(left), *AS_USFUNC(right)).clone());
     else if (IS_INDVAR(left) && IS_INDVAR(right))
-        return (computorv2::add(*AS_INDVAR(left), *AS_INDVAR(right)).copy());
+        return (computorv2::add(*AS_INDVAR(left), *AS_INDVAR(right)).clone());
     throw std::logic_error("Operation 'add' not supported between types '" + left->getTypeName() + "' and '" + right->getTypeName() + "'.");
     return (0);
 }
@@ -2003,55 +2003,55 @@ computorv2::Object* computorv2::sub(const computorv2::Object* left, const comput
     if (!left || !right)
         throw std::logic_error("Operation 'sub' not supported between null types.");
     else if (IS_MATRIX(left) && IS_MATRIX(right))
-        return (computorv2::sub(*AS_MATRIX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::sub(*AS_MATRIX(left), *AS_MATRIX(right)).clone());
     else if (IS_MATRIX(left) && IS_COMPLEX(right))
-        return (computorv2::sub(*AS_MATRIX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::sub(*AS_MATRIX(left), *AS_COMPLEX(right)).clone());
     else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::sub(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::sub(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_MATRIX(left) && IS_USFUNC(right))
-        return (computorv2::sub(*AS_MATRIX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::sub(*AS_MATRIX(left), *AS_USFUNC(right)).clone());
     else if (IS_MATRIX(left) && IS_INDVAR(right))
-        return (computorv2::sub(*AS_MATRIX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::sub(*AS_MATRIX(left), *AS_INDVAR(right)).clone());
     else if (IS_COMPLEX(left) && IS_MATRIX(right))
-        return (computorv2::sub(*AS_COMPLEX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::sub(*AS_COMPLEX(left), *AS_MATRIX(right)).clone());
     else if (IS_COMPLEX(left) && IS_COMPLEX(right))
-        return (computorv2::sub(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::sub(*AS_COMPLEX(left), *AS_COMPLEX(right)).clone());
     else if (IS_COMPLEX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::sub(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::sub(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_COMPLEX(left) && IS_USFUNC(right))
-        return (computorv2::sub(*AS_COMPLEX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::sub(*AS_COMPLEX(left), *AS_USFUNC(right)).clone());
     else if (IS_COMPLEX(left) && IS_INDVAR(right))
-        return (computorv2::sub(*AS_COMPLEX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::sub(*AS_COMPLEX(left), *AS_INDVAR(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
-        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).copy());
+        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_COMPLEX(right))
-        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_POLYNOMIAL(right))
-        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_USFUNC(right))
-        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).copy());
+        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_INDVAR(right))
-        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).copy());
+        return (computorv2::sub(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).clone());
     else if (IS_USFUNC(left) && IS_MATRIX(right))
-        return (computorv2::sub(*AS_USFUNC(left), *AS_MATRIX(right)).copy());
+        return (computorv2::sub(*AS_USFUNC(left), *AS_MATRIX(right)).clone());
     else if (IS_USFUNC(left) && IS_COMPLEX(right))
-        return (computorv2::sub(*AS_USFUNC(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::sub(*AS_USFUNC(left), *AS_COMPLEX(right)).clone());
     else if (IS_USFUNC(left) && IS_POLYNOMIAL(right))
-        return (computorv2::sub(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::sub(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_USFUNC(left) && IS_USFUNC(right))
-        return (computorv2::sub(*AS_USFUNC(left), *AS_USFUNC(right)).copy());
+        return (computorv2::sub(*AS_USFUNC(left), *AS_USFUNC(right)).clone());
     else if (IS_USFUNC(left) && IS_INDVAR(right))
-        return (computorv2::sub(*AS_USFUNC(left), *AS_INDVAR(right)).copy());
+        return (computorv2::sub(*AS_USFUNC(left), *AS_INDVAR(right)).clone());
     else if (IS_INDVAR(left) && IS_MATRIX(right))
-        return (computorv2::sub(*AS_INDVAR(left), *AS_MATRIX(right)).copy());
+        return (computorv2::sub(*AS_INDVAR(left), *AS_MATRIX(right)).clone());
     else if (IS_INDVAR(left) && IS_COMPLEX(right))
-        return (computorv2::sub(*AS_INDVAR(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::sub(*AS_INDVAR(left), *AS_COMPLEX(right)).clone());
     else if (IS_INDVAR(left) && IS_POLYNOMIAL(right))
-        return (computorv2::sub(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::sub(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_INDVAR(left) && IS_USFUNC(right))
-        return (computorv2::sub(*AS_INDVAR(left), *AS_USFUNC(right)).copy());
+        return (computorv2::sub(*AS_INDVAR(left), *AS_USFUNC(right)).clone());
     else if (IS_INDVAR(left) && IS_INDVAR(right))
-        return (computorv2::sub(*AS_INDVAR(left), *AS_INDVAR(right)).copy());
+        return (computorv2::sub(*AS_INDVAR(left), *AS_INDVAR(right)).clone());
     throw std::logic_error("Operation 'sub' not supported between types '" + left->getTypeName() + "' and '" + right->getTypeName() + "'.");
     return (0);
 }
@@ -2188,55 +2188,55 @@ computorv2::Object* computorv2::mod(const computorv2::Object* left, const comput
     if (!left || !right)
         throw std::logic_error("Operation 'mod' not supported between null types.");
     else if (IS_MATRIX(left) && IS_MATRIX(right))
-        return (computorv2::mod(*AS_MATRIX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mod(*AS_MATRIX(left), *AS_MATRIX(right)).clone());
     else if (IS_MATRIX(left) && IS_COMPLEX(right))
-        return (computorv2::mod(*AS_MATRIX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mod(*AS_MATRIX(left), *AS_COMPLEX(right)).clone());
     else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mod(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mod(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_MATRIX(left) && IS_USFUNC(right))
-        return (computorv2::mod(*AS_MATRIX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mod(*AS_MATRIX(left), *AS_USFUNC(right)).clone());
     else if (IS_MATRIX(left) && IS_INDVAR(right))
-        return (computorv2::mod(*AS_MATRIX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mod(*AS_MATRIX(left), *AS_INDVAR(right)).clone());
     else if (IS_COMPLEX(left) && IS_MATRIX(right))
-        return (computorv2::mod(*AS_COMPLEX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mod(*AS_COMPLEX(left), *AS_MATRIX(right)).clone());
     else if (IS_COMPLEX(left) && IS_COMPLEX(right))
-        return (computorv2::mod(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mod(*AS_COMPLEX(left), *AS_COMPLEX(right)).clone());
     else if (IS_COMPLEX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mod(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mod(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_COMPLEX(left) && IS_USFUNC(right))
-        return (computorv2::mod(*AS_COMPLEX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mod(*AS_COMPLEX(left), *AS_USFUNC(right)).clone());
     else if (IS_COMPLEX(left) && IS_INDVAR(right))
-        return (computorv2::mod(*AS_COMPLEX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mod(*AS_COMPLEX(left), *AS_INDVAR(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
-        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_COMPLEX(right))
-        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_USFUNC(right))
-        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_INDVAR(right))
-        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mod(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).clone());
     else if (IS_USFUNC(left) && IS_MATRIX(right))
-        return (computorv2::mod(*AS_USFUNC(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mod(*AS_USFUNC(left), *AS_MATRIX(right)).clone());
     else if (IS_USFUNC(left) && IS_COMPLEX(right))
-        return (computorv2::mod(*AS_USFUNC(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mod(*AS_USFUNC(left), *AS_COMPLEX(right)).clone());
     else if (IS_USFUNC(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mod(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mod(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_USFUNC(left) && IS_USFUNC(right))
-        return (computorv2::mod(*AS_USFUNC(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mod(*AS_USFUNC(left), *AS_USFUNC(right)).clone());
     else if (IS_USFUNC(left) && IS_INDVAR(right))
-        return (computorv2::mod(*AS_USFUNC(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mod(*AS_USFUNC(left), *AS_INDVAR(right)).clone());
     else if (IS_INDVAR(left) && IS_MATRIX(right))
-        return (computorv2::mod(*AS_INDVAR(left), *AS_MATRIX(right)).copy());
+        return (computorv2::mod(*AS_INDVAR(left), *AS_MATRIX(right)).clone());
     else if (IS_INDVAR(left) && IS_COMPLEX(right))
-        return (computorv2::mod(*AS_INDVAR(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::mod(*AS_INDVAR(left), *AS_COMPLEX(right)).clone());
     else if (IS_INDVAR(left) && IS_POLYNOMIAL(right))
-        return (computorv2::mod(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::mod(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_INDVAR(left) && IS_USFUNC(right))
-        return (computorv2::mod(*AS_INDVAR(left), *AS_USFUNC(right)).copy());
+        return (computorv2::mod(*AS_INDVAR(left), *AS_USFUNC(right)).clone());
     else if (IS_INDVAR(left) && IS_INDVAR(right))
-        return (computorv2::mod(*AS_INDVAR(left), *AS_INDVAR(right)).copy());
+        return (computorv2::mod(*AS_INDVAR(left), *AS_INDVAR(right)).clone());
     throw std::logic_error("Operation 'mod' not supported between types '" + left->getTypeName() + "' and '" + right->getTypeName() + "'.");
     return (0);
 }
@@ -2423,55 +2423,55 @@ computorv2::Object* computorv2::pow(const computorv2::Object* left, const comput
     if (!left || !right)
         throw std::logic_error("Operation 'pow' not supported between null types.");
     else if (IS_MATRIX(left) && IS_MATRIX(right))
-        return (computorv2::pow(*AS_MATRIX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::pow(*AS_MATRIX(left), *AS_MATRIX(right)).clone());
     else if (IS_MATRIX(left) && IS_COMPLEX(right))
-        return (computorv2::pow(*AS_MATRIX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::pow(*AS_MATRIX(left), *AS_COMPLEX(right)).clone());
     else if (IS_MATRIX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::pow(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::pow(*AS_MATRIX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_MATRIX(left) && IS_USFUNC(right))
-        return (computorv2::pow(*AS_MATRIX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::pow(*AS_MATRIX(left), *AS_USFUNC(right)).clone());
     else if (IS_MATRIX(left) && IS_INDVAR(right))
-        return (computorv2::pow(*AS_MATRIX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::pow(*AS_MATRIX(left), *AS_INDVAR(right)).clone());
     else if (IS_COMPLEX(left) && IS_MATRIX(right))
-        return (computorv2::pow(*AS_COMPLEX(left), *AS_MATRIX(right)).copy());
+        return (computorv2::pow(*AS_COMPLEX(left), *AS_MATRIX(right)).clone());
     else if (IS_COMPLEX(left) && IS_COMPLEX(right))
-        return (computorv2::pow(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::pow(*AS_COMPLEX(left), *AS_COMPLEX(right)).clone());
     else if (IS_COMPLEX(left) && IS_POLYNOMIAL(right))
-        return (computorv2::pow(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::pow(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_COMPLEX(left) && IS_USFUNC(right))
-        return (computorv2::pow(*AS_COMPLEX(left), *AS_USFUNC(right)).copy());
+        return (computorv2::pow(*AS_COMPLEX(left), *AS_USFUNC(right)).clone());
     else if (IS_COMPLEX(left) && IS_INDVAR(right))
-        return (computorv2::pow(*AS_COMPLEX(left), *AS_INDVAR(right)).copy());
+        return (computorv2::pow(*AS_COMPLEX(left), *AS_INDVAR(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_MATRIX(right))
-        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).copy());
+        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_MATRIX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_COMPLEX(right))
-        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_POLYNOMIAL(right))
-        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_USFUNC(right))
-        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).copy());
+        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_USFUNC(right)).clone());
     else if (IS_POLYNOMIAL(left) && IS_INDVAR(right))
-        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).copy());
+        return (computorv2::pow(*AS_POLYNOMIAL(left), *AS_INDVAR(right)).clone());
     else if (IS_USFUNC(left) && IS_MATRIX(right))
-        return (computorv2::pow(*AS_USFUNC(left), *AS_MATRIX(right)).copy());
+        return (computorv2::pow(*AS_USFUNC(left), *AS_MATRIX(right)).clone());
     else if (IS_USFUNC(left) && IS_COMPLEX(right))
-        return (computorv2::pow(*AS_USFUNC(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::pow(*AS_USFUNC(left), *AS_COMPLEX(right)).clone());
     else if (IS_USFUNC(left) && IS_POLYNOMIAL(right))
-        return (computorv2::pow(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::pow(*AS_USFUNC(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_USFUNC(left) && IS_USFUNC(right))
-        return (computorv2::pow(*AS_USFUNC(left), *AS_USFUNC(right)).copy());
+        return (computorv2::pow(*AS_USFUNC(left), *AS_USFUNC(right)).clone());
     else if (IS_USFUNC(left) && IS_INDVAR(right))
-        return (computorv2::pow(*AS_USFUNC(left), *AS_INDVAR(right)).copy());
+        return (computorv2::pow(*AS_USFUNC(left), *AS_INDVAR(right)).clone());
     else if (IS_INDVAR(left) && IS_MATRIX(right))
-        return (computorv2::pow(*AS_INDVAR(left), *AS_MATRIX(right)).copy());
+        return (computorv2::pow(*AS_INDVAR(left), *AS_MATRIX(right)).clone());
     else if (IS_INDVAR(left) && IS_COMPLEX(right))
-        return (computorv2::pow(*AS_INDVAR(left), *AS_COMPLEX(right)).copy());
+        return (computorv2::pow(*AS_INDVAR(left), *AS_COMPLEX(right)).clone());
     else if (IS_INDVAR(left) && IS_POLYNOMIAL(right))
-        return (computorv2::pow(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).copy());
+        return (computorv2::pow(*AS_INDVAR(left), *AS_POLYNOMIAL(right)).clone());
     else if (IS_INDVAR(left) && IS_USFUNC(right))
-        return (computorv2::pow(*AS_INDVAR(left), *AS_USFUNC(right)).copy());
+        return (computorv2::pow(*AS_INDVAR(left), *AS_USFUNC(right)).clone());
     else if (IS_INDVAR(left) && IS_INDVAR(right))
-        return (computorv2::pow(*AS_INDVAR(left), *AS_INDVAR(right)).copy());
+        return (computorv2::pow(*AS_INDVAR(left), *AS_INDVAR(right)).clone());
     throw std::logic_error("Operation 'pow' not supported between types '" + left->getTypeName() + "' and '" + right->getTypeName() + "'.");
     return (0);
 }

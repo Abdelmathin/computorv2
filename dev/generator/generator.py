@@ -528,7 +528,7 @@ for prototype in user_prototypes:
 							default_return = "computorv2::" + return_types[key]
 							line = prototype.replace("<return_type>", default_return)
 							line = line.replace("<left_object>", left_object + "&")
-							NEED_COPY = ".copy()"
+							NEED_COPY = ".clone()"
 							break
 						continue
 					key1 = (left_object  + "-" + right_object).lower()
@@ -537,7 +537,7 @@ for prototype in user_prototypes:
 						default_return = "computorv2::" + return_types[key]
 						line = prototype.replace("<return_type>", default_return)
 						line = line.replace("<left_object>", left_object + "&").replace("<right_object>", right_object + "&")
-						NEED_COPY = ".copy()"
+						NEED_COPY = ".clone()"
 						break
 			else:
 				line = prototype.replace("<left_object>", left_object + "&").replace("<right_object>", right_object + "&")

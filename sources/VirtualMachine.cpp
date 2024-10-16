@@ -131,7 +131,7 @@ void computorv2::VirtualMachine::setVariableByName(std::string name, const compu
 		throw std::runtime_error("Can't set NULL Variable!");
 	}
 	this->delVariableByName(name);
-	this->_variables[name] = var->copy();
+	this->_variables[name] = var->clone();
 }
 
 void computorv2::VirtualMachine::setConstantByName(std::string name, const computorv2::Object* var)
@@ -142,7 +142,7 @@ void computorv2::VirtualMachine::setConstantByName(std::string name, const compu
 		throw std::runtime_error("Can't set NULL Constant!");
 	}
 	this->delConstantByName(name);
-	this->_constants[name] = var->copy();
+	this->_constants[name] = var->clone();
 }
 
 void computorv2::VirtualMachine::setLocalVariableByName(std::string name, const computorv2::Object* var)
@@ -153,7 +153,7 @@ void computorv2::VirtualMachine::setLocalVariableByName(std::string name, const 
 		throw std::runtime_error("Can't set NULL LocalVariable!");
 	}
 	this->delLocalVariableByName(name);
-	this->_localvariables[name] = var->copy();
+	this->_localvariables[name] = var->clone();
 }
 
 void computorv2::VirtualMachine::delVariableByName(std::string name)

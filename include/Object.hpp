@@ -51,7 +51,7 @@ namespace computorv2
 			virtual int                        getType(void)     const = 0;
 			virtual std::string                getTypeName(void) const = 0;
 			virtual std::string                toString(void)    const = 0;
-			virtual computorv2::Object*        copy(void)        const = 0;
+			virtual computorv2::Object*        clone(void)       const = 0;
 			virtual bool                       isnull(void)      const = 0;
 			virtual bool                       isunity(void)     const = 0;
 			virtual bool                       isnegative(void)  const = 0;

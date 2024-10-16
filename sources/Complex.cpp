@@ -92,9 +92,10 @@ std::string computorv2::Complex::toString(void) const
 	return (ss.str());
 }
 
-computorv2::Object* computorv2::Complex::copy(void) const
+computorv2::Object* computorv2::Complex::clone(void) const
 {
-	return ( new computorv2::Complex(*this) );
+	computorv2::Object* e = new computorv2::Complex(*this);
+	return (e);
 }
 
 bool computorv2::Complex::isnull(void) const

@@ -62,9 +62,10 @@ std::string computorv2::UsualFunction::toString(void) const
     return (ss.str());
 }
 
-computorv2::Object* computorv2::UsualFunction::copy(void) const
+computorv2::Object* computorv2::UsualFunction::clone(void) const
 {
-    return ( new computorv2::UsualFunction(*this) );
+    computorv2::Object* e = new computorv2::UsualFunction(*this);
+    return (e);
 }
 
 bool computorv2::UsualFunction::isnull(void) const
@@ -140,7 +141,7 @@ void computorv2::UsualFunction::setBody(const computorv2::Object* body)
     {
         throw std::logic_error("bad function body!");
     }
-    this->_body = body->copy();
+    this->_body = body->clone();
 }
 
 void computorv2::UsualFunction::init(void)

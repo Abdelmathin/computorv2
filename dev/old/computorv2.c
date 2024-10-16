@@ -675,7 +675,7 @@ void computorv2::Complex::clear(void)
     this->_imag = 0.0;
 }
 
-computorv2::Object* computorv2::Complex::copy(void) const
+computorv2::Object* computorv2::Complex::clone(void) const
 {
     return ( new computorv2::Complex(*this) );
 }

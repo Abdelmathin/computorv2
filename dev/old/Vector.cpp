@@ -74,7 +74,7 @@ std::string computorv2::Vector::toString(void) const
 	return (ss.str());
 }
 
-computorv2::Object* computorv2::Vector::copy(void) const
+computorv2::Object* computorv2::Vector::clone(void) const
 {
 	return ( new computorv2::Vector(*this) );
 }

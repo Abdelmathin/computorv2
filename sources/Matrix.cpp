@@ -86,9 +86,10 @@ std::string computorv2::Matrix::toString(void) const
 	return (ss.str());
 }
 
-computorv2::Object* computorv2::Matrix::copy(void) const
+computorv2::Object* computorv2::Matrix::clone(void) const
 {
-	return ( new computorv2::Matrix(*this) );
+	computorv2::Object* e = new computorv2::Matrix(*this);
+    return (e);
 }
 
 bool computorv2::Matrix::isnull(void) const
@@ -157,11 +158,11 @@ computorv2::Matrix& computorv2::Matrix::operator=(const computorv2::Matrix& othe
 			const computorv2::Object* e = other._data[i];
 			if (e)
 			{
-				this->_data.push_back(e->copy());
+				this->_data.push_back(e->clone());
 			}
 			else
 			{
-				this->_data.push_back(computorv2::Complex::null().copy());
+				this->_data.push_back(computorv2::Complex::null().clone());
 			}
 		}
 	}
@@ -180,11 +181,8 @@ void computorv2::Matrix::setElementAt(unsigned int row, unsigned int column, con
 	{
 		throw std::logic_error("Can't set NULL element!");
 	}
-	if (this->_data[index])
-	{
-		delete (this->_data[index]);
-	}
-	this->_data[index] = element->copy();
+	delete (this->_data[index]);
+	this->_data[index] = element->clone();
 }
 
 computorv2::Object* computorv2::Matrix::getElementAt(unsigned int row, unsigned int column) const
@@ -220,7 +218,7 @@ computorv2::Matrix::Matrix(unsigned int rows, unsigned int columns)
 	this->_data.clear();
 	for (unsigned int i = 0; i < rows * columns; i++)
 	{
-		this->_data.push_back(computorv2::Complex::null().copy());
+		this->_data.push_back(computorv2::Complex::null().clone());
 	}
 }
 
@@ -255,10 +253,7 @@ void computorv2::Matrix::clear(void)
 	std::vector< computorv2::Object* >::iterator it = this->_data.begin();
 	while (it != this->_data.end())
 	{
-		if (*it)
-		{
-			delete (*it);
-		}
+		delete (*it);
 		it++;
 	}
 	this->_data.clear();

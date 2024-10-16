@@ -74,10 +74,7 @@ t_error computorv2::statment_fini(computorv2::statment *st)
 {
 	if (st)
 	{
-		if (st->_result)
-		{
-			delete (st->_result);
-		}
+		delete (st->_result);
 		st->_result = NULL;
 		return (computorv2::statment_init(st));
 	}
@@ -237,29 +234,34 @@ t_error computorv2::statment_parse_number(computorv2::statment *st)
 		return (computorv2::statment_error(st));
 	}
 	st->_result = NULL;
-	char c = computorv2::statment_getc(st);
-	if (!IS_DIGIT(c))
+	std::stringstream ss("");
+	if (!IS_DIGIT(computorv2::statment_getc(st)))
 	{
 		return (computorv2::statment_error(st));
 	}
-	double r = 0.0;
-	while (IS_DIGIT(c))
+	while (IS_DIGIT(computorv2::statment_getc(st)))
 	{
-		r = 10 * r + (CHARCODE(c) - CHARCODE('0'));
-		c = computorv2::statment_next(st);
+		ss << computorv2::statment_getc(st);
+		computorv2::statment_next(st);
 	}
-	if (c != '.')
+	if (computorv2::statment_getc(st) == '.')
 	{
-		st->_result = new computorv2::Complex(r);
-		return (st->_err);
+		ss << computorv2::statment_getc(st);
+		computorv2::statment_next(st);
+		if (!IS_DIGIT(computorv2::statment_getc(st)))
+		{
+			return (computorv2::statment_error(st));
+		}
+		while (IS_DIGIT(computorv2::statment_getc(st)))
+		{
+			ss << computorv2::statment_getc(st);
+			computorv2::statment_next(st);
+		}
 	}
-	c = computorv2::statment_next(st);
-	double f = 0.1;
-	while (IS_DIGIT(c))
+	double r = 0.0; ss >> r;
+	if (ss.fail() || !ss.eof())
 	{
-		r = r + f * (CHARCODE(c) - CHARCODE('0'));
-		c = computorv2::statment_next(st);
-		f = f / 10.0;		
+		return (computorv2::statment_error(st));
 	}
 	st->_result = new computorv2::Complex(r);
 	return (st->_err);
@@ -371,7 +373,7 @@ t_error computorv2::statment_parse_matrix(computorv2::statment *st)
 	st->_result = NULL;
 	if (st->_err == 0)
 	{
-		st->_result = res.copy();
+		st->_result = res.clone();
 	}
 	return (st->_err);
 }
@@ -390,7 +392,7 @@ t_error computorv2::statment_parse_derivative(computorv2::statment *st)
 	computorv2::statment_next(st);
 	computorv2::statment_skip_spaces(st);
 	delete (st->_result);
-	st->_result = df.copy();
+	st->_result = df.clone();
 	return (st->_err);
 }
 
@@ -489,24 +491,26 @@ t_error computorv2::statment_parse_function_call(computorv2::statment *st)
 		return (computorv2::statment_error(st));
 	}
 	const computorv2::Object* function = AS_OBJECT(st->_result);
-	st->_result = NULL;
-	st->_err = statment_map_arguments(st, arguments, values);
-	if (st->_result)
+	try
 	{
+		st->_result = NULL;
+		st->_err = statment_map_arguments(st, arguments, values);
 		delete (st->_result);
 		st->_result = NULL;
+		if ((st->_err == 0) && (values.size() > 0))
+		{
+			st->_result = computorv2::replace(function, values);
+		}
 	}
-	if ((st->_err == 0) && (values.size() > 0))
+	catch (const std::exception& xcp)
 	{
-		st->_result = computorv2::replace(function, values);
+		st->_errmsg = xcp.what();
+		st->_err = computorv2::statment_error(st);
 	}
 	delete (function);
 	for(computorv2::args_it it = values.begin(); it != values.end(); it++)
 	{
-		if (it->second)
-		{
-			delete (it->second);
-		}
+		delete (it->second);
 	}
 	if ((st->_err != 0) || (st->_result == NULL))
 	{
@@ -545,7 +549,7 @@ t_error computorv2::statment_parse_variable(computorv2::statment *st)
 			st->_errmsg = ss.str();
 			return (st->_err);
 		}
-		st->_result = st->_result->copy();
+		st->_result = st->_result->clone();
 	}
 	else
 	{
@@ -653,7 +657,8 @@ t_error computorv2::statment_operation(computorv2::statment *st, const computorv
 	{
 		if (!IS_MATRIX(left) || !IS_MATRIX(right))
 		{
-			throw std::runtime_error("** Only used for term-to-term multiplication!");
+			st->_errmsg = "** Only used for term-to-term multiplication!";
+			return (computorv2::statment_error(st));
 		}
 		st->_result = computorv2::mul(left, right);
 	}
@@ -663,7 +668,8 @@ t_error computorv2::statment_operation(computorv2::statment *st, const computorv
 	}
 	else
 	{
-		throw std::runtime_error("Unknown operation!");
+		st->_errmsg = "Unknown operation!";
+		return (computorv2::statment_error(st));
 	}
 	return (st->_err);
 }
@@ -707,7 +713,7 @@ t_error computorv2::statment_precedence(computorv2::statment *st, t_error (*perv
 		st->_result = NULL;
 		try
 		{
-			st->_err = computorv2::statment_operation(st, left, right, old_operation);			
+			st->_err = computorv2::statment_operation(st, left, right, old_operation);
 		}
 		catch (const std::exception& e)
 		{
@@ -1049,8 +1055,9 @@ t_error computorv2::statment_parse(computorv2::statment *st)
 	}
 	else
 	{
-		return (computorv2::statment_error(st));
+		st->_err = computorv2::statment_error(st);
 	}
+
 	computorv2::statment_skip(st, "\r\n\t\v\f ");
 	return (st->_err);
 }

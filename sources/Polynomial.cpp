@@ -135,9 +135,10 @@ std::string computorv2::Polynomial::toString(void) const
     return (ss.str());
 }
 
-computorv2::Object* computorv2::Polynomial::copy(void) const
+computorv2::Object* computorv2::Polynomial::clone(void) const
 {
-    return ( new computorv2::Polynomial(*this) );
+	computorv2::Object* e = new computorv2::Polynomial(*this);
+    return (e);
 }
 
 bool computorv2::Polynomial::isnull(void) const
@@ -204,37 +205,25 @@ void computorv2::Polynomial::init(const computorv2::Object* base)
 
 void computorv2::Polynomial::delCoefficient(void)
 {
-	if (this->_coefficient)
-	{
-		delete (this->_coefficient);
-	}
+	delete (this->_coefficient);
 	this->_coefficient = NULL;
 }
 
 void computorv2::Polynomial::delBase(void)
 {
-	if (this->_base)
-	{
-		delete (this->_base);
-	}
+	delete (this->_base);
 	this->_base = NULL;
 }
 
 void computorv2::Polynomial::delExponent(void)
 {
-	if (this->_exponent)
-	{
-		delete (this->_exponent);
-	}
+	delete (this->_exponent);
 	this->_exponent = NULL;
 }
 
 void computorv2::Polynomial::delFreeTerm(void)
 {
-	if (this->_freeterm)
-	{
-		delete (this->_freeterm);
-	}
+	delete (this->_freeterm);
 	this->_freeterm = NULL;
 }
 
@@ -325,12 +314,12 @@ void computorv2::Polynomial::setCoefficient(const computorv2::Object* coefficien
 	if (coefficient->isnull())
 	{
 		this->delBase();
-		this->_coefficient = computorv2::Complex::null().copy();
-		this->_base        = computorv2::IndependentVariable::null().copy();
+		this->_coefficient = computorv2::Complex::null().clone();
+		this->_base        = computorv2::IndependentVariable::null().clone();
 	}
 	else
 	{
-		this->_coefficient = coefficient->copy();
+		this->_coefficient = coefficient->clone();
 	}
 }
 
@@ -348,12 +337,12 @@ void computorv2::Polynomial::setBase(const computorv2::Object* base)
 	if (base->isnull())
 	{
 		this->delCoefficient();
-		this->_coefficient = computorv2::Complex::null().copy();
-		this->_base        = computorv2::IndependentVariable::null().copy();
+		this->_coefficient = computorv2::Complex::null().clone();
+		this->_base        = computorv2::IndependentVariable::null().clone();
 	}
 	else
 	{
-		this->_base = base->copy();
+		this->_base = base->clone();
 	}
 }
 
@@ -371,12 +360,12 @@ void computorv2::Polynomial::setExponent(const computorv2::Object* exponent)
 	if (exponent->isnull())
 	{
 		this->delBase();
-		this->_exponent = computorv2::Complex::null().copy();
-		this->_base     = computorv2::IndependentVariable::null().copy();
+		this->_exponent = computorv2::Complex::null().clone();
+		this->_base     = computorv2::IndependentVariable::null().clone();
 	}
 	else
 	{
-		this->_exponent = exponent->copy();
+		this->_exponent = exponent->clone();
 	}
 }
 
@@ -389,11 +378,11 @@ void computorv2::Polynomial::setFreeTerm(const computorv2::Object* freeterm)
 	}
 	if (freeterm->isnull())
 	{
-		this->_freeterm = computorv2::Complex::null().copy();
+		this->_freeterm = computorv2::Complex::null().clone();
 	}
 	else
 	{
-		this->_freeterm = freeterm->copy();
+		this->_freeterm = freeterm->clone();
 	}
 }
 

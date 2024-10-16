@@ -59,9 +59,10 @@ std::string computorv2::IndependentVariable::toString(void) const
     return (this->getName());
 }
 
-computorv2::Object* computorv2::IndependentVariable::copy(void) const
+computorv2::Object* computorv2::IndependentVariable::clone(void) const
 {
-    return ( new computorv2::IndependentVariable(*this) );
+    computorv2::Object* e = new computorv2::IndependentVariable(*this);
+    return (e);
 }
 
 bool computorv2::IndependentVariable::isnull(void) const

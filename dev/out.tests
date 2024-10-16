@@ -1,0 +1,141 @@
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05b90, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05b70, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05bb0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05b90, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05bd0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05bb0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05bf0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05bd0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c10, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05bf0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c30, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c10, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c50, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c30, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c70, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c50, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c90, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c70, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05cb0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05c90, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05cd0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05cb0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05cf0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05cd0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05d10, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05cf0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05d30, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05d10, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c05d90, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c05e00, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c05e60, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05f10, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c05ec0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c05fa0, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c05f70, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c06030, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c06000, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c060c0, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c06090, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c06150, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c06120, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c061e0, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c061b0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c06270, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c06240, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c06300, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c062d0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c06390, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c06360, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c06420, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c063f0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c064b0, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c06480, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c06540, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c06510, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c065d0, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c065a0, LINE: 145
+FILE: sources/UsualFunction.cpp, NEW: 0x7ffe29c06660, LINE: 145
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c06630, LINE: 145
+FILE: sources/statment.cpp, NEW: 0x7ffe29c05ef0, LINE: 552
+st->_result[1]:  0x7ffe29c05ef0 >>> 256
+st->_result[6]:  0x7ffe29c05b90 >>> 16
+st->_result[6]:  0x7ffe29c05b90 >>> 16
+st->_result[6]:  0x7ffe29c05b90 >>> 16
+>> LINE: 300 | 0x7ffe29c05b90
+st->_result[6]:  0x7ffe29c05bd0 >>> 16
+st->_result[6]:  0x7ffe29c05bd0 >>> 16
+st->_result[6]:  0x7ffe29c05bd0 >>> 16
+>> LINE: 300 | 0x7ffe29c05bd0
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05c30, LINE: 222
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05c60, LINE: 222
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05c30, LINE: 186
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05c60, LINE: 186
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05b90, LINE: 162
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05ca0, LINE: 162
+FILE: sources/statment.cpp, NEW: 0x7ffe29c05bd0, LINE: 376
+st->_result[2]:  0x7ffe29c05bd0 >>> 8
+st->_result[3]:  0x7ffe29c05bd0 >>> 8
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c30, LINE: 323
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c10, LINE: 346
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c60, LINE: 369
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05ce0, LINE: 382
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c10, LINE: 346
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05d10, LINE: 162
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c06680, LINE: 162
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c60, LINE: 369
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c066e0, LINE: 323
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c06710, LINE: 346
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c06730, LINE: 369
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c06760, LINE: 382
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c066e0, LINE: 323
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c06710, LINE: 346
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c06790, LINE: 162
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c067c0, LINE: 162
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c06730, LINE: 369
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c06760, LINE: 382
+FILE: sources/computorv2.cpp, NEW: 0x7ffe29c066b0, LINE: 2972
+st->_result[4]:  0x7ffe29c066b0 >>> 128
+st->_result[6]:  0x7ffe29c066b0 >>> 128
+st->_result[6]:  0x7ffe29c066b0 >>> 128
+st->_result[6]:  0x7ffe29c066b0 >>> 128
+>> LINE: 929 | 0x7ffe29c066b0
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05b90, LINE: 323
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c06680, LINE: 346
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c40, LINE: 369
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c70, LINE: 382
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05b90, LINE: 323
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c06680, LINE: 346
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05c00, LINE: 162
+FILE: sources/Matrix.cpp, NEW: 0x7ffe29c05ca0, LINE: 162
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c40, LINE: 369
+FILE: sources/Polynomial.cpp, NEW: 0x7ffe29c05c70, LINE: 382
+FILE: sources/VirtualMachine.cpp, NEW: 0x7ffe29c05bd0, LINE: 134
+>> LINE: 1066 | 0x7ffe29c066b0
+Process:         computorv2 [49834]
+Path:            /Volumes/VOLUME/*/computorv2
+Load Address:    0x10a0ee000
+Identifier:      computorv2
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [37846]
+
+Date/Time:       2024-10-16 10:14:40.035 +0100
+Launch Time:     2024-10-16 10:14:39.642 +0100
+OS Version:      Mac OS X 10.15.7 (19H2)
+Report Version:  7
+Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
+Analysis Tool Version:  Xcode 12.4 (12D4e)
+
+Physical footprint:         332K
+Physical footprint (peak):  332K
+----
+
+leaks Report Version: 4.0
+Process 49834: 171 nodes malloced for 13 KB
+Process 49834: 2 leaks for 576 total leaked bytes.
+
+    2 (576 bytes) << TOTAL >>
+      1 (288 bytes) ROOT LEAK: 0x7ffe29c05930 [288]
+      1 (288 bytes) ROOT LEAK: 0x7ffe29c05a50 [288]
+

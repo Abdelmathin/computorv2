@@ -208,7 +208,7 @@ int computorv2::Client::history(void)
 	int i = 0;
 	while (it != this->_history.end())
 	{
-		this->_outputstream << "line[" << i << "]: " << (*it);
+		this->_outputstream << "line[" << i << "]: " << (*it) << computorv2::crlf;
 		i++;
 		it++;
 	}
@@ -359,20 +359,27 @@ int computorv2::Client::parse_line(std::string line)
 	st._len = st._str.size();
 	st._vm  = &(this->_vm);
 	computorv2::statment_parse(&st);
-	if ((st._err != 0) || (st._result == NULL) || (st._pos < st._len))
+	try
 	{
-		this->error(&st, line);
-	}
-	else
-	{
-		if (st._type == STATMENT_TYPE_SOLVE)
+		if ((st._err != 0) || (st._result == NULL) || (st._pos < st._len))
 		{
-			this->solve_equation(st._result);
+			this->error(&st, line);
 		}
 		else
 		{
-			this->_outputstream << st._result->toString() << computorv2::crlf;
-		}
+			if (st._type == STATMENT_TYPE_SOLVE)
+			{
+				this->solve_equation(st._result);
+			}
+			else
+			{
+				this->_outputstream << st._result->toString() << computorv2::crlf;
+			}
+		}		
+	}
+	catch (const std::exception& xcp)
+	{
+		this->error(&st, xcp.what());
 	}
 	computorv2::statment_fini(&st);
 	return (0);

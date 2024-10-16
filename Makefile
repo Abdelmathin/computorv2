@@ -88,9 +88,6 @@ clean:
 fclean: clean
 	$(REMOVE_FILE) $(NAME)
 
-test: all
-	./computorv2 tests/examples/example00/input00.sh
-
 push:
 	git add . && git commit -m "update" && git push
 

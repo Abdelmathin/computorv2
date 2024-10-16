@@ -137,6 +137,19 @@ namespace computorv2
     computorv2::Object* replace(const computorv2::Object* left, std::map< std::string, const computorv2::Object*>& right);
     computorv2::Object* evaluate(const computorv2::Object* left);
 
+    template< typename T> T* acquireObject(const T* left)
+    {
+        return (left);
+    }
+    template< typename T> T* releaseObject(const T* left)
+    {
+        if (left)
+        {
+            
+        }
+        return (NULL);
+    }
+
     /* ----------------------- transpose ----------------------- */
     computorv2::Matrix  transpose(const computorv2::Matrix& left);
 

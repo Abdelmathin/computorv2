@@ -73,17 +73,17 @@ computorv2::Object* computorv2::pow(const computorv2::Object* left, const comput
 		{
 			throw std::logic_error("Error: Zero to the power of zero!");
 		}
-		return (computorv2::Complex(1.0, 0.0).copy());
+		return (computorv2::Complex(1.0, 0.0).clone());
 	}
 	if (IS_INDEPENDENT(left))
 	{
 		if (IS_COMPLEX(right))
-			return (computorv2::pow(*AS_INDEPENDENT(left), *AS_COMPLEX(right)).copy());
+			return (computorv2::pow(*AS_INDEPENDENT(left), *AS_COMPLEX(right)).clone());
 	}
 	if (IS_USUAL_FUNCTION(left))
 	{
 		if (IS_COMPLEX(right))
-			return (computorv2::pow(*AS_USUAL_FUNCTION(left), *AS_COMPLEX(right)).copy());		
+			return (computorv2::pow(*AS_USUAL_FUNCTION(left), *AS_COMPLEX(right)).clone());		
 	}
 
 	std::stringstream ss("");
@@ -153,16 +153,16 @@ computorv2::Object* computorv2::add(const computorv2::Object* left, const comput
 	if (IS_COMPLEX(left))
 	{
 		if (IS_COMPLEX(right))
-			return (computorv2::add(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
+			return (computorv2::add(*AS_COMPLEX(left), *AS_COMPLEX(right)).clone());
 		else if (IS_POLYNOMIAL(right))
-			return (computorv2::add(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
+			return (computorv2::add(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).clone());
 	}
 	else if (IS_POLYNOMIAL(left))
 	{
 		if (IS_COMPLEX(right))
-			return (computorv2::add(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
+			return (computorv2::add(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).clone());
 		else if (IS_POLYNOMIAL(right))
-			return (computorv2::add(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
+			return (computorv2::add(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).clone());
 	}
 	std::stringstream ss("");
 	ss << "Can't add objects!";
@@ -189,18 +189,18 @@ computorv2::Object* computorv2::mul(const computorv2::Object* left, const comput
 	if (IS_COMPLEX(left))
 	{
 		if (IS_COMPLEX(right))
-			return (computorv2::mul(*AS_COMPLEX(left), *AS_COMPLEX(right)).copy());
+			return (computorv2::mul(*AS_COMPLEX(left), *AS_COMPLEX(right)).clone());
 		else if (IS_POLYNOMIAL(right))
-			return (computorv2::mul(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).copy());
+			return (computorv2::mul(*AS_COMPLEX(left), *AS_POLYNOMIAL(right)).clone());
 	}
 	else if (IS_POLYNOMIAL(left))
 	{
 		if (IS_COMPLEX(right))
-			return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).copy());
+			return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_COMPLEX(right)).clone());
 		if (IS_USUAL_FUNCTION(right))
-			return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_USUAL_FUNCTION(right)).copy());
+			return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_USUAL_FUNCTION(right)).clone());
 		else if (IS_POLYNOMIAL(right))
-			return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).copy());
+			return (computorv2::mul(*AS_POLYNOMIAL(left), *AS_POLYNOMIAL(right)).clone());
 	}
 	std::stringstream ss("");
 	ss << "MultiplicationError: ";
