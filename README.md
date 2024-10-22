@@ -1,74 +1,65 @@
 <p align="center">
-	<a href="" target="blank">
-		<img style="border-radius: 40px;" src="docs/assets/img/computorv2.png" width="200" alt="Toast Logo" />
-	</a>
+    <a href="" target="_blank">
+        <img style="border-radius: 40px;" src="docs/assets/img/computorv2.png" width="200" alt="Computor V2 Logo" />
+    </a>
 </p>
 
 <p align="center">
-	This repository contains a powerful shell that allows for the assignment of variables, including complex numbers, matrices, polynomials, vectors, and regular numeric values. The shell can perform operations between these types and return the result seamlessly. It supports various mathematical functions, enabling the user to assign and manipulate variables for complex calculations.
+    <strong>Welcome to Computor V2!</strong>
+    <br>
+    This repository contains a powerful shell that allows for the assignment of variables, including complex numbers, matrices, polynomials, vectors, and regular numeric values. The shell can perform operations between these types and return the results seamlessly. It supports various mathematical functions, enabling users to assign and manipulate variables for complex calculations.
 </p>
 
 <p align="center">
-		<a href="https://abdelmathin.github.io/42attachments/subjects/en//42subjects-computorv1.pdf" target="_blank">
-			<img src="https://img.shields.io/badge/github-abdelmathin-red" alt="Subject"/>
-		</a>
-		<a href="#">
-			<img src="https://img.shields.io/badge/version-v1.0.0-blue" alt="Discord"/>
-		</a>
-		<!-- <a href="https://discord.gg/Xvqyc33KRR" target="_blank">
-			<img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/>
-		</a>
-		<a href="https://twitter.com/abdelmathin" target="_blank">
-			<img src="https://img.shields.io/badge/twitter-online-brightgreen.svg">
-		</a> -->
-		<a href="https://paypal.me/abdelmathin" target="_blank">
-			<img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/>
-		</a>
+    <a href="https://abdelmathin.github.io/42attachments/subjects/en//42subjects-computorv1.pdf" target="_blank">
+        <img src="https://img.shields.io/badge/github-abdelmathin-red" alt="Subject" />
+    </a>
+    <a href="#">
+        <img src="https://img.shields.io/badge/version-v1.0.0-blue" alt="Version" />
+    </a>
+    <a href="https://paypal.me/abdelmathin" target="_blank">
+        <img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate" />
+    </a>
 </p>
 
 ## Objectives
 
 - **Variable Assignment:** Enable users to assign values to polynomials, functions, matrices, vectors, and complex numbers.
-
 - **Mathematical Operations:** Support basic arithmetic operations and allow calculations between various types of variables.
-
-- **Integrate Mathematical Functions:** Create a tool that integrates mathematical functions and is capable of performing operations with variables of different types.
-
+- **Integrate Mathematical Functions:** Create a tool that integrates mathematical functions and performs operations with different types of variables.
 - **Derivative Calculation:** Implement functionality to compute the derivative of functions and analyze rates of change.
-
 - **Matrix Operations:** Facilitate matrix operations such as addition, multiplication, and finding determinants.
-
 - **Complex Number Support:** Allow users to perform arithmetic operations with complex numbers, including real and imaginary components.
-
-- **Higher-Order Derivatives:** Allow the computation of higher-order derivatives for in-depth function analysis.
+- **Higher-Order Derivatives:** Enable the computation of higher-order derivatives for in-depth function analysis.
 
 ## Prerequisites
+
 - Ensure you have `make` and a compatible compiler (like `gcc` or `clang`) installed on your system.
 
 ## Installation
 
 1. **Clone the Repository:**
-```bash
-git clone git@github.com:Abdelmathin/computorv2.git
-```
+    ```bash
+    git clone git@github.com:Abdelmathin/computorv2.git
+    ```
 
 2. **Navigate to the Project Directory:**
-```bash
-cd computorv2
-```
+    ```bash
+    cd computorv2
+    ```
 
 3. **Build the Project:**
-```bash
-make
-```
+    ```bash
+    make
+    ```
 
-## Usage:
+## Usage
 
 To run the shell, execute the following command:
 
 ```bash
 ./computor
-```
+
 
 ### Examples
 
