@@ -22,7 +22,7 @@
     </a>
 </p>
 
-## Objectives
+# 🌟 Objectives
 
 - **Variable Assignment:** Enable users to assign values to polynomials, functions, matrices, vectors, and complex numbers.
 - **Mathematical Operations:** Support basic arithmetic operations and allow calculations between various types of variables.
@@ -36,7 +36,7 @@
 
 - Ensure you have `make` and a compatible compiler (like `gcc` or `clang`) installed on your system.
 
-## Installation
+# 👨‍💻 Installation
 
 1. **Clone the Repository:**
     ```bash
@@ -243,7 +243,7 @@ int main(void)
 
 ```
 
-## Contributing
+## ✍️ Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue to suggest improvements or report bugs.
 
