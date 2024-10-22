@@ -28,15 +28,21 @@
 
 ## Objectives:
 
-- Develop a command-line shell that allows the assignment of variables: complex numbers, matrices, polynomials, vectors, and numeric values.
+- Enable users to assign polynomial expressions, allowing for the representation of mathematical equations.
 
-- Implement operations between these types, including addition, subtraction, multiplication, and more advanced calculations like derivatives.
+- Facilitate the assignment of functions, including the ability to incorporate trigonometric and logarithmic functions with complex numbers.
 
-- Provide support for complex functions, coefficients, and exponents.
+- Implement functionality to calculate the derivative of assigned functions, enabling users to analyze rates of change and function behavior.
+
+- Allow for the assignment of matrices, providing a structured way to represent and manipulate data.
+
+- Support matrix operations, such as multiplication, enabling users to perform linear algebra calculations seamlessly.
+
+- Enable the assignment of complex numbers, allowing for calculations that involve real and imaginary components.
+
+- Facilitate operations with complex numbers, allowing users to perform arithmetic operations and combinations with other numerical types.
 
 - Create a tool that integrates mathematical functions and is capable of performing operations with variables of different types.
-
-- Ensure that the shell can handle matrix and vector operations, complex number manipulations, and polynomial calculations efficiently.
 
 - Implement functionality to compute derivatives of functions, allowing for the analysis of rates of change and other calculus-related operations.
 
@@ -82,28 +88,34 @@ Here’s a simple example of how to use the shell:
 ```bash
 p = 2*x^2 + 3*x + 5
 ```
+In this example, a polynomial p is assigned, which is a quadratic function. The coefficients 2, 3, and 5 represent the constants for x <sup>2</sup>, x, and the constant term, respectively. This polynomial can be used for further calculations, evaluations, and derivative computations.
 
-2. **Calculate the derivative:**
+2. **Assign a function:**
 ```bash
-f(x) = sin(x) + p'
+g(x) = sin(x) * x - ln(x + 2i)
 ```
 
-3. **Assign a matrix:**
+3. **Calculate the derivative:**
+```bash
+f(x) = sin(x) + g'(x)
+```
+
+4. **Assign a matrix:**
 ```bash
 M = [[1, 2], [3, 4]]
 ```
 
-3. **Perform a matrix operation:**
+5. **Perform a matrix operation:**
 ```bash
 result = M * M
 ```
 
-4. **Assign a complex number:**
+6. **Assign a complex number:**
 ```bash
 c = 3 + 4i
 ```
 
-5. **Perform operations with the complex number:**
+7. **Perform operations with the complex number:**
 ```bash
 result = c + (1 + 2i)
 ```
