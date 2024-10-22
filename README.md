@@ -85,7 +85,7 @@ p = 2*x^2 + 3*x + 5
 
 2. **Calculate the derivative:**
 ```bash
-p'
+f(x) = sin(x) + p'
 ```
 
 3. **Assign a matrix:**
