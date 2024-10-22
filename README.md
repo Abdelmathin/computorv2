@@ -74,7 +74,7 @@ To run the shell, execute the following command:
 ./computor
 ```
 
-## Example
+### Example
 
 Here’s a simple example of how to use the shell:
 
