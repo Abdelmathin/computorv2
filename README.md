@@ -4,10 +4,6 @@
     </a>
 </p>
 
-<a href="https://trendshift.io/repositories/2256" target="_blank">
-	<img src="https://trendshift.io/api/badge/repositories/2256" alt="computor V2" style="width: 250px; height: 55px;" width="250" height="55"/>
-</a>
-
 <p align="center">
     <strong>Welcome to Computor V2!</strong>
     <br>
