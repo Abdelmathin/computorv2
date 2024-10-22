@@ -53,7 +53,7 @@
     make
     ```
 
-## Usage
+# 🚀 Usage
 
 To run the shell, execute the following command:
 
