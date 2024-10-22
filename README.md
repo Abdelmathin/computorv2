@@ -243,56 +243,13 @@ int main(void)
 
 ```
 
-## Derivative Calculation
+## Contributing
 
-To differentiate the polynomial function 
+Contributions are welcome! Please feel free to submit a pull request or open an issue to suggest improvements or report bugs.
 
-$$ 
-P(x) = a \cdot x^n + b 
-$$ 
+## License
 
-where \( a \), \( x \), \( n \), and \( b \) are all functions of \( x \), we use the following differentiation rules:
-
-1. **Product Rule:** If you have a product of two functions, \( u(x) \) and \( v(x) \), the derivative is given by:
-   $$
-   (u \cdot v)' = u' \cdot v + u \cdot v'
-   $$
-
-2. **Chain Rule:** For composite functions, if \( g(x) \) is a function of \( f(x) \), the derivative is:
-   $$
-   \frac{d}{dx} g(f(x)) = g'(f(x)) \cdot f'(x)
-   $$
-
-3. **Power Rule:** For a function of the form \( x^n \), the derivative is:
-   $$
-   \frac{d}{dx} x^n = n \cdot x^{n-1}
-   $$
-
-### Applying the Rules
-
-To differentiate \( P(x) \):
-
-1. Differentiate \( a \cdot x^n \):
-   - Apply the product rule, where \( u = a(x) \) and \( v = x^n \):
-   $$
-   (a \cdot x^n)' = a' \cdot x^n + a \cdot (n \cdot x^{n-1}) = a' \cdot x^n + n \cdot a \cdot x^{n-1}
-   $$
-
-2. Differentiate the constant \( b \):
-   - The derivative of a constant is zero:
-   $$
-   \frac{d}{dx} b = 0
-   $$
-
-### Final Result
-
-Putting it all together, the derivative of \( P(x) \) is:
-
-$$
-P'(x) = a' \cdot x^n + n \cdot a \cdot x^{n-1}
-$$
-
-This derivative gives us the rate of change of the polynomial \( P(x) \) concerning \( x \), allowing for analysis of its behavior and critical points.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 
 
