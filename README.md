@@ -90,9 +90,9 @@ Here’s a simple examples of how to use the shell:
 
 	This polynomial can be used for further calculations, evaluations, and derivative computations.
 
-```bash
-p = 2*x^2 + 3*x + 5
-```
+	```bash
+	p = 2*x^2 + 3*x + 5
+	```
 
 2. **Assign a function:**
 
