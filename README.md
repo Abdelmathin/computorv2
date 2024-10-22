@@ -80,9 +80,9 @@ To run the shell, execute the following command:
 ./computor
 ```
 
-### Example
+### Examples
 
-Here’s a simple example of how to use the shell:
+Here’s a simple examples of how to use the shell:
 
 1. **Assign a polynomial:**
 
