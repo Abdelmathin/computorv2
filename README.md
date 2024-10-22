@@ -10,7 +10,7 @@
 
 <p align="center">
 		<a href="https://abdelmathin.github.io/42attachments/subjects/en//42subjects-computorv1.pdf" target="_blank">
-			<img src="https://img.shields.io/badge/subject-pdf-red" alt="Subject"/>
+			<img src="https://img.shields.io/badge/github-abdelmathin-red" alt="Subject"/>
 		</a>
 		<a href="#">
 			<img src="https://img.shields.io/badge/version-v1.0.0-blue" alt="Discord"/>
