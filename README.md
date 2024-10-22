@@ -53,17 +53,17 @@ pip install computorv2
 
 1. **Clone the Repository:**
 ```bash
-	git clone git@github.com:Abdelmathin/computorv2.git
+git clone git@github.com:Abdelmathin/computorv2.git
 ```
 
 2. **Navigate to the Project Directory:**
 ```bash
-	cd computorv2
+cd computorv2
 ```
 
 3. **Build the Project:**
 ```bash
-	make
+make
 ```
 
 ## Usage:
@@ -71,7 +71,7 @@ pip install computorv2
 To run the shell, execute the following command:
 
 ```bash
-	./computor
+./computor
 ```
 
 ## Example
@@ -80,32 +80,32 @@ Here’s a simple example of how to use the shell:
 
 1. **Assign a polynomial:**
 ```bash
-	p = 2*x^2 + 3*x + 5
+p = 2*x^2 + 3*x + 5
 ```
 
 2. **Calculate the derivative:**
 ```bash
-	p'
+p'
 ```
 
 3. **Assign a matrix:**
 ```bash
-	M = [[1, 2], [3, 4]]
+M = [[1, 2], [3, 4]]
 ```
 
 3. **Perform a matrix operation:**
 ```bash
-	result = M * M
+result = M * M
 ```
 
 4. **Assign a complex number:**
 ```bash
-	c = 3 + 4i
+c = 3 + 4i
 ```
 
 5. **Perform operations with the complex number:**
 ```bash
-	result = c + (1 + 2i)
+result = c + (1 + 2i)
 ```
 
 
