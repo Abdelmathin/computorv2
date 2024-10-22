@@ -208,7 +208,40 @@ int main(void)
 
 ```
 
+### Example: Working with Matrices
 
+```C++
+#include <iostream>
+#include "computorv2.hpp"
+
+int main(void)
+{
+    // Create a 3x2 matrix and set its elements
+    computorv2::Matrix m(3, 2);
+    m.setElementAt(0, 0, 6.0);
+    m.setElementAt(1, 0, 5.0);
+    m.setElementAt(2, 0, 0.0);
+
+    m.setElementAt(0, 1, 10.0);
+    m.setElementAt(1, 1, 3.0);
+    m.setElementAt(2, 1, 2.0);
+
+    // Display the first matrix
+    std::cout << "Matrix M (3x2):" << std::endl;
+    std::cout << m << std::endl;
+
+    // Create and display a 3x3 matrix
+    computorv2::Matrix m3x3(
+        1, 2, 3, 
+        4, 5, 6, 
+        7, 8, 9);
+    std::cout << "3x3 Matrix:" << std::endl;
+    std::cout << m3x3 << std::endl;
+
+    return (0);
+}
+
+```
 
 
 <!--
