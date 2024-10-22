@@ -86,9 +86,9 @@ Here’s a simple examples of how to use the shell:
 
 1. **Assign a polynomial:**
 
-In this example, a polynomial p is assigned, which is a quadratic function. The coefficients 2, 3, and 5 represent the constants for x <sup>2</sup>, x, and the constant term, respectively.
+	In this example, a polynomial p is assigned, which is a quadratic function. The coefficients 2, 3, and 5 represent the constants for x <sup>2</sup>, x, and the constant term, respectively.
 
-This polynomial can be used for further calculations, evaluations, and derivative computations.
+	This polynomial can be used for further calculations, evaluations, and derivative computations.
 
 ```bash
 p = 2*x^2 + 3*x + 5
