@@ -1,15 +1,11 @@
 <p align="center">
 	<a href="" target="blank">
-		<img style="border-radius: 40px;" src="docs/assets/img/42intro.png" width="200" alt="Toast Logo" />
+		<img style="border-radius: 40px;" src="docs/assets/img/computorv2.png" width="200" alt="Toast Logo" />
 	</a>
 </p>
 
 <p align="center">
-    This project aims to make you code a simple equation solving program. It will take polynomial equations into account. These equations will only require exponents. No complex
-    function. The program will have to display its solution(s).
-    Why polynomials? Just because it’s one of the simplest and most powerful tools in
-    mathematics. It is used in every field on every level to simplify and express many things.
-    For instance, they help calculate functions such as sin, cos, et tan.
+	This repository contains a powerful shell that allows for the assignment of variables, including complex numbers, matrices, polynomials, vectors, and regular numeric values. The shell can perform operations between these types and return the result seamlessly. It supports various mathematical functions, enabling the user to assign and manipulate variables for complex calculations.
 </p>
 
 <p align="center">
@@ -32,12 +28,19 @@
 
 ## Objectives:
 
-- The idea is to get you (back) in touch with the manipulation of elementary mathematic
-    tools you will be able to use in seveal 42 subjects. The idea is not to "just make maths".
-    This exercise will allow you to approach exercises that will require these skills and knowledge with a restful mind.
-- Besides, this small subject will be completed with others, touching various subjects
-    that will help you understand what you do, rather than just copy a formula you’ve found
-    on the Internet.
+- Develop a command-line shell that allows the assignment of variables: complex numbers, matrices, polynomials, vectors, and numeric values.
+
+- Implement operations between these types, including addition, subtraction, multiplication, and more advanced calculations like derivatives.
+
+- Provide support for complex functions, coefficients, and exponents.
+
+- Create a tool that integrates mathematical functions and is capable of performing operations with variables of different types.
+
+- Ensure that the shell can handle matrix and vector operations, complex number manipulations, and polynomial calculations efficiently.
+
+- Implement functionality to compute derivatives of functions, allowing for the analysis of rates of change and other calculus-related operations.
+
+- Allow users to compute higher-order derivatives, facilitating deeper exploration of function behavior and characteristics.
 
 ```bash
 pip install computorv2
