@@ -1,3 +1,5 @@
+# Computor V2
+
 <p align="center">
     <a href="" target="_blank">
         <img style="border-radius: 40px;" src="docs/assets/img/computorv2.png" width="200" alt="Computor V2 Logo" />
