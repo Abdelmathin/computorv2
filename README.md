@@ -86,7 +86,9 @@ Here’s a simple examples of how to use the shell:
 
 1. **Assign a polynomial:**
 
-In this example, a polynomial p is assigned, which is a quadratic function. The coefficients 2, 3, and 5 represent the constants for x <sup>2</sup>, x, and the constant term, respectively. This polynomial can be used for further calculations, evaluations, and derivative computations.
+In this example, a polynomial p is assigned, which is a quadratic function. The coefficients 2, 3, and 5 represent the constants for x <sup>2</sup>, x, and the constant term, respectively.
+
+This polynomial can be used for further calculations, evaluations, and derivative computations.
 
 ```bash
 p = 2*x^2 + 3*x + 5
@@ -94,7 +96,9 @@ p = 2*x^2 + 3*x + 5
 
 2. **Assign a function:**
 
-Here, a function g(x) is defined, which combines a trigonometric function, the sine of x, multiplied by x, and the natural logarithm of x + 2i. This showcases the shell's ability to handle both real and complex functions, providing a powerful tool for mathematical analysis.
+Here, a function g(x) is defined, which combines a trigonometric function, the sine of x, multiplied by x, and the natural logarithm of x + 2i.
+
+This showcases the shell's ability to handle both real and complex functions, providing a powerful tool for mathematical analysis.
 
 ```bash
 g(x) = sin(x) * x - ln(x + 2i)
@@ -102,7 +106,9 @@ g(x) = sin(x) * x - ln(x + 2i)
 
 3. **Calculate the derivative:**
 
-In this step, a new function f(x) is created by adding the sine function to the derivative of g(x). This demonstrates the shell's capability to compute derivatives and use them in subsequent functions, allowing for complex mathematical manipulations.
+In this step, a new function f(x) is created by adding the sine function to the derivative of g(x).
+
+This demonstrates the shell's capability to compute derivatives and use them in subsequent functions, allowing for complex mathematical manipulations.
 
 ```bash
 f(x) = sin(x) + g'(x)
@@ -110,7 +116,9 @@ f(x) = sin(x) + g'(x)
 
 4. **Assign a matrix:**
 
-A matrix M is defined, which is a 2x2 array containing integers. This matrix can be used for various operations, such as transformations, multiplications, and more complex linear algebra tasks.
+A matrix M is defined, which is a 2x2 array containing integers.
+
+This matrix can be used for various operations, such as transformations, multiplications, and more complex linear algebra tasks.
 
 ```bash
 M = [[1, 2], [3, 4]]
@@ -118,7 +126,11 @@ M = [[1, 2], [3, 4]]
 
 5. **Perform a matrix operation:**
 
-Here, the matrix M is multiplied by itself. The shell computes the resulting matrix, demonstrating its ability to handle matrix operations effectively. The result will yield a new matrix, which can be used for further calculations or analyses.
+Here, the matrix M is multiplied by itself.
+
+The shell computes the resulting matrix, demonstrating its ability to handle matrix operations effectively.
+
+The result will yield a new matrix, which can be used for further calculations or analyses.
 
 ```bash
 result = M * M
@@ -126,7 +138,9 @@ result = M * M
 
 6. **Assign a complex number:**
 
-A complex number c is assigned, which consists of a real part (3) and an imaginary part (4). This example showcases the shell's support for complex number calculations, essential for many mathematical applications, particularly in engineering and physics.
+A complex number c is assigned, which consists of a real part (3) and an imaginary part (4).
+
+This example showcases the shell's support for complex number calculations, essential for many mathematical applications, particularly in engineering and physics.
 
 ```bash
 c = 3 + 4i
