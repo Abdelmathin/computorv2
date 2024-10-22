@@ -26,31 +26,21 @@
 		</a>
 </p>
 
-## Objectives:
+## Objectives
 
-- Enable users to assign polynomial expressions, allowing for the representation of mathematical equations.
+- **Variable Assignment:** Enable users to assign values to polynomials, functions, matrices, vectors, and complex numbers.
 
-- Facilitate the assignment of functions, including the ability to incorporate trigonometric and logarithmic functions with complex numbers.
+- **Mathematical Operations:** Support basic arithmetic operations and allow calculations between various types of variables.
 
-- Implement functionality to calculate the derivative of assigned functions, enabling users to analyze rates of change and function behavior.
+- **Integrate Mathematical Functions:** Create a tool that integrates mathematical functions and is capable of performing operations with variables of different types.
 
-- Allow for the assignment of matrices, providing a structured way to represent and manipulate data.
+- **Derivative Calculation:** Implement functionality to compute the derivative of functions and analyze rates of change.
 
-- Support matrix operations, such as multiplication, enabling users to perform linear algebra calculations seamlessly.
+- **Matrix Operations:** Facilitate matrix operations such as addition, multiplication, and finding determinants.
 
-- Enable the assignment of complex numbers, allowing for calculations that involve real and imaginary components.
+- **Complex Number Support:** Allow users to perform arithmetic operations with complex numbers, including real and imaginary components.
 
-- Facilitate operations with complex numbers, allowing users to perform arithmetic operations and combinations with other numerical types.
-
-- Create a tool that integrates mathematical functions and is capable of performing operations with variables of different types.
-
-- Implement functionality to compute derivatives of functions, allowing for the analysis of rates of change and other calculus-related operations.
-
-- Allow users to compute higher-order derivatives, facilitating deeper exploration of function behavior and characteristics.
-
-```bash
-pip install computorv2
-```
+- **Higher-Order Derivatives:** Allow the computation of higher-order derivatives for in-depth function analysis.
 
 ## Prerequisites
 - Ensure you have `make` and a compatible compiler (like `gcc` or `clang`) installed on your system.
