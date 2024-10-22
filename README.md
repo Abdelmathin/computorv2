@@ -96,71 +96,71 @@ Here’s a simple examples of how to use the shell:
 
 2. **Assign a function:**
 
-Here, a function g(x) is defined, which combines a trigonometric function, the sine of x, multiplied by x, and the natural logarithm of x + 2i.
+	Here, a function g(x) is defined, which combines a trigonometric function, the sine of x, multiplied by x, and the natural logarithm of x + 2i.
 
-This showcases the shell's ability to handle both real and complex functions, providing a powerful tool for mathematical analysis.
+	This showcases the shell's ability to handle both real and complex functions, providing a powerful tool for mathematical analysis.
 
-```bash
-g(x) = sin(x) * x - ln(x + 2i)
-```
+	```bash
+	g(x) = sin(x) * x - ln(x + 2i)
+	```
 
 3. **Calculate the derivative:**
 
-In this step, a new function f(x) is created by adding the sine function to the derivative of g(x).
+	In this step, a new function f(x) is created by adding the sine function to the derivative of g(x).
 
-This demonstrates the shell's capability to compute derivatives and use them in subsequent functions, allowing for complex mathematical manipulations.
+	This demonstrates the shell's capability to compute derivatives and use them in subsequent functions, allowing for complex mathematical manipulations.
 
-```bash
-f(x) = sin(x) + g'(x)
-```
+	```bash
+	f(x) = sin(x) + g'(x)
+	```
 
 4. **Assign a matrix:**
 
-A matrix M is defined, which is a 2x2 array containing integers.
+	A matrix M is defined, which is a 2x2 array containing integers.
 
-This matrix can be used for various operations, such as transformations, multiplications, and more complex linear algebra tasks.
+	This matrix can be used for various operations, such as transformations, multiplications, and more complex linear algebra tasks.
 
-```bash
-M = [[1, 2], [3, 4]]
-```
+	```bash
+	M = [[1, 2], [3, 4]]
+	```
 
 5. **Perform a matrix operation:**
 
-Here, the matrix M is multiplied by itself.
+	Here, the matrix M is multiplied by itself.
 
-The shell computes the resulting matrix, demonstrating its ability to handle matrix operations effectively.
+	The shell computes the resulting matrix, demonstrating its ability to handle matrix operations effectively.
 
-The result will yield a new matrix, which can be used for further calculations or analyses.
+	The result will yield a new matrix, which can be used for further calculations or analyses.
 
-```bash
-result = M * M
-```
+	```bash
+	result = M * M
+	```
 
 6. **Assign a complex number:**
 
-A complex number c is assigned, which consists of a real part (3) and an imaginary part (4).
+	A complex number c is assigned, which consists of a real part (3) and an imaginary part (4).
 
-This example showcases the shell's support for complex number calculations, essential for many mathematical applications, particularly in engineering and physics.
+	This example showcases the shell's support for complex number calculations, essential for many mathematical applications, particularly in engineering and physics.
 
-```bash
-c = 3 + 4i
-```
+	```bash
+	c = 3 + 4i
+	```
 
 7. **Perform operations with the complex number:**
 
-In this example, the previously assigned complex number c is added to another complex number 1 + 2i. The shell computes the sum, resulting in a new complex number that combines both real and imaginary parts. This illustrates how users can perform arithmetic operations with complex numbers, enhancing the versatility of the tool.
+	In this example, the previously assigned complex number c is added to another complex number 1 + 2i. The shell computes the sum, resulting in a new complex number that combines both real and imaginary parts. This illustrates how users can perform arithmetic operations with complex numbers, enhancing the versatility of the tool.
 
-```bash
-result = c + (1 + 2i)
-```
+	```bash
+	result = c + (1 + 2i)
+	```
 
 8. **Evaluate a polynomial at a specific value:**
 
-The polynomial p is evaluated at x = 2. The shell computes the result, providing insights into the behavior of the polynomial at that specific point.
+	The polynomial p is evaluated at x = 2. The shell computes the result, providing insights into the behavior of the polynomial at that specific point.
 
-```bash
-value = p(2)
-```
+	```bash
+	value = p(2)
+	```
 
 
 <!--
