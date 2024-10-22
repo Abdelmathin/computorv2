@@ -172,6 +172,42 @@ int main(void)
 
     return (0);
 }
+```
+
+### Example: Working with Complex Numbers:
+
+Computor V2 allows users to easily define and manipulate complex numbers. Here’s an example of how to work with complex numbers within the shell:
+
+```C++
+#include <iostream>
+#include "computorv2.hpp"
+
+int main(void)
+{
+    // Assign a complex number
+    computorv2::Complex c1(3, 4); // Represents 3 + 4i
+    computorv2::Complex c2(1, 2); // Represents 1 + 2i
+
+    // Perform arithmetic operations
+    computorv2::Complex sum        = c1 + c2;          // Addition
+    computorv2::Complex difference = c1 - c2;   // Subtraction
+    computorv2::Complex product    = c1 * c2;      // Multiplication
+    computorv2::Complex quotient   = c1 / c2;     // Division
+
+    // Display results
+    std::cout << "c1        = " << c1 << std::endl;          // Outputs: 3 + 4i
+    std::cout << "c2        = " << c2 << std::endl;          // Outputs: 1 + 2i
+    std::cout << "Sum       = " << sum << std::endl;         // Outputs: 4 + 6i
+    std::cout << "Difference = " << difference << std::endl;  // Outputs: 2 + 2i
+    std::cout << "Product   = " << product << std::endl;      // Outputs: -5 + 10i
+    std::cout << "Quotient  = " << quotient << std::endl;     // Outputs: 2.2 - 0.4i
+
+    return (0);
+}
+
+```
+
+
 
 
 <!--
