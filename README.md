@@ -46,6 +46,72 @@
 pip install computorv2
 ```
 
+## Prerequisites
+- Ensure you have `make` and a compatible compiler (like `gcc` or `clang`) installed on your system.
+
+## Installation
+
+1. **Clone the Repository:**
+```bash
+	git clone git@github.com:Abdelmathin/computorv2.git
+```
+
+2. **Navigate to the Project Directory:**
+```bash
+	cd computorv2
+```
+
+3. **Build the Project:**
+```bash
+	make
+```
+
+## Usage:
+
+To run the shell, execute the following command:
+
+```bash
+	./computor
+```
+
+## Example
+
+Here’s a simple example of how to use the shell:
+
+1. **Assign a polynomial:**
+```bash
+	p = 2*x^2 + 3*x + 5
+```
+
+2. **Calculate the derivative:**
+```bash
+	p'
+```
+
+3. **Assign a matrix:**
+```bash
+	M = [[1, 2], [3, 4]]
+```
+
+3. **Perform a matrix operation:**
+```bash
+	result = M * M
+```
+
+4. **Assign a complex number:**
+```bash
+	c = 3 + 4i
+```
+
+5. **Perform operations with the complex number:**
+```bash
+	result = c + (1 + 2i)
+```
+
+
+
+<!--
+
 # Derivative:
 
 - To differentiate
@@ -62,6 +128,7 @@ $$
  0 & 0 & 0 & 0 \\
 \end{bmatrix}
 $$
+--->
 
 <!-- $$  P(x) = a . x^n + b $$
 
