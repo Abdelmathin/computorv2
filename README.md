@@ -59,7 +59,7 @@ To run the shell, execute the following command:
 
 ```bash
 ./computor
-
+```
 
 ### Examples
 
