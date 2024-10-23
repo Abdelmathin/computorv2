@@ -1,10 +1,17 @@
 # Computor V2
 
-<p align="center">
+<!-- <p align="center">
     <a href="" target="_blank">
         <img style="border-radius: 40px;" src="docs/assets/img/computorv2.png" width="200" alt="Computor V2 Logo" />
     </a>
+</p> -->
+
+<p align="center">
+    <a href="" target="_blank">
+        <img style="border-radius: 10px;" src="docs/assets/img/computorv2.jpg" width="" alt="Computor V2 Logo" />
+    </a>
 </p>
+
 
 <p align="center">
     <strong>Welcome to Computor V2!</strong>
@@ -238,7 +245,7 @@ int main(void)
         4, 5, 6, 
         7, 8, 9);
     std::cout << "3x3 Matrix:" << std::endl;
-    std::cout << m3x3 << std::endl;
+    std::cout << m3x3.toString() << std::endl;
 
     return (0);
 }
