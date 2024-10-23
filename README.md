@@ -67,7 +67,7 @@
 To run the shell, execute the following command:
 
 ```bash
-./computor
+./computorv2
 ```
 
 ### Supported Functions
