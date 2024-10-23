@@ -26,6 +26,9 @@
     <a href="#">
         <img src="https://img.shields.io/badge/version-v1.0.0-blue" alt="Version" />
     </a>
+    <a href="#">
+        <img src="https://img.shields.io/badge/profile-42-magenta" alt="Version" />
+    </a>
     <a href="https://paypal.me/abdelmathin" target="_blank">
         <img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate" />
     </a>
